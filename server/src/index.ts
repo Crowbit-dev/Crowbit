@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import session from 'express-session';
-import { env } from './src/env.js';
+import { env } from './env.js';
 
 const app = express();
 const port = env.PORT || 3001;
