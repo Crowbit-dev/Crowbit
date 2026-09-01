@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import crowpng from './assets/crowsideprofile.png';
 import './Auth.css'
 
@@ -74,6 +75,11 @@ export default function Signup() {
 		
 		<button type="submit">Sign up</button>
 		</form>
+
+		<div className="auth-switch">
+			<span>Already have an account?</span>
+			<Link to="/login" className="auth-link">Log in</Link>
+		</div>
 		</div>
 	)
 };

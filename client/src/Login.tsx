@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import './Auth.css'
 
 type FormData = {
@@ -49,6 +50,11 @@ export default function Login() {
 
 				<button type="submit">Log in</button>
 			</form>
+
+			<div className="auth-switch">
+				<span>Need an account?</span>
+				<Link to="/signup" className="auth-link">Sign up</Link>
+			</div>
 		</div>
 	)
 }
