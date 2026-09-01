@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import './Auth.css'
+import crowpng from './assets/crowphotograph.png';
 
 type FormData = {
 	email: string
@@ -33,9 +34,14 @@ export default function Login() {
 
 	return (
 		<div className="auth-page">
-			<form className="auth-form" onSubmit={handleSubmit}>
-				<h2>Welcome back</h2>
+			<div className="auth-visual">
+				<div className="speech-bubble">
+					<h2>Welcome back 😳</h2>
+				</div>
+				<img src={crowpng} alt="Crow" className="auth-crow" />
+			</div>
 
+			<form className="auth-form" onSubmit={handleSubmit}>
 				<label>
 					Email
 					<input type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" />
