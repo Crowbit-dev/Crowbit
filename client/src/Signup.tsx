@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import './Signup.css'
+import crowpng from './assets/crowsideprofile.png';
+import './Auth.css'
 
 type FormData = {
 	email: string
@@ -44,8 +45,9 @@ export default function Signup() {
 	}
 	
 	return (
-		<div className="signup-page">
-		<form className="signup-form" onSubmit={handleSubmit}>
+		<div className="auth-page" style={{ position: 'relative' }}>
+		<img src={crowpng} alt="Crow" style={{ width: '100px', height: '100px', position: 'absolute', top: 50, right: 50, pointerEvents: 'none', background: 'transparent', filter: 'drop-shadow(0 0 12px var(--accent-border))' }} />
+		<form className="auth-form" onSubmit={handleSubmit}>
 		<h2>Create an account</h2>
 		
 		<label>
@@ -68,10 +70,10 @@ export default function Signup() {
 		<input type="password" value={form.confirmPassword} onChange={update('confirmPassword')} placeholder="••••••" />
 		</label>
 		
-		{error && <p className="signup-error">{error}</p>}
+		{error && <p className="auth-error">{error}</p>}
 		
 		<button type="submit">Sign up</button>
 		</form>
 		</div>
 	)
-}
+};
