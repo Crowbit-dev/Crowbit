@@ -257,8 +257,8 @@
 .message-avatar {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), #313131);
   font-weight: 700;
@@ -295,9 +295,10 @@
 }
 
 .post-card {
+  --post-title-size: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .community-tag {
@@ -337,14 +338,17 @@
 
 .post-card h3 {
   margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.4;
+  font-size: var(--post-title-size);
+  /* line-height: 1.4; */
+  text-align: left;
 }
 
 .post-body {
   margin: 0;
-  color: var(--text);
-  line-height: 1.7;
+  color: #D3D3D3;
+  /* line-height: 1.7; */
+  text-align: left;
+  font-size: calc(var(--post-title-size) / 1.32);
 }
 
 .post-image {

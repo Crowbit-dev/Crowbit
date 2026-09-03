@@ -119,12 +119,12 @@ function App() {
                   <div className="post-header">
                     <div className="avatar-wrap">
                       <div className="avatar">{post.author[0]}</div>
-                      <span
+                      {/* <span
                         className="community-badge"
                         style={{
                           background: communities.find((community) => community.name === post.community)?.color,
                         }}
-                      />
+                      /> */}
                     </div>
                     <div className="post-meta">
                       <div className="post-author-row">
@@ -145,8 +145,8 @@ function App() {
                   </div>
 
                   <h3>{post.title}</h3>
-                  <p className="post-body">{post.body}</p>
                   {post.image && <img className="post-image" src={post.image} alt="Placeholder post visual" />}
+                  <p className="post-body">{post.body}</p>
 
                   <div className="post-stats">
                     {/* TODO: Add proper icons for upvotes, comments, and shares */}
