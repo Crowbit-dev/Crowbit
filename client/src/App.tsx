@@ -115,23 +115,30 @@ function App() {
 
               {posts.map((post) => (
                 <article key={`${post.author}-${post.title}`} className="post-card">
-                  <div className="community-badge">
-                    <span
-                      className="community-badge-picture"
-                      style={{
-                        background: communities.find((community) => community.name === post.community)?.color,
-                      }}
-                    />
-                    <span className="community-tag">{post.community}</span>
-                  </div>
                   <div className="post-header">
-                    <div className="avatar">{post.author[0]}</div>
+                    <div className="avatar-wrap">
+                      <div className="avatar">{post.author[0]}</div>
+                      <span
+                        className="community-badge"
+                        style={{
+                          background: communities.find((community) => community.name === post.community)?.color,
+                        }}
+                      />
+                    </div>
                     <div className="post-meta">
                       <div className="post-author-row">
                         <strong>{post.author}</strong>
                         <span>{post.handle}</span>
                         <span>•</span>
                         <span>{post.time}</span>
+                      </div>
+                      <div
+                        className="community-tag"
+                        style={{
+                          '--community-color': communities.find((community) => community.name === post.community)?.color,
+                        } as CSSProperties}
+                      >
+                        <span>{post.community}</span>
                       </div>
                     </div>
                   </div>
