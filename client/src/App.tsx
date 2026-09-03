@@ -111,6 +111,15 @@ function App() {
 
               {posts.map((post) => (
                 <article key={`${post.author}-${post.title}`} className="post-card">
+                  <div className="community-badge">
+                    <span
+                      className="community-badge-picture"
+                      style={{
+                        background: communities.find((community) => community.name === post.community)?.color,
+                      }}
+                    />
+                    <span className="community-tag">{post.community}</span>
+                  </div>
                   <div className="post-header">
                     <div className="avatar">{post.author[0]}</div>
                     <div className="post-meta">
@@ -120,7 +129,6 @@ function App() {
                         <span>•</span>
                         <span>{post.time}</span>
                       </div>
-                      <p className="community-tag">{post.community}</p>
                     </div>
                   </div>
 
@@ -128,6 +136,7 @@ function App() {
                   <p className="post-body">{post.body}</p>
 
                   <div className="post-stats">
+                    {/* TODO: Add proper icons for upvotes, comments, and shares */}
                     <span>▲ {post.stats.upvotes}k</span>
                     <span>💬 {post.stats.comments}</span>
                     <span>↗ {post.stats.shares}</span>

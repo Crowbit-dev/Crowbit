@@ -261,9 +261,31 @@
 }
 
 .post-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-top: 30px;
+}
+
+.community-badge {
+  position: absolute;
+  top: 2px;
+  left: 17px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.community-badge-picture {
+  width: 14px;
+  height: 14px;
+  margin-left: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
 }
 
 .post-header {
@@ -289,9 +311,7 @@
 }
 
 .community-tag {
-  margin: 6px 0 0;
-  color: #cdb7d0;
-  font-size: 0.8rem;
+  color: inherit;
 }
 
 .post-card h3 {
