@@ -101,11 +101,13 @@
 
 .home-layout {
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr) 190px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
-  padding: 28px 24px 40px 0;
+  margin-left: 190px;
+  width: calc(100% - 190px);
+  padding: 28px 24px 40px;
 }
 
 .side-panel,
@@ -114,12 +116,17 @@
 }
 
 .left-panel {
-  align-self: stretch;
-  min-height: calc(100vh - 105px);
+  position: fixed;
+  top: 76px;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  width: 190px;
   padding: 20px 12px 40px 16px;
   box-sizing: border-box;
   background: rgba(33, 33, 33, 0.72);
   border-right: 1px solid rgba(255, 255, 255, 0.07);
+  overflow-y: auto;
 }
 
 .panel-card,
@@ -438,10 +445,15 @@
 @media (max-width: 1100px) {
   .home-layout {
     grid-template-columns: 1fr;
+    width: 100%;
+    margin-left: 0;
   }
 
   .left-panel,
   .right-panel {
+    position: static;
+    width: auto;
+    min-height: 0;
     order: 2;
   }
 

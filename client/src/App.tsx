@@ -82,6 +82,7 @@ function App() {
           <button type="button" className="mode-toggle" onClick={() => setMode(mode === 'feed' ? 'messages' : 'feed')}>
             {mode === 'feed' ? 'Messages' : 'Feed'}
           </button>
+          {/* TODO: Logout button */}
         </div>
       </header>
 
