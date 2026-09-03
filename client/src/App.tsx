@@ -1,14 +1,16 @@
 import { useState, type CSSProperties } from 'react'
 import './App.css'
+import crowPhotograph from './assets/crowphotograph.png'
+import crowSideProfile from './assets/crowsideprofile.png'
 
 type ViewMode = 'feed' | 'messages'
 
 const communities = [
-  { name: 'c/Design', color: '#533e52' },
-  { name: 'c/Dev', color: '#423341' },
-  { name: 'c/Startup', color: '#515151' },
-  { name: 'c/Tech', color: '#313131' },
-  { name: 'c/Art', color: '#533e52' },
+  { name: 'Design', color: '#533e52' },
+  { name: 'Dev', color: '#423341' },
+  { name: 'Startup', color: '#515151' },
+  { name: 'Tech', color: '#313131' },
+  { name: 'Art', color: '#533e52' },
 ]
 
 const posts = [
@@ -16,27 +18,29 @@ const posts = [
     author: 'Nyra',
     handle: '@nyra',
     time: '2h ago',
-    community: 'c/Design',
+    community: 'Design',
     title: 'How are you building your personal brand in 2026?',
     body:
       'I am trying to keep my portfolio, content, and design process aligned without burning out. Curious what other creators are doing.',
+    image: crowPhotograph,
     stats: { comments: 182, upvotes: 2.4, shares: 42 },
   },
   {
     author: 'Milo',
     handle: '@milo',
     time: '5h ago',
-    community: 'c/Dev',
+    community: 'Dev',
     title: 'What is everyone using for fast internal tooling right now?',
     body:
       'I am comparing auth, dashboards, and deployment speed. I want something practical, not just shiny demos.',
+    image: crowSideProfile,
     stats: { comments: 96, upvotes: 1.8, shares: 21 },
   },
   {
     author: 'Ava',
     handle: '@ava',
     time: '1d ago',
-    community: 'c/Startup',
+    community: 'Startup',
     title: 'Founders: what do your best community rituals look like?',
     body:
       'The most sustainable communities usually feel less like a launch and more like a habit. I am collecting examples.',
@@ -134,6 +138,7 @@ function App() {
 
                   <h3>{post.title}</h3>
                   <p className="post-body">{post.body}</p>
+                  {post.image && <img className="post-image" src={post.image} alt="Placeholder post visual" />}
 
                   <div className="post-stats">
                     {/* TODO: Add proper icons for upvotes, comments, and shares */}
