@@ -1,4 +1,6 @@
 import { useState, type CSSProperties } from 'react'
+import { ArrowBigUp, LogOut, MessageCircle, Share2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import './App.css'
 import crowPhotograph from './assets/crowphotograph.png'
 import crowSideProfile from './assets/crowsideprofile.png'
@@ -57,6 +59,15 @@ const messages = [
 
 function App() {
   const [mode, setMode] = useState<ViewMode>('feed')
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    // await fetch('/api/session', {
+    //   method: 'DELETE',
+    //   credentials: 'include',
+    // })
+    navigate('/login', { replace: true })
+  }
 
   return (
     <div className="home-shell">
@@ -82,7 +93,9 @@ function App() {
           <button type="button" className="mode-toggle" onClick={() => setMode(mode === 'feed' ? 'messages' : 'feed')}>
             {mode === 'feed' ? 'Messages' : 'Feed'}
           </button>
-          {/* TODO: Logout button */}
+          <button type="button" className="logout-button" onClick={handleLogout} aria-label="Log out" title="Log out">
+            <LogOut aria-hidden="true" />
+          </button>
         </div>
       </header>
 
@@ -129,9 +142,9 @@ function App() {
                     <div className="post-meta">
                       <div className="post-author-row">
                         <strong>{post.author}</strong>
-                        <span>{post.handle}</span>
-                        <span>•</span>
-                        <span>{post.time}</span>
+                        <span className="post-handle">{post.handle}</span>
+                        <span className="post-divider">•</span>
+                        <span className="post-time">{post.time}</span>
                       </div>
                       <div
                         className="community-tag"
@@ -149,10 +162,18 @@ function App() {
                   <p className="post-body">{post.body}</p>
 
                   <div className="post-stats">
-                    {/* TODO: Add proper icons for upvotes, comments, and shares */}
-                    <span>▲ {post.stats.upvotes}k</span>
-                    <span>💬 {post.stats.comments}</span>
-                    <span>↗ {post.stats.shares}</span>
+                    <button type="button" className="post-action" aria-label={`Upvote ${post.title}`}>
+                      <ArrowBigUp aria-hidden="true" />
+                      <span>{post.stats.upvotes}k</span>
+                    </button>
+                    <button type="button" className="post-action" aria-label={`View comments for ${post.title}`}>
+                      <MessageCircle aria-hidden="true" />
+                      <span>{post.stats.comments}</span>
+                    </button>
+                    <button type="button" className="post-action" aria-label={`Share ${post.title}`}>
+                      <Share2 aria-hidden="true" />
+                      <span>{post.stats.shares}</span>
+                    </button>
                   </div>
                 </article>
               ))}

@@ -48,6 +48,18 @@ app.get("/api/session", (req: Request, res: Response) => {
 	});
 });
 
+app.delete("/api/session", (req: Request, res: Response) => {
+	req.session.destroy((error) => {
+		if (error) {
+			res.status(500).json({ message: "Unable to log out" });
+			return;
+		}
+
+		res.clearCookie("connect.sid");
+		res.sendStatus(204);
+	});
+});
+
 app.listen(port, () => {
 	console.log(`Server running on http://localhost:${port}`);
 });

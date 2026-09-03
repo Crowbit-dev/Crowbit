@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 18px 32px;
+  padding: 18px 16px;
   background: rgba(33, 33, 33, 0.9);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
@@ -97,6 +97,36 @@
   padding: 10px 16px;
   background: linear-gradient(135deg, var(--accent), #423341);
   font-weight: 700;
+}
+
+.logout-button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  background: #313131;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.logout-button:hover {
+  /* background: var(--accent); */
+  background: firebrick;
+  color: var(--text-h);
+}
+
+.logout-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.logout-button svg {
+  width: 19px;
+  height: 19px;
 }
 
 .home-layout {
@@ -332,6 +362,20 @@
   color: var(--text-h);
 }
 
+.post-handle {
+  color: var(--offwhite);
+}
+
+.post-divider {
+  user-select: none;
+  color: var(--offwhite);
+}
+
+.post-time {
+  /* color: gray; */
+  color: var(--offwhite);
+}
+
 .community-tag span {
   color: inherit;
 }
@@ -364,11 +408,39 @@
 
 .post-stats {
   display: flex;
-  gap: 18px;
+  gap: 16px;
   color: var(--text);
   font-size: 0.86rem;
   padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.post-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.post-action:hover {
+  background: var(--accent-bg);
+  color: var(--text-h);
+}
+
+.post-action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.post-action svg {
+  width: 20px;
+  height: 20px;
 }
 
 .messages-panel {
