@@ -22,7 +22,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  user-select: none;
 }
 
 .brand-mark {
@@ -34,19 +33,21 @@
   background: linear-gradient(135deg, var(--accent), #423341);
   font-weight: 800;
   color: white;
+  user-select: none;
 }
 
 .brand-name {
   margin: 0;
   font-size: 1.05rem;
   font-weight: 700;
+  user-select: none;
 }
 
-.brand-subtitle {
-  color: var(--text);
+.account-username {
+  color: var(--offwhite);
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  /* letter-spacing: 0.08em; */
+  /* text-transform: uppercase; */
 }
 
 .top-nav {

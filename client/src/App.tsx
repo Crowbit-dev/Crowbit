@@ -72,11 +72,12 @@ function App() {
   return (
     <div className="home-shell">
       <header className="topbar">
+        {/* TODO: Change brand-mark into user avatar */}
         <div className="brand-wrap">
           <div className="brand-mark">C</div>
           <div>
             <p className="brand-name">Crowbit</p>
-            <span className="brand-subtitle">social hub</span>
+            <span className="account-username">@test</span>
           </div>
         </div>
 
