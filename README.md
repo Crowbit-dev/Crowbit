@@ -1,4 +1,4 @@
-**WIP**
+**Project & README are WIP**
 
 # Crowbit
 
