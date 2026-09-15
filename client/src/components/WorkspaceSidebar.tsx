@@ -103,12 +103,6 @@ function WorkspaceSidebar({
             ))}
           </div>
         </div>
-
-        <div className="sidebar-card sidebar-note-card">
-          <p className="sidebar-kicker">Status</p>
-          <strong>{directMessages.filter((message) => message.status === 'online').length} friends online</strong>
-          <span>Keep this list lightweight and message-first.</span>
-        </div>
       </aside>
     )
   }
@@ -136,12 +130,6 @@ function WorkspaceSidebar({
             <button type="button" className="sidebar-chip">People</button>
             <button type="button" className="sidebar-chip">Communities</button>
           </div>
-        </div>
-
-        <div className="sidebar-card sidebar-note-card">
-          <p className="sidebar-kicker">Recent</p>
-          <strong>Design systems, privacy, moderation</strong>
-          <span>Suggested based on your activity.</span>
         </div>
       </aside>
     )
@@ -246,12 +234,6 @@ function WorkspaceSidebar({
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="sidebar-card sidebar-note-card">
-        <p className="sidebar-kicker">Members</p>
-        <strong>{activeCommunity.members.length} in {activeCommunity.name}</strong>
-        <span>Use the content area to focus on the selected space.</span>
       </div>
     </aside>
   )

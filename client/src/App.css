@@ -199,7 +199,6 @@
 .workspace-content h1,
 .workspace-content h2,
 .workspace-sidebar h2,
-.sidebar-note-card strong,
 .community-detail-card h2,
 .results-card h2,
 .conversation-panel h2 {
@@ -728,12 +727,6 @@
 
 .feed-hero .feed-stat-row {
   justify-content: flex-end;
-}
-
-.sidebar-note-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 @media (max-width: 1280px) {
