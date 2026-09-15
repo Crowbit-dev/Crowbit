@@ -181,8 +181,7 @@
 }
 
 .content-kicker,
-.sidebar-kicker,
-.conversation-badge {
+.sidebar-kicker {
   margin: 0 0 6px;
   color: var(--offwhite);
   font-size: 0.74rem;
@@ -192,8 +191,7 @@
 }
 
 .content-subcopy,
-.sidebar-copy,
-.conversation-subtitle {
+.sidebar-copy {
   color: var(--offwhite);
   line-height: 1.55;
 }
@@ -225,8 +223,6 @@
 
 .sidebar-section-head,
 .post-author-row,
-.conversation-header,
-.conversation-actions,
 .composer-toolbar,
 .section-heading-row {
   display: flex;
@@ -550,48 +546,6 @@
   background: rgba(83, 62, 82, 0.28);
 }
 
-.messages-panel {
-  min-width: 0;
-  padding: 18px;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.conversation-card {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-height: calc(100svh - 170px);
-  padding: 20px;
-  border-radius: 22px;
-  background: rgba(49, 49, 49, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: var(--shadow);
-}
-
-.conversation-header {
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.conversation-header h3 {
-  margin: 4px 0 6px;
-  font-size: 1.3rem;
-}
-
-.conversation-actions {
-  flex-wrap: wrap;
-}
-
-.conversation-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .member-chip {
   display: inline-flex;
   align-items: center;
@@ -845,10 +799,6 @@
   .feed-stat-row,
   .conversation-meta-row {
     width: 100%;
-  }
-
-  .conversation-card {
-    padding: 16px;
   }
 
   .workspace-rail {
