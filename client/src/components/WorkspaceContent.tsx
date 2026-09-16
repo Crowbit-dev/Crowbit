@@ -81,7 +81,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.dmHero}`}>
           <div>
             <p className={styles.contentKicker}>Direct messages</p>
-            <h1>{activeDm.name}</h1>
+            <h2>{activeDm.name}</h2>
             <p className={styles.contentSubcopy}>{activeDm.role} · {activeDm.status}</p>
           </div>
           <div className={styles.contentChipRow}>
@@ -155,7 +155,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.notificationsHero}`}>
           <div>
             <p className={styles.contentKicker}>Notifications</p>
-            <h1>Activity</h1>
+            <h2>Activity</h2>
             <p className={styles.contentSubcopy}>Unread messages across your communities, newest first.</p>
           </div>
           <div className={styles.contentChipRow}>
@@ -205,7 +205,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.searchHero}`}>
           <div>
             <p className={styles.contentKicker}>Search</p>
-            <h1>Find posts, people, and spaces</h1>
+            <h2>Find posts, people, and spaces</h2>
             <p className={styles.contentSubcopy}>Search in one place without changing screens.</p>
           </div>
           <div className={styles.searchHeroCard}>
@@ -263,7 +263,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.settingsHero}`}>
           <div>
             <p className={styles.contentKicker}>Settings</p>
-            <h1>Privacy, notifications, and appearance</h1>
+            <h2>Privacy, notifications, and appearance</h2>
             <p className={styles.contentSubcopy}>Tune the app around how public or private you want to be.</p>
           </div>
         </section>
@@ -301,7 +301,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.communityHero}`}>
           <div>
             <p className={styles.contentKicker}>Communities</p>
-            <h1>{activeCommunity.name}</h1>
+            <h2>{activeCommunity.name}</h2>
             <p className={styles.contentSubcopy}>
               {activeCommunity.channels.length} channels · {activeCommunity.members.length} members
             </p>
@@ -387,7 +387,7 @@ function WorkspaceContent({
       <section className={`${styles.contentHero} ${styles.feedHero}`}>
         <div>
           <p className={styles.contentKicker}>Feed</p>
-          <h1>What’s happening now</h1>
+          <h2>What’s happening now</h2>
           <p className={styles.contentSubcopy}>A fast stream of posts, ideas, and activity across the network.</p>
         </div>
         <div className={styles.feedStatRow}>
