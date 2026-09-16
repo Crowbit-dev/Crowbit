@@ -10,6 +10,7 @@
   --accent-border: rgba(83, 62, 82, 0.7);
   --social-bg: rgba(66, 51, 65, 0.5);
   --shadow: rgba(0, 0, 0, 0.25) 0 10px 15px -3px, rgba(0, 0, 0, 0.2) 0 4px 6px -2px;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.45);
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
