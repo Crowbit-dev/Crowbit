@@ -36,6 +36,21 @@
   gap: 10px;
 }
 
+.workspace-rail-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.rail-divider {
+  width: 28px;
+  height: 1px;
+  margin: 2px 0;
+  align-self: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .rail-button,
 .rail-profile,
 .sidebar-item,
@@ -47,6 +62,7 @@
 
 .rail-button {
   display: grid;
+  position: relative;
   place-items: center;
   width: 44px;
   height: 44px;
@@ -67,6 +83,8 @@
 .sidebar-item:focus-visible,
 .sidebar-chip:hover,
 .sidebar-chip:focus-visible,
+.content-chip:hover,
+.content-chip:focus-visible,
 .post-action:hover,
 .post-action:focus-visible {
   outline: none;
@@ -83,6 +101,24 @@
   background: rgba(83, 62, 82, 0.56);
   color: var(--text-h);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.rail-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: #e11d48;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  user-select: none;
 }
 
 .rail-profile {
@@ -237,6 +273,9 @@
 }
 
 .sidebar-search-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   justify-content: flex-start;
   padding: 14px 16px;
   border-radius: 16px;
@@ -255,6 +294,7 @@
   align-items: center;
   gap: 12px;
   width: 100%;
+  box-sizing: border-box;
   padding: 12px 13px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
@@ -285,6 +325,7 @@
 
 .sidebar-item-copy strong,
 .sidebar-item-copy span {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -371,12 +412,35 @@
 
 .sidebar-chip,
 .content-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 9px 12px;
+  cursor: pointer;
+  user-select: none;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.04);
   color: inherit;
   border: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 0.84rem;
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.sidebar-chip:hover,
+.sidebar-chip:focus-visible,
+.content-chip:hover,
+.content-chip:focus-visible {
+  background: rgba(83, 62, 82, 0.34);
+  color: var(--text-h);
+}
+
+.sidebar-chip:active,
+.content-chip:active {
+  transform: translateY(0);
+  background: rgba(83, 62, 82, 0.5);
 }
 
 .sidebar-chip.active {
@@ -622,6 +686,7 @@
   gap: 10px;
   min-width: 240px;
   padding: 18px 20px;
+  padding-left: 0;
   border-radius: 18px;
   background: rgba(33, 33, 33, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -655,6 +720,61 @@
   border-top: 0;
 }
 
+.sidebar-unread-count {
+  flex: 0 0 auto;
+  min-width: 24px;
+  padding: 2px 8px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: rgba(83, 62, 82, 0.6);
+  color: var(--text-h);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.notification-row {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.notification-row:first-child {
+  border-top: 0;
+}
+
+.notification-row:hover,
+.notification-row:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.24);
+}
+
+.notification-row > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-row strong {
+  display: block;
+}
+
+.notification-row p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .member-row {
   justify-content: flex-start;
 }
@@ -666,6 +786,10 @@
 .conversation-meta-row .member-chip,
 .mini-stat-card {
   min-width: 160px;
+}
+
+.mini-stat-card strong {
+  margin-right: 8px;
 }
 
 .community-focus-card {
@@ -771,6 +895,17 @@
   .workspace-rail-top {
     flex-direction: row;
     width: auto;
+  }
+
+  .workspace-rail-bottom {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .rail-divider {
+    width: 1px;
+    height: 28px;
+    margin: 0 2px;
   }
 
   .rail-profile {

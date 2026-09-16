@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import './App.css'
 import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
@@ -26,9 +26,24 @@ function App() {
     setActiveDmId(dmId)
   }
 
+  const openChannel = (communityName: string, channelId: string) => {
+    selectChannel(communityName, channelId)
+    setMode('communities')
+  }
+
+  const totalUnread = useMemo(
+    () => communities.reduce((sum, community) => sum + community.channels.reduce((inner, channel) => inner + (channel.unread ?? 0), 0), 0),
+    [],
+  )
+
   return (
     <div className="home-shell">
-      <WorkspaceRail mode={mode} onChangeMode={setMode} />
+      <WorkspaceRail
+        mode={mode}
+        totalUnread={totalUnread}
+        onChangeMode={setMode}
+        onCompose={() => setMode('feed')}
+      />
 
       <div className="workspace-frame">
         <WorkspaceSidebar
@@ -41,6 +56,7 @@ function App() {
           onSelectCommunity={selectCommunity}
           onSelectChannel={selectChannel}
           onSelectDm={selectDm}
+          onOpenChannel={openChannel}
         />
 
         <WorkspaceContent
@@ -51,6 +67,7 @@ function App() {
           activeCommunityName={activeCommunityName}
           activeChannelId={activeChannelId}
           activeDmId={activeDmId}
+          onOpenChannel={openChannel}
         />
       </div>
     </div>

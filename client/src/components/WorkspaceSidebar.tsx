@@ -11,6 +11,7 @@ type WorkspaceSidebarProps = {
   onSelectCommunity: (communityName: string) => void
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
+  onOpenChannel: (communityName: string, channelId: string) => void
 }
 
 function WorkspaceSidebar({
@@ -23,6 +24,7 @@ function WorkspaceSidebar({
   onSelectCommunity,
   onSelectChannel,
   onSelectDm,
+  onOpenChannel,
 }: WorkspaceSidebarProps) {
   const activeCommunity = communities.find((community) => community.name === activeCommunityName) ?? communities[0]
 
@@ -31,8 +33,8 @@ function WorkspaceSidebar({
       <aside className="workspace-sidebar">
         <div className="sidebar-heading-block">
           <p className="sidebar-kicker">Feed</p>
-          <h2>What’s happening</h2>
-          <p className="sidebar-copy">Keep an eye on your spaces without the channel list taking over the sidebar.</p>
+          <h2>Your spaces</h2>
+          <p className="sidebar-copy">Choose a space to catch up on its latest posts.</p>
         </div>
 
         <div className="sidebar-search-card">
@@ -70,9 +72,9 @@ function WorkspaceSidebar({
     return (
       <aside className="workspace-sidebar">
         <div className="sidebar-heading-block">
-          <p className="sidebar-kicker">Friends</p>
-          <h2>Direct access</h2>
-          <p className="sidebar-copy">Private chats, shared notes, and quick replies.</p>
+          <p className="sidebar-kicker">Direct messages</p>
+          <h2>Conversations</h2>
+          <p className="sidebar-copy">Pick up where you left off with friends.</p>
         </div>
 
         <div className="sidebar-search-card">
@@ -99,6 +101,49 @@ function WorkspaceSidebar({
                   <span>{message.role}</span>
                 </span>
                 <span className={`status-dot ${message.status}`} />
+              </button>
+            ))}
+          </div>
+        </div>
+      </aside>
+    )
+  }
+
+  if (mode === 'notifications') {
+    const unreadChannels = communities.flatMap((community) =>
+      community.channels
+        .filter((channel) => (channel.unread ?? 0) > 0)
+        .map((channel) => ({ community, channel })),
+    )
+    const totalUnread = unreadChannels.reduce((sum, entry) => sum + (entry.channel.unread ?? 0), 0)
+
+    return (
+      <aside className="workspace-sidebar">
+        <div className="sidebar-heading-block">
+          <p className="sidebar-kicker">Notifications</p>
+          <h2>Inbox</h2>
+          <p className="sidebar-copy">Unread Activity.</p>
+        </div>
+
+        <div className="sidebar-section">
+          <div className="sidebar-section-head">
+            <span>Unread</span>
+            <span>{totalUnread}</span>
+          </div>
+          <div className="sidebar-list">
+            {unreadChannels.map(({ community, channel }) => (
+              <button
+                key={`${community.name}-${channel.id}`}
+                type="button"
+                className={`sidebar-item ${activeCommunityName === community.name && activeChannelId === channel.id ? 'active' : ''}`}
+                onClick={() => onOpenChannel(community.name, channel.id)}
+              >
+                <span className="sidebar-dot" style={{ background: community.color }} />
+                <span className="sidebar-item-copy">
+                  <strong>#{channel.name}</strong>
+                  <span>{community.name}</span>
+                </span>
+                <span className="sidebar-unread-count">{channel.unread}</span>
               </button>
             ))}
           </div>
@@ -153,21 +198,21 @@ function WorkspaceSidebar({
               <span className="sidebar-item-icon"><Users aria-hidden="true" /></span>
               <span className="sidebar-item-copy">
                 <strong>Privacy</strong>
-                <span>Audience, visibility, exports</span>
+                {/* <span>Audience, visibility, exports</span> */}
               </span>
             </div>
             <div className="sidebar-item static-item">
               <span className="sidebar-item-icon"><Settings aria-hidden="true" /></span>
               <span className="sidebar-item-copy">
                 <strong>Account</strong>
-                <span>Profile, login, sessions</span>
+                {/* <span>Profile, login, sessions</span> */}
               </span>
             </div>
             <div className="sidebar-item static-item">
               <span className="sidebar-item-icon"><Hash aria-hidden="true" /></span>
               <span className="sidebar-item-copy">
                 <strong>Experience</strong>
-                <span>Appearance and interaction density</span>
+                {/* <span>Appearance and interaction density</span> */}
               </span>
             </div>
           </div>
@@ -180,8 +225,8 @@ function WorkspaceSidebar({
     <aside className="workspace-sidebar">
       <div className="sidebar-heading-block">
         <p className="sidebar-kicker">Communities</p>
-        <h2>{mode === 'communities' ? 'All spaces' : 'Your spaces'}</h2>
-        <p className="sidebar-copy">Pick a community, then drill into channels and members.</p>
+        <h2>All spaces</h2>
+        <p className="sidebar-copy">Select a community to view its channels and members.</p>
       </div>
 
       <div className="sidebar-search-card">

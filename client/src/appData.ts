@@ -1,7 +1,7 @@
 import crowPhotograph from './assets/crowphotograph.png'
 import crowSideProfile from './assets/crowsideprofile.png'
 
-export type WorkspaceMode = 'feed' | 'dms' | 'communities' | 'search' | 'settings'
+export type WorkspaceMode = 'feed' | 'dms' | 'communities' | 'notifications' | 'search' | 'settings'
 
 export type CommunityChannel = {
   id: string

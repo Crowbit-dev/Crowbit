@@ -1,4 +1,4 @@
-import { ArrowBigUp, MessageCircle, Search, Share2, Shield, Sparkles, Users } from 'lucide-react'
+import { ArrowBigUp, MessageCircle, PenLine, Phone, Search, Share2, Shield, Users, Video } from 'lucide-react'
 import { useMemo, type CSSProperties } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 
@@ -10,12 +10,21 @@ type WorkspaceContentProps = {
   activeCommunityName: string
   activeChannelId: string
   activeDmId: string
+  onOpenChannel: (communityName: string, channelId: string) => void
 }
 
 type MessageEntry = {
   author: string
   time: string
   body: string
+}
+
+// TEMPORARY: mock mutual friends per DM until the backend provides real data.
+const mutualFriendsByDm: Record<string, string[]> = {
+  maya: ['Jules', 'Sami', 'Theo'],
+  jules: ['Maya', 'Sami'],
+  sami: ['Maya', 'Jules', 'Theo', 'Noor'],
+  theo: ['Maya'],
 }
 
 function WorkspaceContent({
@@ -26,6 +35,7 @@ function WorkspaceContent({
   activeCommunityName,
   activeChannelId,
   activeDmId,
+  onOpenChannel,
 }: WorkspaceContentProps) {
   const activeCommunity = useMemo(
     () => communities.find((community) => community.name === activeCommunityName) ?? communities[0],
@@ -39,8 +49,13 @@ function WorkspaceContent({
     () => directMessages.find((message) => message.id === activeDmId) ?? directMessages[0],
     [activeDmId, directMessages],
   )
+  const mutualCommunities = useMemo(
+    () => communities.filter((community) => community.members.some((member) => member.name === activeDm.name)),
+    [activeDm.name, communities],
+  )
 
   if (mode === 'dms') {
+    const mutualFriends = mutualFriendsByDm[activeDm.id] ?? []
     const messages: MessageEntry[] = [
       {
         author: activeDm.name,
@@ -68,28 +83,33 @@ function WorkspaceContent({
             <p className="content-subcopy">{activeDm.role} · {activeDm.status}</p>
           </div>
           <div className="content-chip-row">
-            <span className="content-chip">Private</span>
-            <span className="content-chip">Fast replies</span>
-            <span className="content-chip">Friend-first</span>
+            <button type="button" className="content-chip" aria-label="Start voice call">
+              <Phone size={16} aria-hidden="true" />
+              Call
+            </button>
+            <button type="button" className="content-chip" aria-label="Start video call">
+              <Video size={16} aria-hidden="true" />
+              Video call
+            </button>
           </div>
         </section>
 
         <section className="panel-stack conversation-panel">
           <div className="conversation-meta-row">
-            <div className="member-chip">
+            {/* <div className="member-chip">
               <div className={`status-dot ${activeDm.status}`} />
               <div>
                 <strong>{activeDm.name}</strong>
-                <span>{activeDm.preview}</span>
+                <span>{activeDm.role} · {activeDm.status}</span>
               </div>
+            </div> */}
+            <div className="mini-stat-card">
+              <strong>{mutualCommunities.length}</strong>
+              <span>mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}</span>
             </div>
             <div className="mini-stat-card">
-              <strong>3</strong>
-              <span>shared notes</span>
-            </div>
-            <div className="mini-stat-card">
-              <strong>1m</strong>
-              <span>average reply</span>
+              <strong>{mutualFriends.length}</strong>
+              <span>mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}</span>
             </div>
           </div>
 
@@ -110,11 +130,68 @@ function WorkspaceContent({
 
           <div className="message-composer">
             <div className="composer-toolbar">
-              <Sparkles aria-hidden="true" />
+              <PenLine size={16} aria-hidden="true" />
               <span>Message {activeDm.name}</span>
             </div>
             <div className="composer-input">Write a private message...</div>
           </div>
+        </section>
+      </main>
+    )
+  }
+
+  if (mode === 'notifications') {
+    const unreadChannels = communities.flatMap((community) =>
+      community.channels
+        .filter((channel) => (channel.unread ?? 0) > 0)
+        .map((channel) => ({ community, channel })),
+    )
+    const totalUnread = unreadChannels.reduce((sum, entry) => sum + (entry.channel.unread ?? 0), 0)
+
+    return (
+      <main className="workspace-content">
+        <section className="content-hero notifications-hero">
+          <div>
+            <p className="content-kicker">Notifications</p>
+            <h1>Activity</h1>
+            <p className="content-subcopy">Unread messages across your communities, newest first.</p>
+          </div>
+          <div className="content-chip-row">
+            <span className="content-chip">{totalUnread} unread</span>
+            <span className="content-chip">{unreadChannels.length} channels</span>
+          </div>
+        </section>
+
+        <section className="panel-stack results-card">
+          <div className="section-heading-row">
+            <h2>Unread</h2>
+            <span>{totalUnread} messages</span>
+          </div>
+          {unreadChannels.length === 0 ? (
+            <article className="info-card">
+              <strong>You&apos;re all caught up</strong>
+              <p>New mentions and replies will land here.</p>
+            </article>
+          ) : (
+            <div className="result-list">
+              {unreadChannels.map(({ community, channel }) => (
+                <button
+                  key={`${community.name}-${channel.id}`}
+                  type="button"
+                  className="result-row notification-row"
+                  onClick={() => onOpenChannel(community.name, channel.id)}
+                  aria-label={`Open ${channel.name} in ${community.name}, ${channel.unread} unread messages`}
+                >
+                  <span className="sidebar-dot" style={{ background: community.color }} />
+                  <div>
+                    <strong>#{channel.name}</strong>
+                    <p>{community.name} · {channel.topic}</p>
+                  </div>
+                  <span className="sidebar-unread-count">{channel.unread}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </section>
       </main>
     )
@@ -186,10 +263,6 @@ function WorkspaceContent({
             <p className="content-kicker">Settings</p>
             <h1>Privacy, notifications, and appearance</h1>
             <p className="content-subcopy">Tune the app around how public or private you want to be.</p>
-          </div>
-          <div className="content-chip-row">
-            <span className="content-chip">Private by default</span>
-            <span className="content-chip">No trackers</span>
           </div>
         </section>
 
