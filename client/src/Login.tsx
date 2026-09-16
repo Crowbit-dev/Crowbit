@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import "./Auth.css";
+import styles from "./Auth.module.css";
 import crowpng from "./assets/crowphotograph.png";
 
 type FormData = {
@@ -45,15 +45,15 @@ export default function Login() {
 	};
 
 	return (
-		<div className="auth-page">
-			<div className="auth-visual">
-				<div className="speech-bubble">
+		<div className={styles.authPage}>
+			<div className={styles.authVisual}>
+				<div className={styles.speechBubble}>
 					<h2>Welcome back 😳</h2>
 				</div>
-				<img src={crowpng} alt="Crow" className="auth-crow" />
+				<img src={crowpng} alt="Crow" className={styles.authCrow} />
 			</div>
 
-			<form className="auth-form" onSubmit={handleSubmit}>
+			<form className={styles.authForm} onSubmit={handleSubmit}>
 				<label>
 					Email
 					<input
@@ -74,14 +74,14 @@ export default function Login() {
 					/>
 				</label>
 
-				{error && <p className="auth-error">{error}</p>}
+				{error && <p className={styles.authError}>{error}</p>}
 
 				<button type="submit">Log in</button>
 			</form>
 
-			<div className="auth-switch">
+			<div className={styles.authSwitch}>
 				<span>Need an account?</span>
-				<Link to="/signup" className="auth-link">
+				<Link to="/signup" className={styles.authLink}>
 					Sign up
 				</Link>
 			</div>

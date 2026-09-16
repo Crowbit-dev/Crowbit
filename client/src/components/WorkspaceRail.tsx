@@ -1,6 +1,7 @@
 import { Bell, HeadphoneOff, Headphones, Layers3, Menu, MessageCircle, Mic, MicOff, Plus, Search, Settings } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import type { WorkspaceMode } from '../appData'
+import styles from './WorkspaceRail.module.css'
 
 type RailItem = {
   mode: WorkspaceMode
@@ -29,35 +30,35 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
   ]
 
   return (
-    <aside className="workspace-rail" aria-label="Primary navigation">
-      <div className="workspace-rail-top">
+    <aside className={styles.workspaceRail} aria-label="Primary navigation">
+      <div className={styles.workspaceRailTop}>
         {railItems.map((item) => (
           <button
             key={item.mode}
             type="button"
-            className={`rail-button ${mode === item.mode ? 'active' : ''}`}
+            className={`${styles.railButton} ${mode === item.mode ? styles.active : ''}`}
             onClick={() => onChangeMode(item.mode)}
             aria-label={item.label}
             title={item.label}
           >
             {item.icon}
             {item.mode === 'notifications' && totalUnread > 0 && (
-              <span className="rail-badge" aria-hidden="true">
+              <span className={styles.railBadge} aria-hidden="true">
                 {totalUnread > 99 ? '99+' : totalUnread}
               </span>
             )}
           </button>
         ))}
-        <span className="rail-divider" aria-hidden="true" />
-        <button type="button" className="rail-button" onClick={onCompose} aria-label="Compose new post" title="Compose new post">
+        <span className={styles.railDivider} aria-hidden="true" />
+        <button type="button" className={styles.railButton} onClick={onCompose} aria-label="Compose new post" title="Compose new post">
           <Plus aria-hidden="true" />
         </button>
       </div>
 
-      <div className="workspace-rail-bottom">
+      <div className={styles.workspaceRailBottom}>
         <button
           type="button"
-          className={`rail-button rail-voice ${muted ? 'active' : ''}`}
+          className={`${styles.railButton} ${muted ? styles.active : ''}`}
           onClick={() => setMuted((prev) => !prev)}
           aria-label={muted ? 'Unmute microphone' : 'Mute microphone'}
           aria-pressed={muted}
@@ -67,7 +68,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
         </button>
         <button
           type="button"
-          className={`rail-button rail-voice ${deafened ? 'active' : ''}`}
+          className={`${styles.railButton} ${deafened ? styles.active : ''}`}
           onClick={() => setDeafened((prev) => !prev)}
           aria-label={deafened ? 'Undeafen audio' : 'Deafen audio'}
           aria-pressed={deafened}
@@ -75,8 +76,8 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
         >
           {deafened ? <HeadphoneOff aria-hidden="true" /> : <Headphones aria-hidden="true" />}
         </button>
-        <button type="button" className="rail-profile" aria-label="Current user profile" title="Current user profile">
-          <span className="rail-avatar">N</span>
+        <button type="button" className={styles.railProfile} aria-label="Current user profile" title="Current user profile">
+          <span className={styles.railAvatar}>N</span>
         </button>
       </div>
     </aside>

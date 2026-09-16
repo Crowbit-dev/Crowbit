@@ -1,0 +1,216 @@
+.workspaceSidebar {
+  min-width: 0;
+  padding: 24px 18px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(28, 28, 28, 0.54);
+  backdrop-filter: blur(8px);
+}
+
+.workspaceSidebar h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.sidebarHeadingBlock {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: linear-gradient(180deg, rgba(83, 62, 82, 0.2), rgba(49, 49, 49, 0.82));
+  border-radius: 18px;
+}
+
+.sidebarKicker {
+  margin: 0 0 6px;
+  color: var(--offwhite);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sidebarCopy {
+  color: var(--offwhite);
+  line-height: 1.55;
+}
+
+.sidebarSearchCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+
+.sidebarSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebarSectionHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  color: var(--offwhite);
+  font-size: 0.86rem;
+}
+
+.sidebarList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+.sidebarItem:hover,
+.sidebarItem:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  background: rgba(83, 62, 82, 0.24);
+}
+
+.sidebarItem.active {
+  background: rgba(83, 62, 82, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.sidebarItemCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sidebarItemCopy strong,
+.sidebarItemCopy span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebarAvatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #675566);
+  color: white;
+  font-weight: 800;
+}
+
+.sidebarItemIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--offwhite);
+}
+
+.sidebarSearchCard svg,
+.sidebarItemIcon svg {
+  flex: 0 0 auto;
+  color: var(--offwhite);
+}
+
+.sidebarChipList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sidebarChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font-size: 0.84rem;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.sidebarChip:hover,
+.sidebarChip:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  background: rgba(83, 62, 82, 0.34);
+  color: var(--text-h);
+}
+
+.sidebarChip:active {
+  transform: translateY(0);
+  background: rgba(83, 62, 82, 0.5);
+}
+
+.sidebarChip.active {
+  background: rgba(83, 62, 82, 0.45);
+  color: var(--text-h);
+}
+
+.sidebarCard {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+}
+
+.sidebarNoteCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 980px) {
+  .workspaceSidebar {
+    order: 2;
+    border-right: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+@media (max-width: 640px) {
+  .workspaceSidebar {
+    padding: 16px;
+  }
+}

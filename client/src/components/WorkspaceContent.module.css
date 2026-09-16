@@ -1,0 +1,586 @@
+.workspaceContent {
+  min-width: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+}
+
+.workspaceContent h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+.workspaceContent h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.panelStack {
+  min-width: 0;
+}
+
+.workspaceContent .panelStack {
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.contentHero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)),
+    rgba(49, 49, 49, 0.7);
+}
+
+.feedHero,
+.dmHero,
+.communityHero,
+.searchHero,
+.settingsHero,
+.notificationsHero {
+  align-items: center;
+}
+
+.contentKicker {
+  margin: 0 0 6px;
+  color: var(--offwhite);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.contentSubcopy {
+  color: var(--offwhite);
+  line-height: 1.55;
+}
+
+.contentChipRow,
+.feedStatRow,
+.conversationMetaRow,
+.resultList,
+.memberGrid,
+.channelGrid,
+.settingsGrid,
+.searchGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.contentChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.84rem;
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.contentChip:hover,
+.contentChip:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  background: rgba(83, 62, 82, 0.34);
+  color: var(--text-h);
+}
+
+.contentChip:active {
+  transform: translateY(0);
+  background: rgba(83, 62, 82, 0.5);
+}
+
+.sectionHeadingRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  color: var(--offwhite);
+  font-size: 0.86rem;
+}
+
+.resultsCard,
+.communityDetailCard,
+.infoCard {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+}
+
+.resultsCard h2,
+.communityDetailCard h2 {
+  margin: 0;
+}
+
+.resultList,
+.memberGrid {
+  flex-direction: column;
+}
+
+.resultRow,
+.memberRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.resultRow:first-child,
+.memberRow:first-child {
+  border-top: 0;
+}
+
+.memberRow {
+  justify-content: flex-start;
+}
+
+.resultRow p,
+.memberRow p,
+.settingsCard p,
+.channelCard p,
+.infoCard p {
+  color: var(--offwhite);
+}
+
+.notificationRow {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.notificationRow:first-child {
+  border-top: 0;
+}
+
+.notificationRow:hover,
+.notificationRow:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.24);
+}
+
+.notificationRow > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationRow strong {
+  display: block;
+}
+
+.notificationRow p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.memberChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.memberChip strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.memberChip span {
+  color: var(--offwhite);
+}
+
+.miniStatCard {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+  min-width: 160px;
+}
+
+.miniStatCard strong {
+  margin-right: 8px;
+}
+
+.conversationMetaRow {
+  align-items: stretch;
+}
+
+.conversationFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 2px;
+}
+
+.chatMessage {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.chatMessage:first-child {
+  border-top: 0;
+}
+
+.chatMessageCopy {
+  min-width: 0;
+}
+
+.chatMessageCopy p {
+  color: var(--offwhite);
+}
+
+.chatMessageTopline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.chatMessageTopline strong {
+  color: var(--text-h);
+}
+
+.chatMessageTopline span {
+  color: var(--offwhite);
+  font-size: 0.78rem;
+}
+
+.messageAvatar,
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--accent), #313131);
+  color: white;
+  font-weight: 800;
+}
+
+.avatar.large {
+  width: 46px;
+  height: 46px;
+}
+
+.messageComposer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  border-radius: 18px;
+  background: rgba(33, 33, 33, 0.82);
+}
+
+.composerToolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--offwhite);
+  font-size: 0.84rem;
+}
+
+.composerCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(100%, 760px);
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+}
+
+.composerBox {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: 999px;
+  background: rgba(33, 33, 33, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--offwhite);
+  text-align: left;
+}
+
+.feedStack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  justify-items: center;
+}
+
+.searchGrid,
+.settingsGrid,
+.communityGrid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.channelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.searchHeroCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 240px;
+  padding: 18px 20px;
+  padding-left: 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  border-radius: 18px;
+  background: rgba(33, 33, 33, 0.82);
+  color: var(--offwhite);
+}
+
+.searchHeroCard svg,
+.settingsCard svg {
+  flex: 0 0 auto;
+  color: var(--offwhite);
+}
+
+.settingsCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+}
+
+.settingsGrid .settingsCard,
+.searchGrid .infoCard {
+  min-height: 130px;
+  justify-content: flex-start;
+}
+
+.communityFocusCard {
+  min-width: 220px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(33, 33, 33, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.communityFocusCard strong {
+  display: block;
+  margin: 4px 0;
+  font-size: 1.1rem;
+}
+
+.communityFocusCard span {
+  color: var(--offwhite);
+  line-height: 1.5;
+}
+
+.channelCard {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+  border-left: 3px solid var(--community-color, var(--accent));
+}
+
+.channelCard p {
+  color: var(--offwhite);
+}
+
+.channelCard.active {
+  background: rgba(83, 62, 82, 0.25);
+}
+
+.postCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 760px);
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow);
+  background: rgba(49, 49, 49, 0.82);
+  border-radius: 18px;
+}
+
+.postCard h3 {
+  margin: 0;
+  font-size: 1.22rem;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.postMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.postAuthorRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.postHandle,
+.postTime,
+.postDivider {
+  color: var(--offwhite);
+}
+
+.postDivider {
+  user-select: none;
+}
+
+.communityTag {
+  display: inline-flex;
+  align-items: center;
+  color: color-mix(in srgb, var(--community-color) 55%, white);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.postImage {
+  display: block;
+  width: min(100%, 560px);
+  height: auto;
+  align-self: center;
+  max-height: 320px;
+  object-fit: contain;
+  background: rgba(16, 16, 16, 0.32);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.postBody {
+  margin: 0;
+  line-height: 1.65;
+  color: var(--offwhite);
+}
+
+.postStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.postAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.postAction:hover,
+.postAction:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  background: rgba(83, 62, 82, 0.28);
+}
+
+.feedHero .feedStatRow {
+  justify-content: flex-end;
+}
+
+@media (max-width: 1280px) {
+  .communityGrid,
+  .settingsGrid,
+  .searchGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 980px) {
+  .workspaceContent {
+    order: 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .workspaceContent {
+    padding: 16px;
+  }
+
+  .contentHero {
+    padding: 20px;
+    flex-direction: column;
+  }
+
+  .feedStatRow,
+  .conversationMetaRow {
+    width: 100%;
+  }
+
+  .searchHeroCard {
+    width: 100%;
+    min-width: 0;
+  }
+}

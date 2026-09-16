@@ -1,5 +1,7 @@
 import { Hash, Search, Settings, Users } from 'lucide-react'
 import type { Community, DirectMessage, WorkspaceMode } from '../appData'
+import shared from '../styles/shared.module.css'
+import styles from './WorkspaceSidebar.module.css'
 
 type WorkspaceSidebarProps = {
   mode: WorkspaceMode
@@ -30,33 +32,33 @@ function WorkspaceSidebar({
 
   if (mode === 'feed') {
     return (
-      <aside className="workspace-sidebar">
-        <div className="sidebar-heading-block">
-          <p className="sidebar-kicker">Feed</p>
+      <aside className={styles.workspaceSidebar}>
+        <div className={styles.sidebarHeadingBlock}>
+          <p className={styles.sidebarKicker}>Feed</p>
           <h2>Your spaces</h2>
-          <p className="sidebar-copy">Choose a space to catch up on its latest posts.</p>
+          <p className={styles.sidebarCopy}>Choose a space to catch up on its latest posts.</p>
         </div>
 
-        <div className="sidebar-search-card">
+        <div className={styles.sidebarSearchCard}>
           <Search aria-hidden="true" />
           <span>Search the network</span>
         </div>
 
-        <div className="sidebar-section">
-          <div className="sidebar-section-head">
+        <div className={styles.sidebarSection}>
+          <div className={styles.sidebarSectionHead}>
             <span>Spaces</span>
             <span>{communities.length}</span>
           </div>
-          <div className="sidebar-list">
+          <div className={styles.sidebarList}>
             {communities.map((community) => (
               <button
                 key={community.name}
                 type="button"
-                className={`sidebar-item ${activeCommunity.name === community.name ? 'active' : ''}`}
+                className={`${styles.sidebarItem} ${activeCommunity.name === community.name ? styles.active : ''}`}
                 onClick={() => onSelectCommunity(community.name)}
               >
-                <span className="sidebar-dot" style={{ background: community.color }} />
-                <span className="sidebar-item-copy">
+                <span className={shared.sidebarDot} style={{ background: community.color }} />
+                <span className={styles.sidebarItemCopy}>
                   <strong>{community.name}</strong>
                   <span>{community.members.length} members</span>
                 </span>
@@ -70,37 +72,37 @@ function WorkspaceSidebar({
 
   if (mode === 'dms') {
     return (
-      <aside className="workspace-sidebar">
-        <div className="sidebar-heading-block">
-          <p className="sidebar-kicker">Direct messages</p>
+      <aside className={styles.workspaceSidebar}>
+        <div className={styles.sidebarHeadingBlock}>
+          <p className={styles.sidebarKicker}>Direct messages</p>
           <h2>Conversations</h2>
-          <p className="sidebar-copy">Pick up where you left off with friends.</p>
+          <p className={styles.sidebarCopy}>Pick up where you left off with friends.</p>
         </div>
 
-        <div className="sidebar-search-card">
+        <div className={styles.sidebarSearchCard}>
           <Search aria-hidden="true" />
           <span>Search friends</span>
         </div>
 
-        <div className="sidebar-section">
-          <div className="sidebar-section-head">
+        <div className={styles.sidebarSection}>
+          <div className={styles.sidebarSectionHead}>
             <span>Friends</span>
             <span>{directMessages.length}</span>
           </div>
-          <div className="sidebar-list">
+          <div className={styles.sidebarList}>
             {directMessages.map((message) => (
               <button
                 key={message.id}
                 type="button"
-                className={`sidebar-item dm-item ${activeDmId === message.id ? 'active' : ''}`}
+                className={`${styles.sidebarItem} ${activeDmId === message.id ? styles.active : ''}`}
                 onClick={() => onSelectDm(message.id)}
               >
-                <span className="sidebar-avatar">{message.name[0]}</span>
-                <span className="sidebar-item-copy">
+                <span className={styles.sidebarAvatar}>{message.name[0]}</span>
+                <span className={styles.sidebarItemCopy}>
                   <strong>{message.name}</strong>
                   <span>{message.role}</span>
                 </span>
-                <span className={`status-dot ${message.status}`} />
+                <span className={`${shared.statusDot} ${shared[message.status]}`} />
               </button>
             ))}
           </div>
@@ -118,32 +120,32 @@ function WorkspaceSidebar({
     const totalUnread = unreadChannels.reduce((sum, entry) => sum + (entry.channel.unread ?? 0), 0)
 
     return (
-      <aside className="workspace-sidebar">
-        <div className="sidebar-heading-block">
-          <p className="sidebar-kicker">Notifications</p>
+      <aside className={styles.workspaceSidebar}>
+        <div className={styles.sidebarHeadingBlock}>
+          <p className={styles.sidebarKicker}>Notifications</p>
           <h2>Inbox</h2>
-          <p className="sidebar-copy">Unread Activity.</p>
+          <p className={styles.sidebarCopy}>Unread Activity.</p>
         </div>
 
-        <div className="sidebar-section">
-          <div className="sidebar-section-head">
+        <div className={styles.sidebarSection}>
+          <div className={styles.sidebarSectionHead}>
             <span>Unread</span>
             <span>{totalUnread}</span>
           </div>
-          <div className="sidebar-list">
+          <div className={styles.sidebarList}>
             {unreadChannels.map(({ community, channel }) => (
               <button
                 key={`${community.name}-${channel.id}`}
                 type="button"
-                className={`sidebar-item ${activeCommunityName === community.name && activeChannelId === channel.id ? 'active' : ''}`}
+                className={`${styles.sidebarItem} ${activeCommunityName === community.name && activeChannelId === channel.id ? styles.active : ''}`}
                 onClick={() => onOpenChannel(community.name, channel.id)}
               >
-                <span className="sidebar-dot" style={{ background: community.color }} />
-                <span className="sidebar-item-copy">
+                <span className={shared.sidebarDot} style={{ background: community.color }} />
+                <span className={styles.sidebarItemCopy}>
                   <strong>#{channel.name}</strong>
                   <span>{community.name}</span>
                 </span>
-                <span className="sidebar-unread-count">{channel.unread}</span>
+                <span className={shared.sidebarUnreadCount}>{channel.unread}</span>
               </button>
             ))}
           </div>
@@ -154,26 +156,26 @@ function WorkspaceSidebar({
 
   if (mode === 'search') {
     return (
-      <aside className="workspace-sidebar">
-        <div className="sidebar-heading-block">
-          <p className="sidebar-kicker">Search</p>
+      <aside className={styles.workspaceSidebar}>
+        <div className={styles.sidebarHeadingBlock}>
+          <p className={styles.sidebarKicker}>Search</p>
           <h2>Find anything</h2>
-          <p className="sidebar-copy">Search posts, people, and communities from one place.</p>
+          <p className={styles.sidebarCopy}>Search posts, people, and communities from one place.</p>
         </div>
 
-        <div className="sidebar-search-card">
+        <div className={styles.sidebarSearchCard}>
           <Search aria-hidden="true" />
           <span>Search the network</span>
         </div>
 
-        <div className="sidebar-section">
-          <div className="sidebar-section-head">
+        <div className={styles.sidebarSection}>
+          <div className={styles.sidebarSectionHead}>
             <span>Filters</span>
           </div>
-          <div className="sidebar-chip-list">
-            <button type="button" className="sidebar-chip active">Posts</button>
-            <button type="button" className="sidebar-chip">People</button>
-            <button type="button" className="sidebar-chip">Communities</button>
+          <div className={styles.sidebarChipList}>
+            <button type="button" className={`${styles.sidebarChip} ${styles.active}`}>Posts</button>
+            <button type="button" className={styles.sidebarChip}>People</button>
+            <button type="button" className={styles.sidebarChip}>Communities</button>
           </div>
         </div>
       </aside>
@@ -182,35 +184,35 @@ function WorkspaceSidebar({
 
   if (mode === 'settings') {
     return (
-      <aside className="workspace-sidebar">
-        <div className="sidebar-heading-block">
-          <p className="sidebar-kicker">Settings</p>
+      <aside className={styles.workspaceSidebar}>
+        <div className={styles.sidebarHeadingBlock}>
+          <p className={styles.sidebarKicker}>Settings</p>
           <h2>Preferences</h2>
-          <p className="sidebar-copy">Control visibility, notifications, and privacy defaults.</p>
+          <p className={styles.sidebarCopy}>Control visibility, notifications, and privacy defaults.</p>
         </div>
 
-        <div className="sidebar-section">
-          <div className="sidebar-section-head">
+        <div className={styles.sidebarSection}>
+          <div className={styles.sidebarSectionHead}>
             <span>Categories</span>
           </div>
-          <div className="sidebar-list settings-list">
-            <div className="sidebar-item static-item">
-              <span className="sidebar-item-icon"><Users aria-hidden="true" /></span>
-              <span className="sidebar-item-copy">
+          <div className={styles.sidebarList}>
+            <div className={styles.sidebarItem}>
+              <span className={styles.sidebarItemIcon}><Users aria-hidden="true" /></span>
+              <span className={styles.sidebarItemCopy}>
                 <strong>Privacy</strong>
                 {/* <span>Audience, visibility, exports</span> */}
               </span>
             </div>
-            <div className="sidebar-item static-item">
-              <span className="sidebar-item-icon"><Settings aria-hidden="true" /></span>
-              <span className="sidebar-item-copy">
+            <div className={styles.sidebarItem}>
+              <span className={styles.sidebarItemIcon}><Settings aria-hidden="true" /></span>
+              <span className={styles.sidebarItemCopy}>
                 <strong>Account</strong>
                 {/* <span>Profile, login, sessions</span> */}
               </span>
             </div>
-            <div className="sidebar-item static-item">
-              <span className="sidebar-item-icon"><Hash aria-hidden="true" /></span>
-              <span className="sidebar-item-copy">
+            <div className={styles.sidebarItem}>
+              <span className={styles.sidebarItemIcon}><Hash aria-hidden="true" /></span>
+              <span className={styles.sidebarItemCopy}>
                 <strong>Experience</strong>
                 {/* <span>Appearance and interaction density</span> */}
               </span>
@@ -222,33 +224,33 @@ function WorkspaceSidebar({
   }
 
   return (
-    <aside className="workspace-sidebar">
-      <div className="sidebar-heading-block">
-        <p className="sidebar-kicker">Communities</p>
+    <aside className={styles.workspaceSidebar}>
+      <div className={styles.sidebarHeadingBlock}>
+        <p className={styles.sidebarKicker}>Communities</p>
         <h2>All spaces</h2>
-        <p className="sidebar-copy">Select a community to view its channels and members.</p>
+        <p className={styles.sidebarCopy}>Select a community to view its channels and members.</p>
       </div>
 
-      <div className="sidebar-search-card">
+      <div className={styles.sidebarSearchCard}>
         <Search aria-hidden="true" />
         <span>Search communities</span>
       </div>
 
-      <div className="sidebar-section">
-        <div className="sidebar-section-head">
+      <div className={styles.sidebarSection}>
+        <div className={styles.sidebarSectionHead}>
           <span>Spaces</span>
           <span>{communities.length}</span>
         </div>
-        <div className="sidebar-list">
+        <div className={styles.sidebarList}>
           {communities.map((community) => (
             <button
               key={community.name}
               type="button"
-              className={`sidebar-item ${activeCommunity.name === community.name ? 'active' : ''}`}
+              className={`${styles.sidebarItem} ${activeCommunity.name === community.name ? styles.active : ''}`}
               onClick={() => onSelectCommunity(community.name)}
             >
-              <span className="sidebar-dot" style={{ background: community.color }} />
-              <span className="sidebar-item-copy">
+              <span className={shared.sidebarDot} style={{ background: community.color }} />
+              <span className={styles.sidebarItemCopy}>
                 <strong>{community.name}</strong>
                 <span>{community.members.length} members</span>
               </span>
@@ -257,25 +259,25 @@ function WorkspaceSidebar({
         </div>
       </div>
 
-      <div className="sidebar-section">
-        <div className="sidebar-section-head">
+      <div className={styles.sidebarSection}>
+        <div className={styles.sidebarSectionHead}>
           <span>Channels</span>
           <span>Active</span>
         </div>
-        <div className="sidebar-list">
+        <div className={styles.sidebarList}>
           {activeCommunity.channels.map((channel) => (
             <button
               key={channel.id}
               type="button"
-              className={`sidebar-item channel-item ${activeChannelId === channel.id ? 'active' : ''}`}
+              className={`${styles.sidebarItem} ${activeChannelId === channel.id ? styles.active : ''}`}
               onClick={() => onSelectChannel(activeCommunity.name, channel.id)}
             >
-              <span className="sidebar-item-icon"><Hash aria-hidden="true" /></span>
-              <span className="sidebar-item-copy">
+              <span className={styles.sidebarItemIcon}><Hash aria-hidden="true" /></span>
+              <span className={styles.sidebarItemCopy}>
                 <strong>{channel.name}</strong>
                 <span>{channel.topic}</span>
               </span>
-              {channel.unread ? <span className="unread-pill">{channel.unread}</span> : null}
+              {channel.unread ? <span className={shared.sidebarUnreadCount}>{channel.unread}</span> : null}
             </button>
           ))}
         </div>

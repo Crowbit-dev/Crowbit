@@ -1,14 +1,13 @@
-.auth-page {
+.authPage {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  /* padding: 48px 16px; */
   box-sizing: border-box;
 }
 
-.auth-visual {
+.authVisual {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -16,7 +15,7 @@
   margin-bottom: 16px;
 }
 
-.speech-bubble {
+.speechBubble {
   position: relative;
   display: inline-block;
   padding: 12px 22px;
@@ -27,7 +26,7 @@
   margin-bottom: 20px;
 }
 
-.speech-bubble::after {
+.speechBubble::after {
   content: '';
   position: absolute;
   left: 13.5%;
@@ -39,21 +38,20 @@
   background: var(--accent);
 }
 
-.speech-bubble h2 {
+.speechBubble h2 {
   margin: 0;
   font-size: 1.4rem;
   text-align: center;
   color: #fff;
 }
 
-.auth-crow {
-  /* width: 120px; */
+.authCrow {
   height: 200px;
   object-fit: contain;
   filter: drop-shadow(0 0 12px var(--accent-border));
 }
 
-.auth-form {
+.authForm {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -62,7 +60,7 @@
   text-align: left;
 }
 
-.auth-form label {
+.authForm label {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -71,7 +69,7 @@
   color: var(--text-h);
 }
 
-.auth-form input {
+.authForm input {
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -82,13 +80,13 @@
   transition: border-color 0.15s;
 }
 
-.auth-form input:focus {
+.authForm input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-.auth-form button[type="submit"] {
+.authForm button[type="submit"] {
   margin-top: 8px;
   padding: 10px 16px;
   border: none;
@@ -102,17 +100,17 @@
   transition: opacity 0.15s;
 }
 
-.auth-form button[type="submit"]:hover {
+.authForm button[type="submit"]:hover {
   opacity: 0.9;
 }
 
-.auth-error {
+.authError {
   color: #ef4444;
   font-size: 14px;
   text-align: center;
 }
 
-.auth-switch {
+.authSwitch {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,14 +120,14 @@
   color: var(--text);
 }
 
-.auth-link {
+.authLink {
   color: var(--text-h);
   text-decoration: none;
   font-weight: 700;
   transition: opacity 0.15s ease;
 }
 
-.auth-link:hover {
+.authLink:hover {
   opacity: 0.8;
   text-decoration: underline;
 }

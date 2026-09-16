@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import crowpng from "./assets/crowsideprofile.png";
-import "./Auth.css";
+import styles from "./Auth.module.css";
 
 type FormData = {
 	email: string;
@@ -58,7 +58,7 @@ export default function Signup() {
 	};
 
 	return (
-		<div className="auth-page" style={{ position: "relative" }}>
+		<div className={styles.authPage} style={{ position: "relative" }}>
 			<img
 				src={crowpng}
 				alt="Crow"
@@ -73,7 +73,7 @@ export default function Signup() {
 					filter: "drop-shadow(0 0 12px var(--accent-border))",
 				}}
 			/>
-			<form className="auth-form" onSubmit={handleSubmit}>
+			<form className={styles.authForm} onSubmit={handleSubmit}>
 				<h2>Create an account</h2>
 
 				<label>
@@ -116,14 +116,14 @@ export default function Signup() {
 					/>
 				</label>
 
-				{error && <p className="auth-error">{error}</p>}
+				{error && <p className={styles.authError}>{error}</p>}
 
 				<button type="submit">Sign up</button>
 			</form>
 
-			<div className="auth-switch">
+			<div className={styles.authSwitch}>
 				<span>Already have an account?</span>
-				<Link to="/login" className="auth-link">
+				<Link to="/login" className={styles.authLink}>
 					Log in
 				</Link>
 			</div>
