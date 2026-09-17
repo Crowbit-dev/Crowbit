@@ -84,6 +84,16 @@
   color: #fda4af;
 }
 
+.railButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.railButton:disabled:hover,
+.railButton:disabled:focus-visible {
+  transform: none;
+}
+
 .railBadge {
   position: absolute;
   top: -6px;

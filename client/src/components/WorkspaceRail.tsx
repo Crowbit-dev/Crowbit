@@ -19,6 +19,7 @@ type WorkspaceRailProps = {
 function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: WorkspaceRailProps) {
   const [muted, setMuted] = useState(false)
   const [deafened, setDeafened] = useState(false)
+  const micMuted = muted || deafened
 
   const railItems: RailItem[] = [
     { mode: 'feed', label: 'Feed', icon: <Menu aria-hidden="true" /> },
@@ -58,13 +59,14 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
       <div className={styles.workspaceRailBottom}>
         <button
           type="button"
-          className={`${styles.railButton} ${muted ? styles.toggled : ''}`}
+          className={`${styles.railButton} ${micMuted ? styles.toggled : ''}`}
           onClick={() => setMuted((prev) => !prev)}
-          aria-label={muted ? 'Unmute microphone' : 'Mute microphone'}
-          aria-pressed={muted}
-          title={muted ? 'Unmute microphone' : 'Mute microphone'}
+          disabled={deafened}
+          aria-label={deafened ? 'Undeafen to unmute' : muted ? 'Unmute microphone' : 'Mute microphone'}
+          aria-pressed={micMuted}
+          title={deafened ? 'Undeafen to unmute' : muted ? 'Unmute microphone' : 'Mute microphone'}
         >
-          {muted ? <MicOff aria-hidden="true" /> : <Mic aria-hidden="true" />}
+          {micMuted ? <MicOff aria-hidden="true" /> : <Mic aria-hidden="true" />}
         </button>
         <button
           type="button"
