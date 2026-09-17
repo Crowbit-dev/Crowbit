@@ -110,3 +110,30 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(83, 62, 82, 0.8) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(83, 62, 82, 0.8);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}

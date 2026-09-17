@@ -8,7 +8,7 @@
 }
 
 .workspace-frame {
-  min-height: 100svh;
+  height: 100svh;
   margin-left: 84px;
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
@@ -22,6 +22,7 @@
 
 @media (max-width: 980px) {
   .workspace-frame {
+    height: auto;
     margin-left: 0;
     grid-template-columns: 1fr;
   }
