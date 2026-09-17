@@ -176,6 +176,10 @@ function WorkspaceContent({
     () => communities.filter((community) => community.members.some((member) => member.name === activeDm.name)),
     [activeDm.name, communities],
   )
+  const joinedCommunityNames = useMemo(
+    () => new Set(communities.filter((community) => community.joined).map((community) => community.name)),
+    [communities],
+  )
 
   if (mode === 'dms') {
     return (
@@ -439,8 +443,15 @@ function WorkspaceContent({
     )
   }
 
+  const visiblePosts =
+    activeCommunityName === 'all'
+      ? posts
+      : activeCommunityName === 'home'
+        ? posts.filter((post) => joinedCommunityNames.has(post.community))
+        : posts.filter((post) => post.community === activeCommunityName)
+
   const feedHighlights = [
-    { value: `${posts.length}`, label: 'new posts' },
+    { value: `${visiblePosts.length}`, label: 'new posts' },
     { value: `${communities.length}`, label: 'communities' },
     { value: `${directMessages.filter((message) => message.status === 'online').length}`, label: 'friends online' },
   ]
@@ -469,7 +480,13 @@ function WorkspaceContent({
           <div className={styles.composerBox}>Share something...</div>
         </div>
 
-        {posts.map((post) => (
+        {visiblePosts.length === 0 ? (
+          <article className={styles.infoCard}>
+            <strong>No posts here yet</strong>
+            <p>Nothing from {activeCommunityName === 'home' ? 'your spaces' : activeCommunityName} so far — try another space.</p>
+          </article>
+        ) : (
+          visiblePosts.map((post) => (
           <article key={`${post.author}-${post.title}`} className={styles.postCard}>
             <div className={styles.postHeader}>
               <div className={styles.avatar}>{post.author[0]}</div>
@@ -510,7 +527,8 @@ function WorkspaceContent({
               </button>
             </div>
           </article>
-        ))}
+          ))
+        )}
       </section>
     </main>
   )

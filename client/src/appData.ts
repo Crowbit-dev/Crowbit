@@ -20,6 +20,7 @@ export type CommunityMember = {
 export type Community = {
   name: string
   color: string
+  joined: boolean
   channels: CommunityChannel[]
   members: CommunityMember[]
 }
@@ -52,6 +53,7 @@ export const communities: Community[] = [
   {
     name: 'Design',
     color: '#533e52',
+    joined: true,
     channels: [
       { id: 'general', name: 'general', topic: 'Share work, critique, and weekly goals', unread: 6 },
       { id: 'feedback', name: 'feedback', topic: 'Design reviews, prototypes, and polish', unread: 2 },
@@ -67,6 +69,7 @@ export const communities: Community[] = [
   {
     name: 'Dev',
     color: '#423341',
+    joined: true,
     channels: [
       { id: 'backend', name: 'backend', topic: 'APIs, auth, and service architecture', unread: 4 },
       { id: 'frontend', name: 'frontend', topic: 'UI work, state, and client bugs' },
@@ -81,6 +84,7 @@ export const communities: Community[] = [
   {
     name: 'Startup',
     color: '#515151',
+    joined: true,
     channels: [
       { id: 'launch', name: 'launch', topic: 'Announcements, launches, and milestones', unread: 3 },
       { id: 'founders', name: 'founders', topic: 'Operator advice and team decisions' },
@@ -95,6 +99,7 @@ export const communities: Community[] = [
   {
     name: 'Tech',
     color: '#313131',
+    joined: false,
     channels: [
       { id: 'stack', name: 'stack', topic: 'Tools, frameworks, and architecture' },
       { id: 'ops', name: 'ops', topic: 'Reliability, uptime, and incident notes', unread: 2 },
@@ -109,6 +114,7 @@ export const communities: Community[] = [
   {
     name: 'Art',
     color: '#533e52',
+    joined: false,
     channels: [
       { id: 'sketches', name: 'sketches', topic: 'Process shots, drafts, and concepts', unread: 1 },
       { id: 'releases', name: 'releases', topic: 'Finished pieces and launches' },
@@ -154,6 +160,16 @@ export const posts: Post[] = [
     body:
       'The most sustainable communities usually feel less like a launch and more like a habit. I am collecting examples.',
     stats: { comments: 243, upvotes: 3.1, shares: 58 },
+  },
+  {
+    author: 'Noor',
+    handle: '@noor',
+    time: '3h ago',
+    community: 'Tech',
+    title: 'What is on your security audit checklist this quarter?',
+    body:
+      'I am putting together a lightweight checklist for small teams: access reviews, dependency updates, and backup drills. What am I missing?',
+    stats: { comments: 64, upvotes: 1.2, shares: 15 },
   },
 ]
 

@@ -1,4 +1,4 @@
-import { Hash, Search, Settings, Users } from 'lucide-react'
+import { Hash, House, LayoutGrid, Search, Settings, Users } from 'lucide-react'
 import type { Community, DirectMessage, WorkspaceMode } from '../appData'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
@@ -50,11 +50,33 @@ function WorkspaceSidebar({
             <span>{communities.length}</span>
           </div>
           <div className={styles.sidebarList}>
+            <button
+              type="button"
+              className={`${styles.sidebarItem} ${activeCommunityName === 'all' ? styles.active : ''}`}
+              onClick={() => onSelectCommunity('all')}
+            >
+              <span className={styles.sidebarItemIcon}><LayoutGrid aria-hidden="true" /></span>
+              <span className={styles.sidebarItemCopy}>
+                <strong>All</strong>
+                <span>Every space</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.sidebarItem} ${activeCommunityName === 'home' ? styles.active : ''}`}
+              onClick={() => onSelectCommunity('home')}
+            >
+              <span className={styles.sidebarItemIcon}><House aria-hidden="true" /></span>
+              <span className={styles.sidebarItemCopy}>
+                <strong>Home</strong>
+                <span>Your spaces</span>
+              </span>
+            </button>
             {communities.map((community) => (
               <button
                 key={community.name}
                 type="button"
-                className={`${styles.sidebarItem} ${activeCommunity.name === community.name ? styles.active : ''}`}
+                className={`${styles.sidebarItem} ${activeCommunityName === community.name ? styles.active : ''}`}
                 onClick={() => onSelectCommunity(community.name)}
               >
                 <span className={shared.sidebarDot} style={{ background: community.color }} />

@@ -7,11 +7,15 @@ import { communities, directMessages, posts, type WorkspaceMode } from './appDat
 
 function App() {
   const [mode, setMode] = useState<WorkspaceMode>('feed')
-  const [activeCommunityName, setActiveCommunityName] = useState(communities[0].name)
+  const [activeCommunityName, setActiveCommunityName] = useState('all')
   const [activeChannelId, setActiveChannelId] = useState(communities[0].channels[0].id)
   const [activeDmId, setActiveDmId] = useState(directMessages[0].id)
 
   const selectCommunity = (communityName: string) => {
+    if (communityName === 'all' || communityName === 'home') {
+      setActiveCommunityName(communityName)
+      return
+    }
     const community = communities.find((entry) => entry.name === communityName) ?? communities[0]
     setActiveCommunityName(community.name)
     setActiveChannelId(community.channels[0]?.id ?? 'general')
