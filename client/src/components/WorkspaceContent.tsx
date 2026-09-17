@@ -1,5 +1,5 @@
-import { ArrowBigUp, MessageCircle, PenLine, Phone, Search, Share2, Shield, Users, Video } from 'lucide-react'
-import { useMemo, type CSSProperties } from 'react'
+import { ArrowBigUp, MessageCircle, PenLine, Phone, Search, SendHorizontal, Share2, Shield, Users, Video } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceContent.module.css'
@@ -27,6 +27,127 @@ const mutualFriendsByDm: Record<string, string[]> = {
   jules: ['Maya', 'Sami'],
   sami: ['Maya', 'Jules', 'Theo', 'Noor'],
   theo: ['Maya'],
+}
+
+function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessage; mutualCommunities: Community[] }) {
+  const mutualFriends = mutualFriendsByDm[activeDm.id] ?? []
+  const [messages, setMessages] = useState<MessageEntry[]>([
+    { author: activeDm.name, time: 'Yesterday', body: activeDm.preview },
+    { author: 'You', time: 'Yesterday', body: 'I left feedback on the latest update and marked the next steps.' },
+    { author: activeDm.name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
+  ])
+  const [draft, setDraft] = useState('')
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const stuckToBottomRef = useRef(true)
+
+  // Auto-grow the composer up to its max height.
+  useEffect(() => {
+    const ta = inputRef.current
+    if (!ta) return
+    ta.style.height = 'auto'
+    ta.style.height = `${Math.min(ta.scrollHeight, 140)}px`
+  }, [draft, activeDm.id])
+
+  // Track whether the pane is scrolled to the bottom.
+  useEffect(() => {
+    const scroller = bottomRef.current?.closest('main')
+    if (!scroller) return
+    const onScroll = () => {
+      stuckToBottomRef.current = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 40
+    }
+    onScroll()
+    scroller.addEventListener('scroll', onScroll, { passive: true })
+    return () => scroller.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Autoscroll on new messages, but only if already at the bottom.
+  useEffect(() => {
+    const scroller = bottomRef.current?.closest('main')
+    if (!scroller || !stuckToBottomRef.current) {
+      return
+    }
+    scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'auto' })
+  }, [messages])
+
+  const send = () => {
+    const body = draft.trim()
+    if (!body) return
+    setMessages((prev) => [...prev, { author: 'You', time: 'Now', body }])
+    setDraft('')
+    inputRef.current?.focus()
+  }
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    send()
+  }
+
+  return (
+    <>
+      <div className={styles.conversationMetaRow}>
+        {/* <div className="member-chip">
+          <div className={`status-dot ${activeDm.status}`} />
+          <div>
+            <strong>{activeDm.name}</strong>
+            <span>{activeDm.role} · {activeDm.status}</span>
+          </div>
+        </div> */}
+        <div className={styles.miniStatCard}>
+          <strong>{mutualCommunities.length}</strong>
+          <span>mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}</span>
+        </div>
+        <div className={styles.miniStatCard}>
+          <strong>{mutualFriends.length}</strong>
+          <span>mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}</span>
+        </div>
+      </div>
+
+      <div className={styles.conversationFeed}>
+        {messages.map((message, index) => (
+          <article key={`${message.author}-${message.time}-${index}`} className={styles.chatMessage}>
+            <div className={styles.messageAvatar}>{message.author[0]}</div>
+            <div className={styles.chatMessageCopy}>
+              <div className={styles.chatMessageTopline}>
+                <strong>{message.author}</strong>
+                <span>{message.time}</span>
+              </div>
+              <p>{message.body}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <form className={styles.messageComposer} onSubmit={handleSubmit}>
+        <PenLine size={16} aria-hidden="true" />
+        <textarea
+          ref={inputRef}
+          rows={1}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault()
+              send()
+            }
+          }}
+          placeholder={`Message ${activeDm.name}`}
+          aria-label={`Message ${activeDm.name}`}
+          maxLength={2000}
+        />
+        <button
+          type="submit"
+          className={styles.composerSend}
+          disabled={!draft.trim()}
+          aria-label={`Send message to ${activeDm.name}`}
+          title="Send"
+        >
+          <SendHorizontal size={16} aria-hidden="true" />
+        </button>
+      </form>
+      <div ref={bottomRef} aria-hidden="true" />
+    </>
+  )
 }
 
 function WorkspaceContent({
@@ -57,31 +178,12 @@ function WorkspaceContent({
   )
 
   if (mode === 'dms') {
-    const mutualFriends = mutualFriendsByDm[activeDm.id] ?? []
-    const messages: MessageEntry[] = [
-      {
-        author: activeDm.name,
-        time: 'Yesterday',
-        body: activeDm.preview,
-      },
-      {
-        author: 'You',
-        time: 'Yesterday',
-        body: 'I left feedback on the latest update and marked the next steps.',
-      },
-      {
-        author: activeDm.name,
-        time: 'Today',
-        body: 'I will send the revised version before the next check-in.',
-      },
-    ]
-
     return (
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.dmHero}`}>
           <div>
             <p className={styles.contentKicker}>Direct messages</p>
-            <h2>{activeDm.name}</h2>
+            <h1>{activeDm.name}</h1>
             <p className={styles.contentSubcopy}>{activeDm.role} · {activeDm.status}</p>
           </div>
           <div className={styles.contentChipRow}>
@@ -96,47 +198,8 @@ function WorkspaceContent({
           </div>
         </section>
 
-        <section className={styles.panelStack}>
-          <div className={styles.conversationMetaRow}>
-            {/* <div className="member-chip">
-              <div className={`status-dot ${activeDm.status}`} />
-              <div>
-                <strong>{activeDm.name}</strong>
-                <span>{activeDm.role} · {activeDm.status}</span>
-              </div>
-            </div> */}
-            <div className={styles.miniStatCard}>
-              <strong>{mutualCommunities.length}</strong>
-              <span>mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}</span>
-            </div>
-            <div className={styles.miniStatCard}>
-              <strong>{mutualFriends.length}</strong>
-              <span>mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}</span>
-            </div>
-          </div>
-
-          <div className={styles.conversationFeed}>
-            {messages.map((message) => (
-              <article key={`${message.author}-${message.time}`} className={styles.chatMessage}>
-                <div className={styles.messageAvatar}>{message.author[0]}</div>
-                <div className={styles.chatMessageCopy}>
-                  <div className={styles.chatMessageTopline}>
-                    <strong>{message.author}</strong>
-                    <span>{message.time}</span>
-                  </div>
-                  <p>{message.body}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className={styles.messageComposer}>
-            <div className={styles.composerToolbar}>
-              <PenLine size={16} aria-hidden="true" />
-              <span>Message {activeDm.name}</span>
-            </div>
-            <div className="composer-input">Write a private message...</div>
-          </div>
+        <section className={`${styles.panelStack} ${styles.conversationPanel}`}>
+          <DmConversation key={activeDm.id} activeDm={activeDm} mutualCommunities={mutualCommunities} />
         </section>
       </main>
     )

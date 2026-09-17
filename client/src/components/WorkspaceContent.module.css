@@ -252,10 +252,18 @@
   align-items: stretch;
 }
 
+.conversationPanel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 18px;
+}
+
 .conversationFeed {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  flex: 1;
   padding: 4px 2px;
 }
 
@@ -278,6 +286,8 @@
 
 .chatMessageCopy p {
   color: var(--offwhite);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .chatMessageTopline {
@@ -317,22 +327,69 @@
 
 .messageComposer {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 14px;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: 14px 16px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: var(--shadow-card);
   border-radius: 18px;
   background: rgba(33, 33, 33, 0.82);
+  backdrop-filter: blur(12px);
+  color: var(--offwhite);
+  font-size: 0.9rem;
 }
 
-.composerToolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+.messageComposer textarea {
+  flex: 1;
+  min-width: 0;
+  max-height: 140px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  line-height: 1.45;
+  resize: none;
+  overflow-y: auto;
+}
+
+.messageComposer textarea:focus {
+  outline: none;
+}
+
+.messageComposer textarea::placeholder {
   color: var(--offwhite);
-  font-size: 0.84rem;
+  opacity: 1;
+}
+
+.composerSend {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--offwhite);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.composerSend:hover:not(:disabled),
+.composerSend:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.4);
+  color: var(--text-h);
+}
+
+.composerSend:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .composerCard {
