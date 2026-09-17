@@ -130,6 +130,7 @@
   background: linear-gradient(135deg, var(--accent), #675566);
   color: white;
   font-weight: 800;
+  user-select: none;
 }
 
 .sidebarItemIcon {
