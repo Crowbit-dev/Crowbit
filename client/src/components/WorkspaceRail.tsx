@@ -58,7 +58,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
       <div className={styles.workspaceRailBottom}>
         <button
           type="button"
-          className={`${styles.railButton} ${muted ? styles.active : ''}`}
+          className={`${styles.railButton} ${muted ? styles.toggled : ''}`}
           onClick={() => setMuted((prev) => !prev)}
           aria-label={muted ? 'Unmute microphone' : 'Mute microphone'}
           aria-pressed={muted}
@@ -68,7 +68,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
         </button>
         <button
           type="button"
-          className={`${styles.railButton} ${deafened ? styles.active : ''}`}
+          className={`${styles.railButton} ${deafened ? styles.toggled : ''}`}
           onClick={() => setDeafened((prev) => !prev)}
           aria-label={deafened ? 'Undeafen audio' : 'Deafen audio'}
           aria-pressed={deafened}

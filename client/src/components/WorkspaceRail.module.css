@@ -73,6 +73,17 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
+.railButton.toggled {
+  background: rgba(225, 29, 72, 0.22);
+  color: #fb7185;
+}
+
+.railButton.toggled:hover,
+.railButton.toggled:focus-visible {
+  background: rgba(225, 29, 72, 0.34);
+  color: #fda4af;
+}
+
 .railBadge {
   position: absolute;
   top: -6px;
