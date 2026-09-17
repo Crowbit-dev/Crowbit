@@ -21,7 +21,9 @@ type MessageEntry = {
   body: string
 }
 
-// TEMPORARY: mock mutual friends per DM until the backend provides real data.
+// TEMPORARY: formats mock upvote counts until the backend provides real numbers.
+const formatUpvotes = (value: number) => (value < 100 ? `${value}` : `${value}k`)
+
 const mutualFriendsByDm: Record<string, string[]> = {
   maya: ['Jules', 'Sami', 'Theo'],
   jules: ['Maya', 'Sami'],
@@ -46,7 +48,10 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
     const ta = inputRef.current
     if (!ta) return
     ta.style.height = 'auto'
-    ta.style.height = `${Math.min(ta.scrollHeight, 140)}px`
+    const fullHeight = ta.scrollHeight
+    const cappedHeight = Math.min(fullHeight, 140)
+    ta.style.height = `${cappedHeight}px`
+    ta.style.overflowY = fullHeight > cappedHeight ? 'auto' : 'hidden'
   }, [draft, activeDm.id])
 
   // Track whether the pane is scrolled to the bottom.
@@ -304,7 +309,7 @@ function WorkspaceContent({
               <article key={post.title} className={styles.resultRow}>
                 <div>
                   <strong>{post.title}</strong>
-                  <p>{post.community} · {post.author}</p>
+                  <p>{post.community ? `${post.community} · ` : ''}{post.author}</p>
                 </div>
                 <span>{post.stats.comments} comments</span>
               </article>
@@ -433,7 +438,7 @@ function WorkspaceContent({
                       <strong>{post.title}</strong>
                       <p>{post.author}</p>
                     </div>
-                    <span>{post.stats.upvotes}k upvotes</span>
+                    <span>{formatUpvotes(post.stats.upvotes)} upvotes</span>
                   </div>
                 ))}
             </div>
@@ -447,7 +452,7 @@ function WorkspaceContent({
     activeCommunityName === 'all'
       ? posts
       : activeCommunityName === 'home'
-        ? posts.filter((post) => joinedCommunityNames.has(post.community))
+        ? posts.filter((post) => post.community === '' || joinedCommunityNames.has(post.community))
         : posts.filter((post) => post.community === activeCommunityName)
 
   const feedHighlights = [
@@ -475,11 +480,6 @@ function WorkspaceContent({
       </section>
 
       <section className={`${styles.panelStack} ${styles.feedStack}`}>
-        <div className={styles.composerCard}>
-          <div className={`${styles.avatar} ${styles.large}`}>N</div>
-          <div className={styles.composerBox}>Share something...</div>
-        </div>
-
         {visiblePosts.length === 0 ? (
           <article className={styles.infoCard}>
             <strong>No posts here yet</strong>
@@ -497,25 +497,27 @@ function WorkspaceContent({
                   <span className={styles.postDivider}>•</span>
                   <span className={styles.postTime}>{post.time}</span>
                 </div>
-                <div
-                  className={styles.communityTag}
-                  style={{
-                    '--community-color': communities.find((community) => community.name === post.community)?.color,
-                  } as CSSProperties}
-                >
-                  <span>{post.community}</span>
-                </div>
+                {post.community && (
+                  <div
+                    className={styles.communityTag}
+                    style={{
+                      '--community-color': communities.find((community) => community.name === post.community)?.color,
+                    } as CSSProperties}
+                  >
+                    <span>{post.community}</span>
+                  </div>
+                )}
               </div>
             </div>
 
             <h3>{post.title}</h3>
             {post.image && <img className={styles.postImage} src={post.image} alt="Placeholder post visual" />}
-            <p className={styles.postBody}>{post.body}</p>
+            {post.body && <p className={styles.postBody}>{post.body}</p>}
 
             <div className={styles.postStats}>
               <button type="button" className={styles.postAction} aria-label={`Upvote ${post.title}`}>
                 <ArrowBigUp aria-hidden="true" />
-                <span>{post.stats.upvotes}k</span>
+                <span>{formatUpvotes(post.stats.upvotes)}</span>
               </button>
               <button type="button" className={styles.postAction} aria-label={`View comments for ${post.title}`}>
                 <MessageCircle aria-hidden="true" />

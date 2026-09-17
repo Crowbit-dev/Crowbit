@@ -346,6 +346,7 @@
   flex: 1;
   min-width: 0;
   max-height: 140px;
+  box-sizing: border-box;
   padding: 0;
   border: 0;
   background: transparent;
@@ -353,7 +354,7 @@
   font: inherit;
   line-height: 1.45;
   resize: none;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .messageComposer textarea:focus {
@@ -390,28 +391,6 @@
 .composerSend:disabled {
   opacity: 0.4;
   cursor: default;
-}
-
-.composerCard {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: min(100%, 760px);
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow-card);
-  background: rgba(49, 49, 49, 0.82);
-  border-radius: 18px;
-}
-
-.composerBox {
-  flex: 1;
-  padding: 14px 16px;
-  border-radius: 999px;
-  background: rgba(33, 33, 33, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--offwhite);
-  text-align: left;
 }
 
 .feedStack {

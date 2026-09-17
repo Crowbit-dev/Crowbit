@@ -1,15 +1,18 @@
 import { useMemo, useState } from 'react'
 import './App.css'
+import PostModal from './components/PostModal'
 import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
-import { communities, directMessages, posts, type WorkspaceMode } from './appData'
+import { communities, directMessages, posts, type Post, type WorkspaceMode } from './appData'
 
 function App() {
   const [mode, setMode] = useState<WorkspaceMode>('feed')
   const [activeCommunityName, setActiveCommunityName] = useState('home')
   const [activeChannelId, setActiveChannelId] = useState(communities[0].channels[0].id)
   const [activeDmId, setActiveDmId] = useState(directMessages[0].id)
+  const [localPosts, setLocalPosts] = useState(posts)
+  const [composerOpen, setComposerOpen] = useState(false)
 
   const selectCommunity = (communityName: string) => {
     if (communityName === 'all' || communityName === 'home') {
@@ -40,13 +43,23 @@ function App() {
     [],
   )
 
+  const composerDefault = communities.some((community) => community.name === activeCommunityName)
+    ? activeCommunityName
+    : (communities.find((community) => community.joined)?.name ?? communities[0].name)
+
+  const handlePost = (post: Post) => {
+    setLocalPosts((prev) => [post, ...prev])
+    setComposerOpen(false)
+    setMode('feed')
+  }
+
   return (
     <div className="home-shell">
       <WorkspaceRail
         mode={mode}
         totalUnread={totalUnread}
         onChangeMode={setMode}
-        onCompose={() => setMode('feed')}
+        onCompose={() => setComposerOpen(true)}
       />
 
       <div className="workspace-frame">
@@ -66,7 +79,7 @@ function App() {
         <WorkspaceContent
           mode={mode}
           communities={communities}
-          posts={posts}
+          posts={localPosts}
           directMessages={directMessages}
           activeCommunityName={activeCommunityName}
           activeChannelId={activeChannelId}
@@ -74,6 +87,14 @@ function App() {
           onOpenChannel={openChannel}
         />
       </div>
+      {composerOpen && (
+        <PostModal
+          communities={communities}
+          defaultCommunity={composerDefault}
+          onClose={() => setComposerOpen(false)}
+          onPost={handlePost}
+        />
+      )}
     </div>
   )
 }
