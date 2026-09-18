@@ -153,12 +153,14 @@ function WorkspaceSidebar({
                 className={`${styles.sidebarItem} ${activeDmId === message.id ? styles.active : ''}`}
                 onClick={() => onSelectDm(message.id)}
               >
-                <span className={styles.sidebarAvatar}>{message.name[0]}</span>
+                <span className={styles.sidebarPresence}>
+                  <span className={styles.sidebarAvatar}>{message.name[0]}</span>
+                  <span className={`${shared.statusDot} ${shared[message.status]} ${shared.presenceDot}`} />
+                </span>
                 <span className={styles.sidebarItemCopy}>
                   <strong>{message.name}</strong>
                   <span>{message.role}</span>
                 </span>
-                <span className={`${shared.statusDot} ${shared[message.status]}`} />
               </button>
             ))}
             {visibleFriends.length === 0 && (

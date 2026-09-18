@@ -1,5 +1,5 @@
-import { ArrowBigUp, MessageCircle, PenLine, Phone, Search, SendHorizontal, Share2, Shield, Users, Video } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react'
+import { ArrowBigUp, MessageCircle, Paperclip, Phone, Search, SendHorizontal, Share2, Shield, Users, Video, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceContent.module.css'
@@ -21,6 +21,7 @@ type MessageEntry = {
   author: string
   time: string
   body: string
+  image?: string
 }
 
 // TEMPORARY: formats mock upvote counts until the backend provides real numbers.
@@ -41,7 +42,9 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
     { author: activeDm.name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
   ])
   const [draft, setDraft] = useState('')
+  const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([])
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const stuckToBottomRef = useRef(true)
 
@@ -78,10 +81,25 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
 
   const send = () => {
     const body = draft.trim()
-    if (!body) return
-    setMessages((prev) => [...prev, { author: 'You', time: 'Now', body }])
+    if (!body && attachments.length === 0) return
+    setMessages((prev) => [...prev, { author: 'You', time: 'Now', body: body || 'Shared an image', image: attachments[0]?.url }])
+    attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url))
+    setAttachments([])
     setDraft('')
     inputRef.current?.focus()
+  }
+
+  const attach = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []).filter((file) => file.type.startsWith('image/'))
+    if (files.length > 0) {
+      setAttachments((prev) => [...prev, ...files.map((file) => ({ url: URL.createObjectURL(file), name: file.name }))])
+    }
+    e.target.value = ''
+  }
+
+  const removeAttachment = (url: string) => {
+    setAttachments((prev) => prev.filter((attachment) => attachment.url !== url))
+    URL.revokeObjectURL(url)
   }
 
   const handleSubmit = (e: FormEvent) => {
@@ -107,42 +125,66 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
           <article key={`${message.author}-${message.time}-${index}`} className={styles.chatMessage}>
             <div className={styles.messageAvatar}>{message.author[0]}</div>
             <div className={styles.chatMessageCopy}>
-              <div className={styles.chatMessageTopline}>
-                <strong>{message.author}</strong>
-                <span>{message.time}</span>
-              </div>
-              <p>{message.body}</p>
+                  <div className={styles.chatMessageTopline}>
+                    <strong>{message.author}</strong>
+                    <span>{message.time}</span>
+                  </div>
+                  <p>{message.body}</p>
+                  {message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
             </div>
           </article>
         ))}
       </div>
 
       <form className={styles.messageComposer} onSubmit={handleSubmit}>
-        <PenLine size={16} aria-hidden="true" />
-        <textarea
-          ref={inputRef}
-          rows={1}
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault()
-              send()
-            }
-          }}
-          placeholder={`Message ${activeDm.name}`}
-          aria-label={`Message ${activeDm.name}`}
-          maxLength={2000}
-        />
-        <button
-          type="submit"
-          className={styles.composerSend}
-          disabled={!draft.trim()}
-          aria-label={`Send message to ${activeDm.name}`}
-          title="Send"
-        >
-          <SendHorizontal size={16} aria-hidden="true" />
-        </button>
+        {attachments.length > 0 && (
+          <div className={styles.dmAttachments}>
+            {attachments.map((attachment) => (
+              <span key={attachment.url} className={styles.dmAttachment}>
+                <img src={attachment.url} alt={attachment.name} />
+                <button type="button" onClick={() => removeAttachment(attachment.url)} aria-label={`Remove ${attachment.name}`} title="Remove">
+                  <X size={14} aria-hidden="true" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className={styles.messageComposerRow}>
+          <button
+            type="button"
+            className={styles.composerSend}
+            onClick={() => fileRef.current?.click()}
+            aria-label="Attach images"
+            title="Attach images"
+          >
+            <Paperclip size={16} aria-hidden="true" />
+          </button>
+          <textarea
+            ref={inputRef}
+            rows={1}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                send()
+              }
+            }}
+            placeholder={`Message ${activeDm.name}`}
+            aria-label={`Message ${activeDm.name}`}
+            maxLength={2000}
+          />
+          <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={attach} tabIndex={-1} />
+          <button
+            type="submit"
+            className={styles.composerSend}
+            disabled={!draft.trim() && attachments.length === 0}
+            aria-label={`Send message to ${activeDm.name}`}
+            title="Send"
+          >
+            <SendHorizontal size={16} aria-hidden="true" />
+          </button>
+        </div>
       </form>
       <div ref={bottomRef} aria-hidden="true" />
     </>
@@ -188,8 +230,8 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.dmHero}`}>
           <div>
             <p className={styles.contentKicker}>Direct messages</p>
-            <h2>{activeDm.name}</h2>
-            <p className={styles.contentSubcopy}>{activeDm.role} · {activeDm.status}</p>
+            <h2 className={styles.dmName}><span className={`${shared.statusDot} ${shared[activeDm.status]}`} />{activeDm.name}</h2>
+            <p className={styles.contentSubcopy}>{activeDm.role}</p>
           </div>
           <div className={styles.contentChipRow}>
             <button type="button" className={styles.contentChip} aria-label="Start voice call">

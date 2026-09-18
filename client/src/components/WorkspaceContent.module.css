@@ -74,6 +74,12 @@
   line-height: 1.55;
 }
 
+.dmName {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .contentChipRow,
 .feedStatRow,
 .conversationMetaRow,
@@ -304,7 +310,8 @@
 
 .messageComposer {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 10px;
   position: sticky;
   bottom: 0;
@@ -317,6 +324,12 @@
   backdrop-filter: blur(12px);
   color: var(--offwhite);
   font-size: 0.9rem;
+}
+
+.messageComposerRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .messageComposer textarea {
@@ -332,6 +345,50 @@
   line-height: 1.45;
   resize: none;
   overflow-y: hidden;
+}
+
+.dmAttachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dmAttachment {
+  position: relative;
+  display: inline-block;
+}
+
+.dmAttachment img {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dmAttachment button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.92);
+  color: #fff;
+  cursor: pointer;
+}
+
+.chatMessageImage {
+  display: block;
+  max-width: min(100%, 320px);
+  margin-top: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .messageComposer textarea:focus {
