@@ -285,7 +285,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.searchHero}`}>
           <div>
             <p className={styles.contentKicker}>Search</p>
-            <h1>Find posts, people, and spaces</h1>
+            <h2>Find posts, people, and spaces</h2>
             <p className={styles.contentSubcopy}>Search in one place without changing screens.</p>
           </div>
           <div className={styles.searchHeroCard}>
