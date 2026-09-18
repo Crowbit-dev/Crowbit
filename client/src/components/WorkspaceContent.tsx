@@ -188,7 +188,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.dmHero}`}>
           <div>
             <p className={styles.contentKicker}>Direct messages</p>
-            <h1>{activeDm.name}</h1>
+            <h2>{activeDm.name}</h2>
             <p className={styles.contentSubcopy}>{activeDm.role} · {activeDm.status}</p>
           </div>
           <div className={styles.contentChipRow}>
