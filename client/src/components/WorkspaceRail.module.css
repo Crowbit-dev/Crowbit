@@ -154,7 +154,6 @@
   height: 48px;
   padding: 4px;
   box-sizing: border-box;
-  overflow: hidden;
   border-radius: 50%;
   background: rgba(28, 28, 28, 0.98);
   border: 0;
@@ -176,16 +175,21 @@
 }
 
 .profileAvatar {
+  position: relative;
   display: grid;
   place-items: center;
   flex: 0 0 auto;
   width: 40px;
   height: 40px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), #6f5b6d);
   color: white;
+  font: inherit;
   font-weight: 800;
   user-select: none;
+  cursor: pointer;
 }
 
 .profileDetails {
@@ -268,6 +272,67 @@
   color: #fda4af;
 }
 
+.statusMenu {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  z-index: 5;
+  padding-bottom: 8px;
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 190px;
+  padding: 6px;
+  box-sizing: border-box;
+  border-radius: 14px;
+  background: rgba(28, 28, 28, 0.98);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  animation: status-menu-in 140ms ease;
+}
+
+.statusOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.86rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.statusOption:hover,
+.statusOption:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.35);
+}
+
+.statusLabel {
+  flex: 1;
+}
+
+.statusOption svg {
+  flex: 0 0 auto;
+  color: var(--text-h);
+}
+
+@keyframes status-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
 @media (max-width: 980px) {
   .workspaceRail {
     position: sticky;
@@ -303,6 +368,11 @@
   }
 
   .profileCard {
+    left: auto;
+    right: 0;
+  }
+
+  .statusMenu {
     left: auto;
     right: 0;
   }
