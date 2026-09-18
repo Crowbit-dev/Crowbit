@@ -1,5 +1,6 @@
-import { Bell, HeadphoneOff, Headphones, Layers3, Menu, MessageCircle, Mic, MicOff, Plus, Search, Settings } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { Bell, HeadphoneOff, Headphones, Layers3, LogOut, Menu, MessageCircle, Mic, MicOff, Plus, Search, Settings } from 'lucide-react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { WorkspaceMode } from '../appData'
 import styles from './WorkspaceRail.module.css'
 
@@ -19,7 +20,40 @@ type WorkspaceRailProps = {
 function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: WorkspaceRailProps) {
   const [muted, setMuted] = useState(false)
   const [deafened, setDeafened] = useState(false)
+  const navigate = useNavigate()
+  // Deafening implies mute, like Discord: undeafening restores the prior mic state.
   const micMuted = muted || deafened
+
+  // TEMPORARY: mock current user until the backend provides session data.
+  const currentUser = { displayName: 'Nova', username: '@nova' }
+  const [copied, setCopied] = useState(false)
+  const copyTimer = useRef<number | null>(null)
+
+  useEffect(
+    () => () => {
+      if (copyTimer.current !== null) window.clearTimeout(copyTimer.current)
+    },
+    [],
+  )
+
+  const copyUsername = async () => {
+    try {
+      await navigator.clipboard.writeText(currentUser.username)
+    } catch {
+      const fallback = document.createElement('textarea')
+      fallback.value = currentUser.username
+      document.body.appendChild(fallback)
+      fallback.select()
+      document.execCommand('copy')
+      fallback.remove()
+    }
+    setCopied(true)
+    if (copyTimer.current !== null) window.clearTimeout(copyTimer.current)
+    copyTimer.current = window.setTimeout(() => setCopied(false), 1500)
+  }
+
+  // TEMPORARY: client-side only until logout is wired to the backend.
+  const logout = () => navigate('/login')
 
   const railItems: RailItem[] = [
     { mode: 'feed', label: 'Feed', icon: <Menu aria-hidden="true" /> },
@@ -78,9 +112,33 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
         >
           {deafened ? <HeadphoneOff aria-hidden="true" /> : <Headphones aria-hidden="true" />}
         </button>
-        <button type="button" className={styles.railProfile} aria-label="Current user profile" title="Current user profile">
-          <span className={styles.railAvatar}>N</span>
-        </button>
+        <div className={styles.profileWrap}>
+          <button type="button" className={styles.railProfile} aria-label="Current user profile" title="Current user profile">
+            <span className={styles.railAvatar}>N</span>
+          </button>
+          <div className={styles.profileCard}>
+            <span className={styles.profileAvatar}>N</span>
+            <span className={styles.profileDetails}>
+              <span className={styles.profileCopy}>
+                <strong>{currentUser.displayName}</strong>
+                <button
+                  type="button"
+                  className={`${styles.profileCopyName} ${copied ? styles.copied : ''}`}
+                  onClick={(e) => {
+                    copyUsername()
+                    e.currentTarget.blur()
+                  }}
+                  title="Copy username"
+                >
+                  {copied ? 'Copied!' : currentUser.username}
+                </button>
+              </span>
+              <button type="button" className={styles.profileLogout} onClick={logout} aria-label="Log out" title="Log out">
+                <LogOut size={16} aria-hidden="true" />
+              </button>
+            </span>
+          </div>
+        </div>
       </div>
     </aside>
   )
