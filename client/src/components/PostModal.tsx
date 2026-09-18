@@ -39,7 +39,6 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [onClose, pickerOpen])
 
-  // Auto-grow the main box.
   useEffect(() => {
     const ta = mainRef.current
     if (!ta) return
@@ -50,7 +49,6 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
     ta.style.overflowY = fullHeight > cappedHeight ? 'auto' : 'hidden'
   }, [text])
 
-  // Auto-grow the body area.
   useEffect(() => {
     const ta = bodyRef.current
     if (!ta) return

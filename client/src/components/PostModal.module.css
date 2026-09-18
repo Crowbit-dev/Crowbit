@@ -207,28 +207,6 @@
   color: var(--text-h);
 }
 
-.title {
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(23, 23, 23, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--text-h);
-  font: inherit;
-  font-size: 1.05rem;
-  font-weight: 600;
-}
-
-.title:focus {
-  outline: none;
-  border-color: var(--accent-border);
-}
-
-.title::placeholder {
-  color: var(--offwhite);
-  opacity: 1;
-  font-weight: 500;
-}
-
 .main {
   min-height: calc(2lh + 24px);
   padding: 12px 14px;

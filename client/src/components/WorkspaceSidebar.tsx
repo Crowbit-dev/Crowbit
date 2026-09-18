@@ -266,21 +266,18 @@ function WorkspaceSidebar({
               <span className={styles.sidebarItemIcon}><Users aria-hidden="true" /></span>
               <span className={styles.sidebarItemCopy}>
                 <strong>Privacy</strong>
-                {/* <span>Audience, visibility, exports</span> */}
               </span>
             </div>
             <div className={styles.sidebarItem}>
               <span className={styles.sidebarItemIcon}><Settings aria-hidden="true" /></span>
               <span className={styles.sidebarItemCopy}>
                 <strong>Account</strong>
-                {/* <span>Profile, login, sessions</span> */}
               </span>
             </div>
             <div className={styles.sidebarItem}>
               <span className={styles.sidebarItemIcon}><Hash aria-hidden="true" /></span>
               <span className={styles.sidebarItemCopy}>
                 <strong>Experience</strong>
-                {/* <span>Appearance and interaction density</span> */}
               </span>
             </div>
           </div>

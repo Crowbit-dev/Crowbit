@@ -216,25 +216,6 @@
   white-space: nowrap;
 }
 
-.memberChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.memberChip strong {
-  display: block;
-  font-size: 0.9rem;
-}
-
-.memberChip span {
-  color: var(--offwhite);
-}
-
 .miniStatCard {
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -318,11 +299,6 @@
   color: white;
   font-weight: 800;
   user-select: none;
-}
-
-.avatar.large {
-  width: 46px;
-  height: 46px;
 }
 
 .messageComposer {

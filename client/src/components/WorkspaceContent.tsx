@@ -45,7 +45,6 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
   const bottomRef = useRef<HTMLDivElement>(null)
   const stuckToBottomRef = useRef(true)
 
-  // Auto-grow the composer up to its max height.
   useEffect(() => {
     const ta = inputRef.current
     if (!ta) return
@@ -56,7 +55,7 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
     ta.style.overflowY = fullHeight > cappedHeight ? 'auto' : 'hidden'
   }, [draft, activeDm.id])
 
-  // Track whether the pane is scrolled to the bottom.
+  // Within 40px of the bottom counts as "at bottom" so rounding never breaks stickiness.
   useEffect(() => {
     const scroller = bottomRef.current?.closest('main')
     if (!scroller) return
@@ -92,15 +91,8 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
 
   return (
     <>
-      <div className={styles.conversationMetaRow}>
-        {/* <div className="member-chip">
-          <div className={`status-dot ${activeDm.status}`} />
-          <div>
-            <strong>{activeDm.name}</strong>
-            <span>{activeDm.role} · {activeDm.status}</span>
-          </div>
-        </div> */}
-        <div className={styles.miniStatCard}>
+          <div className={styles.conversationMetaRow}>
+            <div className={styles.miniStatCard}>
           <strong>{mutualCommunities.length}</strong>
           <span>mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}</span>
         </div>
