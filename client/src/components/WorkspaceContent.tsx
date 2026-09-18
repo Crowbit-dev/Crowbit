@@ -230,7 +230,7 @@ function WorkspaceContent({
         <section className={`${styles.contentHero} ${styles.dmHero}`}>
           <div>
             <p className={styles.contentKicker}>Direct messages</p>
-            <h2 className={styles.dmName}><span className={`${shared.statusDot} ${shared[activeDm.status]}`} />{activeDm.name}</h2>
+            <h2 className={styles.dmName}><span className={`${shared.statusDot} ${shared[activeDm.status]}`} />{activeDm.name}<span className={styles.dmUsername}>@{activeDm.id}</span></h2>
             <p className={styles.contentSubcopy}>{activeDm.role}</p>
           </div>
           <div className={styles.contentChipRow}>

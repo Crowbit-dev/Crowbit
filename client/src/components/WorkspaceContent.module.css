@@ -77,7 +77,15 @@
 .dmName {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+}
+
+.dmUsername {
+  color: var(--offwhite);
+  font-size: 0.6em;
+  font-weight: 500;
+  position: relative;
+  top: 0.2em;
 }
 
 .contentChipRow,
