@@ -1,4 +1,4 @@
-import { Hash, House, LayoutGrid, Search, Settings, Users } from 'lucide-react'
+import { Hash, House, LayoutGrid, Search, Settings, Users, X } from 'lucide-react'
 import type { Community, DirectMessage, WorkspaceMode } from '../appData'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
@@ -14,6 +14,28 @@ type WorkspaceSidebarProps = {
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
   onOpenChannel: (communityName: string, channelId: string) => void
+  searchQuery: string
+  onSearchQuery: (query: string) => void
+}
+
+function SidebarSearch({ value, onChange, placeholder }: { value: string; onChange: (query: string) => void; placeholder: string }) {
+  return (
+    <label className={styles.sidebarSearchCard}>
+      <Search aria-hidden="true" />
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        aria-label={placeholder}
+        maxLength={80}
+      />
+      {value && (
+        <button type="button" className={styles.sidebarClear} onClick={() => onChange('')} aria-label="Clear search" title="Clear search">
+          <X size={14} aria-hidden="true" />
+        </button>
+      )}
+    </label>
+  )
 }
 
 function WorkspaceSidebar({
@@ -27,10 +49,17 @@ function WorkspaceSidebar({
   onSelectChannel,
   onSelectDm,
   onOpenChannel,
+  searchQuery,
+  onSearchQuery,
 }: WorkspaceSidebarProps) {
   const activeCommunity = communities.find((community) => community.name === activeCommunityName) ?? communities[0]
+  const query = searchQuery.trim().toLowerCase()
 
   if (mode === 'feed') {
+    const visibleCommunities = query
+      ? communities.filter((community) => community.name.toLowerCase().includes(query))
+      : communities
+
     return (
       <aside className={styles.workspaceSidebar}>
         <div className={styles.sidebarHeadingBlock}>
@@ -39,10 +68,7 @@ function WorkspaceSidebar({
           <p className={styles.sidebarCopy}>Choose a space to catch up on its latest posts.</p>
         </div>
 
-        <div className={styles.sidebarSearchCard}>
-          <Search aria-hidden="true" />
-          <span>Search the network</span>
-        </div>
+        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search the network" />
 
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
@@ -50,29 +76,33 @@ function WorkspaceSidebar({
             <span>{communities.length}</span>
           </div>
           <div className={styles.sidebarList}>
-            <button
-              type="button"
-              className={`${styles.sidebarItem} ${activeCommunityName === 'all' ? styles.active : ''}`}
-              onClick={() => onSelectCommunity('all')}
-            >
-              <span className={styles.sidebarItemIcon}><LayoutGrid aria-hidden="true" /></span>
-              <span className={styles.sidebarItemCopy}>
-                <strong>All</strong>
-                <span>Every space</span>
-              </span>
-            </button>
-            <button
-              type="button"
-              className={`${styles.sidebarItem} ${activeCommunityName === 'home' ? styles.active : ''}`}
-              onClick={() => onSelectCommunity('home')}
-            >
-              <span className={styles.sidebarItemIcon}><House aria-hidden="true" /></span>
-              <span className={styles.sidebarItemCopy}>
-                <strong>Home</strong>
-                <span>Your spaces</span>
-              </span>
-            </button>
-            {communities.map((community) => (
+            {!query && (
+              <>
+                <button
+                  type="button"
+                  className={`${styles.sidebarItem} ${activeCommunityName === 'all' ? styles.active : ''}`}
+                  onClick={() => onSelectCommunity('all')}
+                >
+                  <span className={styles.sidebarItemIcon}><LayoutGrid aria-hidden="true" /></span>
+                  <span className={styles.sidebarItemCopy}>
+                    <strong>All</strong>
+                    <span>Every space</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.sidebarItem} ${activeCommunityName === 'home' ? styles.active : ''}`}
+                  onClick={() => onSelectCommunity('home')}
+                >
+                  <span className={styles.sidebarItemIcon}><House aria-hidden="true" /></span>
+                  <span className={styles.sidebarItemCopy}>
+                    <strong>Home</strong>
+                    <span>Your spaces</span>
+                  </span>
+                </button>
+              </>
+            )}
+            {visibleCommunities.map((community) => (
               <button
                 key={community.name}
                 type="button"
@@ -86,6 +116,9 @@ function WorkspaceSidebar({
                 </span>
               </button>
             ))}
+            {visibleCommunities.length === 0 && (
+              <p className={styles.sidebarEmpty}>No spaces match “{searchQuery.trim()}”.</p>
+            )}
           </div>
         </div>
       </aside>
@@ -93,6 +126,10 @@ function WorkspaceSidebar({
   }
 
   if (mode === 'dms') {
+    const visibleFriends = query
+      ? directMessages.filter((message) => `${message.name} ${message.role}`.toLowerCase().includes(query))
+      : directMessages
+
     return (
       <aside className={styles.workspaceSidebar}>
         <div className={styles.sidebarHeadingBlock}>
@@ -101,10 +138,7 @@ function WorkspaceSidebar({
           <p className={styles.sidebarCopy}>Pick up where you left off with friends.</p>
         </div>
 
-        <div className={styles.sidebarSearchCard}>
-          <Search aria-hidden="true" />
-          <span>Search friends</span>
-        </div>
+        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search friends" />
 
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
@@ -112,7 +146,7 @@ function WorkspaceSidebar({
             <span>{directMessages.length}</span>
           </div>
           <div className={styles.sidebarList}>
-            {directMessages.map((message) => (
+            {visibleFriends.map((message) => (
               <button
                 key={message.id}
                 type="button"
@@ -127,6 +161,9 @@ function WorkspaceSidebar({
                 <span className={`${shared.statusDot} ${shared[message.status]}`} />
               </button>
             ))}
+            {visibleFriends.length === 0 && (
+              <p className={styles.sidebarEmpty}>No friends match “{searchQuery.trim()}”.</p>
+            )}
           </div>
         </div>
       </aside>
@@ -140,6 +177,11 @@ function WorkspaceSidebar({
         .map((channel) => ({ community, channel })),
     )
     const totalUnread = unreadChannels.reduce((sum, entry) => sum + (entry.channel.unread ?? 0), 0)
+    const visibleUnread = query
+      ? unreadChannels.filter(({ community, channel }) =>
+          `${community.name} ${channel.name} ${channel.topic}`.toLowerCase().includes(query),
+        )
+      : unreadChannels
 
     return (
       <aside className={styles.workspaceSidebar}>
@@ -149,13 +191,15 @@ function WorkspaceSidebar({
           <p className={styles.sidebarCopy}>Unread Activity.</p>
         </div>
 
+        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search unread" />
+
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
             <span>Unread</span>
             <span>{totalUnread}</span>
           </div>
           <div className={styles.sidebarList}>
-            {unreadChannels.map(({ community, channel }) => (
+            {visibleUnread.map(({ community, channel }) => (
               <button
                 key={`${community.name}-${channel.id}`}
                 type="button"
@@ -170,6 +214,9 @@ function WorkspaceSidebar({
                 <span className={shared.sidebarUnreadCount}>{channel.unread}</span>
               </button>
             ))}
+            {visibleUnread.length === 0 && (
+              <p className={styles.sidebarEmpty}>No unread channels match “{searchQuery.trim()}”.</p>
+            )}
           </div>
         </div>
       </aside>
@@ -185,10 +232,7 @@ function WorkspaceSidebar({
           <p className={styles.sidebarCopy}>Search posts, people, and communities from one place.</p>
         </div>
 
-        <div className={styles.sidebarSearchCard}>
-          <Search aria-hidden="true" />
-          <span>Search the network</span>
-        </div>
+        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search the network" />
 
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
@@ -253,10 +297,7 @@ function WorkspaceSidebar({
         <p className={styles.sidebarCopy}>Select a community to view its channels and members.</p>
       </div>
 
-      <div className={styles.sidebarSearchCard}>
-        <Search aria-hidden="true" />
-        <span>Search communities</span>
-      </div>
+      <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search communities" />
 
       <div className={styles.sidebarSection}>
         <div className={styles.sidebarSectionHead}>
@@ -264,7 +305,7 @@ function WorkspaceSidebar({
           <span>{communities.length}</span>
         </div>
         <div className={styles.sidebarList}>
-          {communities.map((community) => (
+          {(query ? communities.filter((community) => community.name.toLowerCase().includes(query)) : communities).map((community) => (
             <button
               key={community.name}
               type="button"
@@ -278,6 +319,9 @@ function WorkspaceSidebar({
               </span>
             </button>
           ))}
+          {query && !communities.some((community) => community.name.toLowerCase().includes(query)) && (
+            <p className={styles.sidebarEmpty}>No spaces match “{searchQuery.trim()}”.</p>
+          )}
         </div>
       </div>
 
@@ -287,7 +331,7 @@ function WorkspaceSidebar({
           <span>Active</span>
         </div>
         <div className={styles.sidebarList}>
-          {activeCommunity.channels.map((channel) => (
+          {(query ? activeCommunity.channels.filter((channel) => `${channel.name} ${channel.topic}`.toLowerCase().includes(query)) : activeCommunity.channels).map((channel) => (
             <button
               key={channel.id}
               type="button"

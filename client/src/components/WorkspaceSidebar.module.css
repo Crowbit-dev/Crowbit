@@ -51,6 +51,60 @@
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.04);
   color: var(--text);
+  cursor: text;
+  transition: border-color 120ms ease;
+}
+
+.sidebarSearchCard:focus-within {
+  border-color: var(--accent-border);
+}
+
+.sidebarSearchCard input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.86rem;
+}
+
+.sidebarSearchCard input:focus {
+  outline: none;
+}
+
+.sidebarSearchCard input::placeholder {
+  color: var(--offwhite);
+  opacity: 1;
+}
+
+.sidebarClear {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--offwhite);
+  cursor: pointer;
+}
+
+.sidebarClear:hover,
+.sidebarClear:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.4);
+  color: var(--text-h);
+}
+
+.sidebarEmpty {
+  margin: 0;
+  padding: 4px 2px;
+  color: var(--offwhite);
+  font-size: 0.84rem;
 }
 
 .sidebarSection {

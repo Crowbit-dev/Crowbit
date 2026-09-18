@@ -13,6 +13,7 @@ function App() {
   const [activeDmId, setActiveDmId] = useState(directMessages[0].id)
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const selectCommunity = (communityName: string) => {
     if (communityName === 'all' || communityName === 'home') {
@@ -74,6 +75,8 @@ function App() {
           onSelectChannel={selectChannel}
           onSelectDm={selectDm}
           onOpenChannel={openChannel}
+          searchQuery={searchQuery}
+          onSearchQuery={setSearchQuery}
         />
 
         <WorkspaceContent
@@ -85,6 +88,8 @@ function App() {
           activeChannelId={activeChannelId}
           activeDmId={activeDmId}
           onOpenChannel={openChannel}
+          searchQuery={searchQuery}
+          onSearchQuery={setSearchQuery}
         />
       </div>
       {composerOpen && (

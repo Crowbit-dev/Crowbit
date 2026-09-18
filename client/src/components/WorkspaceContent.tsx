@@ -13,6 +13,8 @@ type WorkspaceContentProps = {
   activeChannelId: string
   activeDmId: string
   onOpenChannel: (communityName: string, channelId: string) => void
+  searchQuery: string
+  onSearchQuery: (query: string) => void
 }
 
 type MessageEntry = {
@@ -164,6 +166,8 @@ function WorkspaceContent({
   activeChannelId,
   activeDmId,
   onOpenChannel,
+  searchQuery,
+  onSearchQuery,
 }: WorkspaceContentProps) {
   const activeCommunity = useMemo(
     () => communities.find((community) => community.name === activeCommunityName) ?? communities[0],
@@ -272,17 +276,29 @@ function WorkspaceContent({
   }
 
   if (mode === 'search') {
+    const q = searchQuery.trim().toLowerCase()
+    const matchedPosts = q
+      ? posts.filter((post) => `${post.title} ${post.body} ${post.author} ${post.handle} ${post.community}`.toLowerCase().includes(q))
+      : posts.slice(0, 2)
+    const matchedCommunities = q
+      ? communities.filter((community) =>
+          `${community.name} ${community.channels.map((channel) => `${channel.name} ${channel.topic}`).join(' ')} ${community.members.map((member) => `${member.name} ${member.role}`).join(' ')}`
+            .toLowerCase()
+            .includes(q),
+        )
+      : communities.slice(0, 2)
+
     return (
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.searchHero}`}>
           <div>
             <p className={styles.contentKicker}>Search</p>
-            <h2>Find posts, people, and spaces</h2>
+            <h1>Find posts, people, and spaces</h1>
             <p className={styles.contentSubcopy}>Search in one place without changing screens.</p>
           </div>
           <div className={styles.searchHeroCard}>
             <Search aria-hidden="true" />
-            <span>Search the network</span>
+            <span>{q ? `Results for “${searchQuery.trim()}”` : 'Search the network'}</span>
           </div>
         </section>
 
@@ -301,29 +317,41 @@ function WorkspaceContent({
 
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
-            <h2>Recent results</h2>
-            <span>{posts.length + communities.length} items</span>
+            <h2>{q ? 'Results' : 'Recent results'}</h2>
+            <span>{matchedPosts.length + matchedCommunities.length} items</span>
           </div>
-          <div className={styles.resultList}>
-            {posts.slice(0, 2).map((post) => (
-              <article key={post.title} className={styles.resultRow}>
-                <div>
-                  <strong>{post.title}</strong>
-                  <p>{post.community ? `${post.community} · ` : ''}{post.author}</p>
-                </div>
-                <span>{post.stats.comments} comments</span>
-              </article>
-            ))}
-            {communities.slice(0, 2).map((community) => (
-              <article key={community.name} className={styles.resultRow}>
-                <div>
-                  <strong>{community.name}</strong>
-                  <p>{community.channels.length} channels · {community.members.length} members</p>
-                </div>
-                <span>Community</span>
-              </article>
-            ))}
-          </div>
+          {matchedPosts.length === 0 && matchedCommunities.length === 0 ? (
+            <article className={styles.infoCard}>
+              <strong>No results for “{searchQuery.trim()}”</strong>
+              <p>Try a different keyword, or browse spaces and friends instead.</p>
+              <div>
+                <button type="button" className={styles.contentChip} onClick={() => onSearchQuery('')}>
+                  Clear search
+                </button>
+              </div>
+            </article>
+          ) : (
+            <div className={styles.resultList}>
+              {matchedPosts.map((post) => (
+                <article key={post.title} className={styles.resultRow}>
+                  <div>
+                    <strong>{post.title}</strong>
+                    <p>{post.community ? `${post.community} · ` : ''}{post.author}</p>
+                  </div>
+                  <span>{post.stats.comments} comments</span>
+                </article>
+              ))}
+              {matchedCommunities.map((community) => (
+                <article key={community.name} className={styles.resultRow}>
+                  <div>
+                    <strong>{community.name}</strong>
+                    <p>{community.channels.length} channels · {community.members.length} members</p>
+                  </div>
+                  <span>Community</span>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
       </main>
     )
