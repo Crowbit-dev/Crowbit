@@ -14,36 +14,47 @@ An open-source, privacy-first social media alternative that gives users full con
 **Repository Layout**
 - `client/` — frontend app (Vite + React + TypeScript)
 - `server/` — API and backend services
-- `public/` — static assets served by the client
+- `client/public/` — static assets served by the client
+- `.github/` — CI workflows and Dependabot config
 
 **Quick Start (development)**
-Prerequisites: `node` (16+), `npm` or `pnpm`.
+Prerequisites: `node` (20+), `npm` (the repo uses `package-lock.json`, so stick to npm).
 
-1. Install dependencies
+1. Install dependencies (npm workspaces — one command at the root covers both apps)
 
 ```bash
-cd server && npm install
-cd ../client && npm install
+npm ci
 ```
 
-2. Run dev servers (two terminals)
+2. Run dev servers (two terminals, or use the root shortcuts below)
 
 Terminal A (server):
+
 ```bash
-cd server
-npm run dev
+npm run server
 ```
 
 Terminal B (client):
+
 ```bash
-cd client
 npm run dev
 ```
 
-If `dev` scripts differ, use the appropriate `start` / `serve` script defined in each `package.json`.
+Root shortcuts: `npm run dev` (client), `npm run server` (server), `npm run build` (client build), `npm run lint` (client lint), `npm run typecheck` (server typecheck).
+
+The client dev server proxies `/api` to `http://localhost:3001`, so run both halves together.
 
 **Environment**
-- See `server/src/env.ts` for environment variables used by the server. Create a `.env` file in `server/` with the required keys before running.
+The server exits on boot without a secret. Create a `.env` file in `server/`:
+
+```bash
+SESSION_SECRET=replace-me-with-a-long-random-string
+# Optional:
+# PORT=3001
+# NODE_ENV=development
+```
+
+See `server/src/env.ts` for the full list of variables.
 
 **Contributing**
 - Open an issue to discuss large changes.
