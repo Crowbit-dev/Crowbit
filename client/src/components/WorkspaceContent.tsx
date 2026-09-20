@@ -82,7 +82,7 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
   const send = () => {
     const body = draft.trim()
     if (!body && attachments.length === 0) return
-    setMessages((prev) => [...prev, { author: 'You', time: 'Now', body: body || 'Shared an image', image: attachments[0]?.url }])
+    setMessages((prev) => [...prev, { author: 'You', time: 'Now', body: body, image: attachments[0]?.url }])
     attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url))
     setAttachments([])
     setDraft('')
