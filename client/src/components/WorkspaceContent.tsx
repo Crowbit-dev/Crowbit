@@ -110,15 +110,12 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
   return (
     <>
           <div className={styles.conversationMetaRow}>
-            <div className={styles.miniStatCard}>
-          <strong>{mutualCommunities.length}</strong>
-          <span>mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}</span>
-        </div>
-        <div className={styles.miniStatCard}>
-          <strong>{mutualFriends.length}</strong>
-          <span>mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}</span>
-        </div>
-      </div>
+            <p className={styles.mutualStats}>
+              {mutualCommunities.length} mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}
+              {' · '}
+              {mutualFriends.length} mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}
+            </p>
+          </div>
 
       <div className={styles.conversationFeed}>
         {messages.map((message, index) => (

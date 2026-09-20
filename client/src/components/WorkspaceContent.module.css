@@ -246,6 +246,17 @@
 
 .conversationMetaRow {
   align-items: stretch;
+  padding-left: 10px;
+}
+
+.mutualStats {
+  margin: 0;
+  color: var(--offwhite);
+  font-size: 0.86rem;
+}
+
+.mutualStats strong {
+  color: var(--text-h);
 }
 
 .conversationPanel {
@@ -253,7 +264,6 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  gap: 18px;
 }
 
 .conversationFeed {
