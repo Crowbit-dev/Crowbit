@@ -251,12 +251,43 @@
 
 .mutualStats {
   margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
   color: var(--offwhite);
   font-size: 0.86rem;
 }
 
 .mutualStats strong {
   color: var(--text-h);
+}
+
+.avatarGroup {
+  display: inline-flex;
+  align-items: center;
+}
+
+.avatarGroupAvatar {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  margin-left: -7px;
+  border-radius: 50%;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  user-select: none;
+  box-shadow: 0 0 0 0.5px rgba(20, 20, 20, 0.9);
+}
+
+.avatarGroupAvatar:first-child {
+  margin-left: 0;
+}
+
+.avatarGroupMore {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .conversationPanel {

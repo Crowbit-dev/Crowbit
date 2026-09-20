@@ -34,6 +34,37 @@ const mutualFriendsByDm: Record<string, string[]> = {
   theo: ['Maya'],
 }
 
+const AVATAR_TONES = [
+  'linear-gradient(135deg, #533e52, #6f5b6d)',
+  'linear-gradient(135deg, #423341, #675566)',
+  'linear-gradient(135deg, #515151, #313131)',
+  'linear-gradient(135deg, #6f5b6d, #423341)',
+]
+
+type AvatarGroupItem = string | { name: string; background?: string }
+
+function AvatarGroup({ items, max = 3 }: { items: AvatarGroupItem[]; max?: number }) {
+  const normalized = items.map((item) => (typeof item === 'string' ? { name: item } : item))
+  const visible = normalized.slice(0, max)
+  const extra = normalized.length - visible.length
+  if (normalized.length === 0) return null
+  return (
+    <span className={styles.avatarGroup}>
+      {visible.map((item, index) => (
+        <span
+          key={item.name}
+          className={styles.avatarGroupAvatar}
+          style={{ background: item.background ?? AVATAR_TONES[item.name.charCodeAt(0) % AVATAR_TONES.length], zIndex: visible.length - index }}
+          title={item.name}
+        >
+          {item.name[0]}
+        </span>
+      ))}
+      {extra > 0 && <span className={`${styles.avatarGroupAvatar} ${styles.avatarGroupMore}`}>+{extra}</span>}
+    </span>
+  )
+}
+
 function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessage; mutualCommunities: Community[] }) {
   const mutualFriends = mutualFriendsByDm[activeDm.id] ?? []
   const [messages, setMessages] = useState<MessageEntry[]>([
@@ -111,9 +142,11 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
     <>
           <div className={styles.conversationMetaRow}>
             <p className={styles.mutualStats}>
-              {mutualCommunities.length} mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}
+              <AvatarGroup items={mutualCommunities.map((community) => ({ name: community.name, background: community.color }))} />
+              <strong>{mutualCommunities.length}</strong> mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}
               {' · '}
-              {mutualFriends.length} mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}
+              <AvatarGroup items={mutualFriends} />
+              <strong>{mutualFriends.length}</strong> mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}
             </p>
           </div>
 
