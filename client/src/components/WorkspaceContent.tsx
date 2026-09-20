@@ -13,6 +13,8 @@ type WorkspaceContentProps = {
   activeChannelId: string
   activeDmId: string
   onOpenChannel: (communityName: string, channelId: string) => void
+  onOpenThread: (post: Post) => void
+  threadOpen: boolean
   searchQuery: string
   onSearchQuery: (query: string) => void
 }
@@ -230,6 +232,8 @@ function WorkspaceContent({
   activeChannelId,
   activeDmId,
   onOpenChannel,
+  onOpenThread,
+  threadOpen,
   searchQuery,
   onSearchQuery,
 }: WorkspaceContentProps) {
@@ -571,7 +575,7 @@ function WorkspaceContent({
         </div>
       </section>
 
-      <section className={`${styles.panelStack} ${styles.feedStack}`}>
+      <section className={`${styles.panelStack} ${styles.feedStack} ${threadOpen ? styles.threadShift : ''}`}>
         {visiblePosts.length === 0 ? (
           <article className={styles.infoCard}>
             <strong>No posts here yet</strong>
@@ -611,7 +615,7 @@ function WorkspaceContent({
                 <ArrowBigUp aria-hidden="true" />
                 <span>{formatUpvotes(post.stats.upvotes)}</span>
               </button>
-              <button type="button" className={styles.postAction} aria-label={`View comments for ${post.title}`}>
+              <button type="button" className={styles.postAction} aria-label={`View comments for ${post.title}`} onClick={() => onOpenThread(post)}>
                 <MessageCircle aria-hidden="true" />
                 <span>{post.stats.comments}</span>
               </button>

@@ -481,6 +481,13 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 14px;
   justify-items: center;
+  transition: margin-right 200ms ease;
+}
+
+@media (min-width: 1401px) {
+  .feedStack.threadShift {
+    margin-right: 400px;
+  }
 }
 
 .searchGrid,

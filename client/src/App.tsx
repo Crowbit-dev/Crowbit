@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import './App.css'
 import PostModal from './components/PostModal'
+import ThreadPanel from './components/ThreadPanel'
 import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
@@ -14,6 +15,9 @@ function App() {
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [activeThread, setActiveThread] = useState<Post | null>(null)
+  const [threadVisible, setThreadVisible] = useState(false)
+  const threadCloseTimer = useRef<number | null>(null)
 
   const selectCommunity = (communityName: string) => {
     if (communityName === 'all' || communityName === 'home') {
@@ -54,12 +58,54 @@ function App() {
     setMode('feed')
   }
 
+  const openThread = (post: Post) => {
+    if (threadCloseTimer.current !== null) {
+      window.clearTimeout(threadCloseTimer.current)
+      threadCloseTimer.current = null
+    }
+    setActiveThread(post)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setThreadVisible(true))
+    })
+  }
+
+  const closeThread = () => {
+    setThreadVisible(false)
+    if (threadCloseTimer.current !== null) {
+      window.clearTimeout(threadCloseTimer.current)
+    }
+    threadCloseTimer.current = window.setTimeout(() => {
+      setActiveThread(null)
+      threadCloseTimer.current = null
+    }, 200)
+  }
+
+  const toggleThread = (post: Post) => {
+    if (activeThread && activeThread.author === post.author && activeThread.title === post.title) {
+      closeThread()
+    } else {
+      openThread(post)
+    }
+  }
+
+  const closeThreadNow = () => {
+    if (threadCloseTimer.current !== null) {
+      window.clearTimeout(threadCloseTimer.current)
+      threadCloseTimer.current = null
+    }
+    setThreadVisible(false)
+    setActiveThread(null)
+  }
+
   return (
     <div className="home-shell">
       <WorkspaceRail
         mode={mode}
         totalUnread={totalUnread}
-        onChangeMode={setMode}
+        onChangeMode={(nextMode) => {
+          setMode(nextMode)
+          closeThreadNow()
+        }}
         onCompose={() => setComposerOpen(true)}
       />
 
@@ -88,9 +134,21 @@ function App() {
           activeChannelId={activeChannelId}
           activeDmId={activeDmId}
           onOpenChannel={openChannel}
+          onOpenThread={toggleThread}
+          threadOpen={activeThread !== null}
           searchQuery={searchQuery}
           onSearchQuery={setSearchQuery}
         />
+
+        {activeThread && (
+          <div className={`thread-wrap${threadVisible ? ' open' : ''}`}>
+            <ThreadPanel
+              key={`${activeThread.author}-${activeThread.title}`}
+              post={activeThread}
+              onClose={closeThread}
+            />
+          </div>
+        )}
       </div>
       {composerOpen && (
         <PostModal

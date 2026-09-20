@@ -14,6 +14,25 @@
   grid-template-columns: 320px minmax(0, 1fr);
 }
 
+.thread-wrap {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(400px, 92vw);
+  z-index: 40;
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%);
+  pointer-events: none;
+  transition: transform 200ms ease;
+}
+
+.thread-wrap.open {
+  transform: none;
+  pointer-events: auto;
+}
+
 @media (max-width: 1280px) {
   .workspace-frame {
     grid-template-columns: 290px minmax(0, 1fr);
@@ -25,5 +44,10 @@
     height: auto;
     margin-left: 0;
     grid-template-columns: 1fr;
+  }
+
+  .thread-wrap {
+    left: 0;
+    width: auto;
   }
 }
