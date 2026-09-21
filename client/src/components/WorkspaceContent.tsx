@@ -552,7 +552,6 @@ function WorkspaceContent({
         : posts.filter((post) => post.community === activeCommunityName)
 
   const feedHighlights = [
-    { value: `${visiblePosts.length}`, label: 'new posts' },
     { value: `${communities.length}`, label: 'communities' },
     { value: `${directMessages.filter((message) => message.status === 'online').length}`, label: 'friends online' },
   ]
