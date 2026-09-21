@@ -598,54 +598,17 @@ function WorkspaceContent({
             </div>
             <div className={styles.channelGrid}>
               {activeCommunity.channels.map((channel) => (
-                <div
+                <button
                   key={channel.id}
+                  type="button"
+                  onClick={() => onOpenChannel(activeCommunity.name, channel.id)}
                   className={`${styles.channelCard} ${activeChannel.id === channel.id ? styles.active : ''}`}
                   style={{ '--community-color': activeCommunity.color } as CSSProperties}
                 >
                   <strong>#{channel.name}</strong>
                   <p>{channel.topic}</p>
-                </div>
+                </button>
               ))}
-            </div>
-          </article>
-
-          <article className={styles.communityDetailCard}>
-            <div className={styles.sectionHeadingRow}>
-              <h2>Members</h2>
-              <span>Online first</span>
-            </div>
-            <div className={styles.memberGrid}>
-              {activeCommunity.members.map((member) => (
-                <div key={member.name} className={styles.memberRow}>
-                  <div className={`${shared.statusDot} ${shared[member.status]}`} />
-                  <div>
-                    <strong>{member.name}</strong>
-                    <p>{member.role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className={styles.communityDetailCard}>
-            <div className={styles.sectionHeadingRow}>
-              <h2>Recent posts</h2>
-              <span>From the feed</span>
-            </div>
-            <div className={styles.resultList}>
-              {posts
-                .filter((post) => post.community === activeCommunity.name)
-                .slice(0, 2)
-                .map((post) => (
-                  <div key={post.title} className={styles.resultRow}>
-                    <div>
-                      <strong>{post.title}</strong>
-                      <p>{post.author}</p>
-                    </div>
-                    <span>{formatUpvotes(post.stats.upvotes)} upvotes</span>
-                  </div>
-                ))}
             </div>
           </article>
         </section>

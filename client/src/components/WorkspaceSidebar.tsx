@@ -46,7 +46,6 @@ function WorkspaceSidebar({
   activeChannelId,
   activeDmId,
   onSelectCommunity,
-  onSelectChannel,
   onSelectDm,
   onOpenChannel,
   searchQuery,
@@ -321,30 +320,6 @@ function WorkspaceSidebar({
           {query && !communities.some((community) => community.name.toLowerCase().includes(query)) && (
             <p className={styles.sidebarEmpty}>No spaces match “{searchQuery.trim()}”.</p>
           )}
-        </div>
-      </div>
-
-      <div className={styles.sidebarSection}>
-        <div className={styles.sidebarSectionHead}>
-          <span>Channels</span>
-          <span>Active</span>
-        </div>
-        <div className={styles.sidebarList}>
-          {(query ? activeCommunity.channels.filter((channel) => `${channel.name} ${channel.topic}`.toLowerCase().includes(query)) : activeCommunity.channels).map((channel) => (
-            <button
-              key={channel.id}
-              type="button"
-              className={`${styles.sidebarItem} ${activeChannelId === channel.id ? styles.active : ''}`}
-              onClick={() => onSelectChannel(activeCommunity.name, channel.id)}
-            >
-              <span className={styles.sidebarItemIcon}><Hash aria-hidden="true" /></span>
-              <span className={styles.sidebarItemCopy}>
-                <strong>{channel.name}</strong>
-                <span>{channel.topic}</span>
-              </span>
-              {channel.unread ? <span className={shared.sidebarUnreadCount}>{channel.unread}</span> : null}
-            </button>
-          ))}
         </div>
       </div>
     </aside>
