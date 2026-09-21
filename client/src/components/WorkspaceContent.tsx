@@ -30,10 +30,19 @@ type MessageEntry = {
   time: string
   body: string
   image?: string
+  // LOCAL-ONLY: quoted reference; a real backend would resolve this from an id.
+  replyTo?: { id: string; author: string; body: string }
 }
 
 // TEMPORARY: formats mock upvote counts until the backend provides real numbers.
 const formatUpvotes = (value: number) => (value < 100 ? `${value}` : `${value}k`)
+
+// Shortens quoted text with an explicit ellipsis (the CSS container
+// truncation only kicks in when the full snippet overflows its box).
+const snippet = (body: string, length = 80) => {
+  const line = body.split('\n')[0] ?? ''
+  return line.length > length ? `${line.slice(0, length).trimEnd()}…` : line
+}
 
 const mutualFriendsByDm: Record<string, string[]> = {
   maya: ['Jules', 'Sami', 'Theo'],
@@ -89,11 +98,14 @@ function DmConversation({
     { id: `${activeDm.id}-3`, author: activeDm.name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
   ])
   const [draft, setDraft] = useState('')
+  const [replyTarget, setReplyTarget] = useState<MessageEntry | null>(null)
+  const [flashId, setFlashId] = useState<string | null>(null)
   const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([])
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const feedRef = useRef<HTMLDivElement>(null)
   const stuckToBottomRef = useRef(true)
+  const flashTimer = useRef<number | null>(null)
 
   useEffect(() => {
     const ta = inputRef.current
@@ -107,7 +119,7 @@ function DmConversation({
 
   // Within 40px of the bottom counts as "at bottom" so rounding never breaks stickiness.
   useEffect(() => {
-    const scroller = bottomRef.current?.closest('main')
+    const scroller = feedRef.current
     if (!scroller) return
     const onScroll = () => {
       stuckToBottomRef.current = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 40
@@ -119,7 +131,7 @@ function DmConversation({
 
   // Autoscroll on new messages, but only if already at the bottom.
   useEffect(() => {
-    const scroller = bottomRef.current?.closest('main')
+    const scroller = feedRef.current
     if (!scroller || !stuckToBottomRef.current) {
       return
     }
@@ -129,10 +141,21 @@ function DmConversation({
   const send = () => {
     const body = draft.trim()
     if (!body && attachments.length === 0) return
-    setMessages((prev) => [...prev, { id: `local-${Date.now()}`, author: 'You', time: 'Now', body, image: attachments[0]?.url }])
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `local-${Date.now()}`,
+        author: 'You',
+        time: 'Now',
+        body: body || 'Shared an image',
+        image: attachments[0]?.url,
+        replyTo: replyTarget ? { id: replyTarget.id, author: replyTarget.author, body: replyTarget.body } : undefined,
+      },
+    ])
     attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url))
     setAttachments([])
     setDraft('')
+    setReplyTarget(null)
     inputRef.current?.focus()
   }
 
@@ -150,9 +173,15 @@ function DmConversation({
   }
 
   const replyTo = (message: MessageEntry) => {
-    const quote = message.body.split('\n')[0]?.slice(0, 120) ?? ''
-    setDraft((prev) => (prev ? `${prev}\n> ${message.author}: ${quote}\n` : `> ${message.author}: ${quote}\n\n`))
+    setReplyTarget(message)
     inputRef.current?.focus()
+  }
+
+  const jumpToMessage = (id: string) => {
+    document.getElementById(`msg-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setFlashId(id)
+    if (flashTimer.current !== null) window.clearTimeout(flashTimer.current)
+    flashTimer.current = window.setTimeout(() => setFlashId(null), 1200)
   }
 
   const openMessageMenu = (e: ReactMouseEvent<HTMLElement>, message: MessageEntry) => {
@@ -196,15 +225,28 @@ function DmConversation({
             </p>
           </div>
 
-      <div className={styles.conversationFeed}>
+      <div ref={feedRef} className={styles.conversationFeed}>
           {messages.map((message) => (
               <article
+                id={`msg-${message.id}`}
                 key={message.id}
-                className={styles.chatMessage}
+                className={`${styles.chatMessage} ${flashId === message.id ? styles.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
                 onContextMenu={(e) => openMessageMenu(e, message)}
               >
-            <div className={styles.messageAvatar}>{message.author[0]}</div>
-            <div className={styles.chatMessageCopy}>
+                <div className={styles.messageAvatar}>{message.author[0]}</div>
+                <div className={styles.chatMessageCopy}>
+                  {message.replyTo && (
+                    <button
+                      type="button"
+                      className={styles.messageReference}
+                      onClick={() => message.replyTo && jumpToMessage(message.replyTo.id)}
+                      aria-label={`Jump to ${message.replyTo.author}'s message`}
+                    >
+                      <Reply size={12} aria-hidden="true" />
+                      <strong>{message.replyTo.author}</strong>
+                      <span>{snippet(message.replyTo.body)}</span>
+                    </button>
+                  )}
                   <div className={styles.chatMessageTopline}>
                     <strong>{message.author}</strong>
                     <span>{message.time}</span>
@@ -217,6 +259,17 @@ function DmConversation({
       </div>
 
       <form className={styles.messageComposer} onSubmit={handleSubmit}>
+        {replyTarget && (
+          <div className={styles.replyPreview}>
+            <span className={styles.replyPreviewText}>
+              Replying to <strong>{replyTarget.author}</strong>
+            </span>
+            <span className={styles.replyPreviewSnippet}>{snippet(replyTarget.body)}</span>
+            <button type="button" className={styles.replyPreviewClose} onClick={() => setReplyTarget(null)} aria-label="Cancel reply" title="Cancel reply">
+              <X size={14} aria-hidden="true" />
+            </button>
+          </div>
+        )}
         {attachments.length > 0 && (
           <div className={styles.dmAttachments}>
             {attachments.map((attachment) => (
@@ -248,6 +301,8 @@ function DmConversation({
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault()
                 send()
+              } else if (e.key === 'Escape') {
+                setReplyTarget(null)
               }
             }}
             placeholder={`Message ${activeDm.name}`}
@@ -266,7 +321,6 @@ function DmConversation({
           </button>
         </div>
       </form>
-      <div ref={bottomRef} aria-hidden="true" />
     </>
   )
 }
