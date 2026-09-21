@@ -594,7 +594,6 @@ function WorkspaceContent({
           <article className={styles.communityDetailCard}>
             <div className={styles.sectionHeadingRow}>
               <h2>Channels</h2>
-              <span>Active</span>
             </div>
             <div className={styles.channelGrid}>
               {activeCommunity.channels.map((channel) => (
