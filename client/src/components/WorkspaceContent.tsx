@@ -1,7 +1,9 @@
-import { ArrowBigUp, MessageCircle, Paperclip, Phone, Search, SendHorizontal, Share2, Shield, Users, Video, X } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
+import { ArrowBigUp, Copy, Link2, MessageCircle, Paperclip, Phone, Reply, Search, SendHorizontal, Share2, Shield, Trash2, Users, Video, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
+import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
+import type { ContextMenuItem } from './ContextMenu'
 import styles from './WorkspaceContent.module.css'
 
 type WorkspaceContentProps = {
@@ -14,12 +16,16 @@ type WorkspaceContentProps = {
   activeDmId: string
   onOpenChannel: (communityName: string, channelId: string) => void
   onOpenThread: (post: Post) => void
+  onDeletePost: (post: Post) => void
   threadShift: number
+  openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => void
   searchQuery: string
   onSearchQuery: (query: string) => void
 }
 
 type MessageEntry = {
+  // LOCAL-ONLY: mock ids so messages have stable keys/links with no backend.
+  id: string
   author: string
   time: string
   body: string
@@ -67,12 +73,20 @@ function AvatarGroup({ items, max = 3 }: { items: AvatarGroupItem[]; max?: numbe
   )
 }
 
-function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessage; mutualCommunities: Community[] }) {
+function DmConversation({
+  activeDm,
+  mutualCommunities,
+  openMenu,
+}: {
+  activeDm: DirectMessage
+  mutualCommunities: Community[]
+  openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => void
+}) {
   const mutualFriends = mutualFriendsByDm[activeDm.id] ?? []
   const [messages, setMessages] = useState<MessageEntry[]>([
-    { author: activeDm.name, time: 'Yesterday', body: activeDm.preview },
-    { author: 'You', time: 'Yesterday', body: 'I left feedback on the latest update and marked the next steps.' },
-    { author: activeDm.name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
+    { id: `${activeDm.id}-1`, author: activeDm.name, time: 'Yesterday', body: activeDm.preview },
+    { id: `${activeDm.id}-2`, author: 'You', time: 'Yesterday', body: 'I left feedback on the latest update and marked the next steps.' },
+    { id: `${activeDm.id}-3`, author: activeDm.name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
   ])
   const [draft, setDraft] = useState('')
   const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([])
@@ -115,7 +129,7 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
   const send = () => {
     const body = draft.trim()
     if (!body && attachments.length === 0) return
-    setMessages((prev) => [...prev, { author: 'You', time: 'Now', body: body, image: attachments[0]?.url }])
+    setMessages((prev) => [...prev, { id: `local-${Date.now()}`, author: 'You', time: 'Now', body, image: attachments[0]?.url }])
     attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url))
     setAttachments([])
     setDraft('')
@@ -133,6 +147,36 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
   const removeAttachment = (url: string) => {
     setAttachments((prev) => prev.filter((attachment) => attachment.url !== url))
     URL.revokeObjectURL(url)
+  }
+
+  const replyTo = (message: MessageEntry) => {
+    const quote = message.body.split('\n')[0]?.slice(0, 120) ?? ''
+    setDraft((prev) => (prev ? `${prev}\n> ${message.author}: ${quote}\n` : `> ${message.author}: ${quote}\n\n`))
+    inputRef.current?.focus()
+  }
+
+  const openMessageMenu = (e: ReactMouseEvent<HTMLElement>, message: MessageEntry) => {
+    e.preventDefault()
+    // Capture the highlight now — opening the menu collapses the selection.
+    const selection = window.getSelection()?.toString().trim() ?? ''
+    const items: ContextMenuItem[] = [
+      ...(selection ? [{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy', hint: 'Ctrl + C', onSelect: () => void copyText(selection) }] : []),
+      { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(message.body) },
+      { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyTo(message) },
+      // LOCAL-ONLY: fake link; no backend route exists for it yet.
+      { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Message Link', onSelect: () => void copyText(`https://crowbit.net/m/${message.id}`) },
+    ]
+    if (message.author === 'You') {
+      items.push({ type: 'separator' })
+      // LOCAL-ONLY: deletes from in-memory state; nothing persists without a backend.
+      items.push({
+        icon: <Trash2 size={16} aria-hidden="true" />,
+        label: 'Delete Message',
+        danger: true,
+        onSelect: () => setMessages((prev) => prev.filter((entry) => entry.id !== message.id)),
+      })
+    }
+    openMenu(e.clientX, e.clientY, items, e.currentTarget)
   }
 
   const handleSubmit = (e: FormEvent) => {
@@ -153,8 +197,12 @@ function DmConversation({ activeDm, mutualCommunities }: { activeDm: DirectMessa
           </div>
 
       <div className={styles.conversationFeed}>
-        {messages.map((message, index) => (
-          <article key={`${message.author}-${message.time}-${index}`} className={styles.chatMessage}>
+          {messages.map((message) => (
+              <article
+                key={message.id}
+                className={styles.chatMessage}
+                onContextMenu={(e) => openMessageMenu(e, message)}
+              >
             <div className={styles.messageAvatar}>{message.author[0]}</div>
             <div className={styles.chatMessageCopy}>
                   <div className={styles.chatMessageTopline}>
@@ -233,7 +281,9 @@ function WorkspaceContent({
   activeDmId,
   onOpenChannel,
   onOpenThread,
+  onDeletePost,
   threadShift,
+  openMenu,
   searchQuery,
   onSearchQuery,
 }: WorkspaceContentProps) {
@@ -280,7 +330,7 @@ function WorkspaceContent({
         </section>
 
         <section className={`${styles.panelStack} ${styles.conversationPanel}`}>
-          <DmConversation key={activeDm.id} activeDm={activeDm} mutualCommunities={mutualCommunities} />
+          <DmConversation key={activeDm.id} activeDm={activeDm} mutualCommunities={mutualCommunities} openMenu={openMenu} />
         </section>
       </main>
     )
@@ -544,6 +594,31 @@ function WorkspaceContent({
     )
   }
 
+  const openPostMenu = (e: ReactMouseEvent<HTMLElement>, post: Post) => {
+    e.preventDefault()
+    // LOCAL-ONLY: slug is fabricated; no backend route exists for it yet.
+    const postSlug = `${post.author}-${post.title}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    // Capture the highlight now — opening the menu collapses the selection.
+    const selection = window.getSelection()?.toString().trim() ?? ''
+    const items: ContextMenuItem[] = [
+      ...(selection ? [{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy', hint: 'Ctrl + C', onSelect: () => void copyText(selection) }] : []),
+      { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(post.body ? `${post.title}\n\n${post.body}` : post.title) },
+      { icon: <MessageCircle size={16} aria-hidden="true" />, label: 'Open Thread', onSelect: () => onOpenThread(post) },
+      { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Post Link', onSelect: () => void copyText(`https://crowbit.net/p/${postSlug}`) },
+    ]
+    if (post.author === 'You') {
+      items.push({ type: 'separator' })
+      // LOCAL-ONLY: deletes from in-memory App state; nothing persists without a backend.
+      items.push({
+        icon: <Trash2 size={16} aria-hidden="true" />,
+        label: 'Delete Post',
+        danger: true,
+        onSelect: () => onDeletePost(post),
+      })
+    }
+    openMenu(e.clientX, e.clientY, items, e.currentTarget)
+  }
+
   const visiblePosts =
     activeCommunityName === 'all'
       ? posts
@@ -585,7 +660,11 @@ function WorkspaceContent({
           </article>
         ) : (
           visiblePosts.map((post) => (
-          <article key={`${post.author}-${post.title}`} className={styles.postCard}>
+          <article
+            key={`${post.author}-${post.title}`}
+            className={styles.postCard}
+            onContextMenu={(e) => openPostMenu(e, post)}
+          >
             <div className={styles.postHeader}>
               <div className={styles.avatar}>{post.author[0]}</div>
               <div className={styles.postMeta}>

@@ -2,6 +2,7 @@ import { Bell, Check, HeadphoneOff, Headphones, Layers3, LogOut, Menu, MessageCi
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { WorkspaceMode } from '../appData'
+import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceRail.module.css'
 
@@ -58,16 +59,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
   )
 
   const copyUsername = async () => {
-    try {
-      await navigator.clipboard.writeText(currentUser.username)
-    } catch {
-      const fallback = document.createElement('textarea')
-      fallback.value = currentUser.username
-      document.body.appendChild(fallback)
-      fallback.select()
-      document.execCommand('copy')
-      fallback.remove()
-    }
+    await copyText(currentUser.username)
     setCopied(true)
     if (copyTimer.current !== null) window.clearTimeout(copyTimer.current)
     copyTimer.current = window.setTimeout(() => setCopied(false), 1500)

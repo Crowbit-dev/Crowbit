@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
+import ContextMenu, { type ContextMenuItem, type ContextMenuState } from './components/ContextMenu'
 import PostModal from './components/PostModal'
 import ThreadPanel from './components/ThreadPanel'
 import WorkspaceContent from './components/WorkspaceContent'
@@ -18,6 +19,7 @@ function App() {
   const [activeThread, setActiveThread] = useState<Post | null>(null)
   const [threadVisible, setThreadVisible] = useState(false)
   const threadCloseTimer = useRef<number | null>(null)
+  const [menu, setMenu] = useState<ContextMenuState | null>(null)
   const [windowWidth, setWindowWidth] = useState(() => window.innerWidth)
   const [threadWidth, setThreadWidth] = useState<number>(() => {
     try {
@@ -67,6 +69,18 @@ function App() {
     setComposerOpen(false)
     setMode('feed')
   }
+
+  // LOCAL-ONLY: removes from in-memory state; nothing persists without a backend.
+  const handleDeletePost = (post: Post) => {
+    setLocalPosts((prev) => prev.filter((entry) => !(entry.author === post.author && entry.title === post.title)))
+    setActiveThread((prev) => (prev && prev.author === post.author && prev.title === post.title ? null : prev))
+  }
+
+  const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => {
+    setMenu({ x, y, items, invoker })
+  }
+
+  const closeMenu = () => setMenu(null)
 
   const openThread = (post: Post) => {
     if (threadCloseTimer.current !== null) {
@@ -139,6 +153,7 @@ function App() {
         onChangeMode={(nextMode) => {
           setMode(nextMode)
           closeThreadNow()
+          closeMenu()
         }}
         onCompose={() => setComposerOpen(true)}
       />
@@ -169,7 +184,9 @@ function App() {
           activeDmId={activeDmId}
           onOpenChannel={openChannel}
           onOpenThread={toggleThread}
+          onDeletePost={handleDeletePost}
           threadShift={activeThread ? threadWidth : 0}
+          openMenu={openMenu}
           searchQuery={searchQuery}
           onSearchQuery={setSearchQuery}
         />
@@ -198,6 +215,7 @@ function App() {
           onPost={handlePost}
         />
       )}
+      {menu && <ContextMenu menu={menu} onClose={closeMenu} />}
     </div>
   )
 }
