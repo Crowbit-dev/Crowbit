@@ -384,7 +384,7 @@ function WorkspaceContent({
           <div>
             <p className={styles.contentKicker}>Direct messages</p>
             <h2 className={styles.dmName}><span className={`${shared.statusDot} ${shared[activeDm.status]}`} />{activeDm.name}<span className={styles.dmUsername}>@{activeDm.id}</span></h2>
-            <p className={styles.contentSubcopy}>{activeDm.role}</p>
+            <p className={styles.contentSubcopy}>{activeDm.customStatus}</p>
           </div>
           <div className={styles.contentChipRow}>
             <button type="button" className={styles.contentChip} aria-label="Start voice call">

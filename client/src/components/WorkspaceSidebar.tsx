@@ -127,7 +127,7 @@ function WorkspaceSidebar({
 
   if (mode === 'dms') {
     const visibleFriends = query
-      ? directMessages.filter((message) => `${message.name} ${message.role}`.toLowerCase().includes(query))
+      ? directMessages.filter((message) => `${message.name} ${message.customStatus}`.toLowerCase().includes(query))
       : directMessages
 
     return (
@@ -159,7 +159,7 @@ function WorkspaceSidebar({
                 </span>
                 <span className={styles.sidebarItemCopy}>
                   <strong>{message.name}</strong>
-                  <span>{message.role}</span>
+                  <span>{message.customStatus}</span>
                 </span>
               </button>
             ))}

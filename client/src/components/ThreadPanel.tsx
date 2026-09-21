@@ -9,6 +9,8 @@ export type ThreadComment = {
   body: string
 }
 
+// TODO: add a read more button for long comments
+
 // TEMPORARY: mock comments keyed by post title until the backend provides real data.
 const mockComments: Record<string, ThreadComment[]> = {
   'How are you building your personal brand in 2026?': [

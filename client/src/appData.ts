@@ -29,7 +29,7 @@ export type DirectMessage = {
   id: string
   name: string
   status: 'online' | 'away' | 'offline'
-  role: string
+  customStatus: string
   preview: string
   time: string
 }
@@ -174,8 +174,8 @@ export const posts: Post[] = [
 ]
 
 export const directMessages: DirectMessage[] = [
-  { id: 'maya', name: 'Maya', status: 'online', role: 'Founder', preview: 'The deck is ready for review', time: 'now' },
-  { id: 'jules', name: 'Jules', status: 'away', role: 'Designer', preview: 'I sent over the mockups', time: '12m' },
-  { id: 'sami', name: 'Sami', status: 'online', role: 'Engineer', preview: 'We should ship the beta this week', time: '1h' },
-  { id: 'theo', name: 'Theo', status: 'offline', role: 'Writer', preview: 'Thanks for the feedback on the post', time: '3h' },
+  { id: 'maya', name: 'Maya', status: 'online', customStatus: '🚀 shipping the launch deck', preview: 'The deck is ready for review', time: 'now' },
+  { id: 'jules', name: 'Jules', status: 'away', customStatus: '🎨 deep in mockups, brb', preview: 'I sent over the mockups', time: '12m' },
+  { id: 'sami', name: 'Sami', status: 'online', customStatus: 'probably breaking prod', preview: 'We should ship the beta this week', time: '1h' },
+  { id: 'theo', name: 'Theo', status: 'offline', customStatus: '✍️ drafting the next post', preview: 'Thanks for the feedback on the post', time: '3h' },
 ]
