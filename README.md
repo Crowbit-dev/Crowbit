@@ -62,7 +62,7 @@ See `server/src/env.ts` for the full list of variables.
 - Keep changes focused and include tests where applicable.
 
 **Contact & Security**
-- For questions or security reports, open an issue or contact the maintainers via the repository or email gizzixz@gmail.com
+- For questions or security reports, open an issue or contact the maintainers via the repository or email gizzi@crowbit.dev
 
 
 Thanks for checking out Crowbit — privacy-first social for people who value control.
