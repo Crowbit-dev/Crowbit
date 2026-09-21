@@ -382,7 +382,6 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.dmHero}`}>
           <div>
-            <p className={styles.contentKicker}>Direct messages</p>
             <h2 className={styles.dmName}><span className={`${shared.statusDot} ${shared[activeDm.status]}`} />{activeDm.name}<span className={styles.dmUsername}>@{activeDm.id}</span></h2>
             <p className={styles.contentSubcopy}>{activeDm.customStatus}</p>
           </div>
@@ -417,7 +416,6 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.notificationsHero}`}>
           <div>
-            <p className={styles.contentKicker}>Notifications</p>
             <h2>Activity</h2>
             <p className={styles.contentSubcopy}>Unread messages across your communities, newest first.</p>
           </div>
@@ -479,7 +477,6 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.searchHero}`}>
           <div>
-            <p className={styles.contentKicker}>Search</p>
             <h2>Find posts, people, and spaces</h2>
             <p className={styles.contentSubcopy}>Search in one place without changing screens.</p>
           </div>
@@ -549,7 +546,6 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.settingsHero}`}>
           <div>
-            <p className={styles.contentKicker}>Settings</p>
             <h2>Privacy, notifications, and appearance</h2>
             <p className={styles.contentSubcopy}>Tune the app around how public or private you want to be.</p>
           </div>
@@ -587,16 +583,10 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.contentHero} ${styles.communityHero}`}>
           <div>
-            <p className={styles.contentKicker}>Communities</p>
             <h2>{activeCommunity.name}</h2>
             <p className={styles.contentSubcopy}>
               {activeCommunity.channels.length} channels · {activeCommunity.members.length} members
             </p>
-          </div>
-          <div className={styles.communityFocusCard}>
-            <p className={styles.contentKicker}>Focused channel</p>
-            <strong>#{activeChannel.name}</strong>
-            <span>{activeChannel.topic}</span>
           </div>
         </section>
 
@@ -704,7 +694,6 @@ function WorkspaceContent({
     <main className={styles.workspaceContent}>
       <section className={`${styles.contentHero} ${styles.feedHero}`}>
         <div>
-          <p className={styles.contentKicker}>Feed</p>
           <h2>What’s happening now</h2>
           <p className={styles.contentSubcopy}>A fast stream of posts, ideas, and activity across the network.</p>
         </div>

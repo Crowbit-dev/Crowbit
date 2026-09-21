@@ -59,16 +59,6 @@
   align-items: center;
 }
 
-.contentKicker {
-  margin: 0 0 6px;
-  color: var(--offwhite);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  line-height: 0.9;
-}
-
 .contentSubcopy {
   color: var(--offwhite);
   line-height: 1.55;
@@ -163,10 +153,9 @@
 .resultRow,
 .memberRow {
   display: flex;
-  align-items: center;
-  gap: 14px;
   flex-direction: column;
   align-items: flex-start;
+  gap: 14px;
   justify-content: space-between;
   padding: 14px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
@@ -646,10 +635,9 @@
 
 .settingsCard {
   display: flex;
-  align-items: center;
-  gap: 14px;
   flex-direction: column;
   align-items: flex-start;
+  gap: 14px;
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: var(--shadow-card);
@@ -661,25 +649,6 @@
 .searchGrid .infoCard {
   min-height: 130px;
   justify-content: flex-start;
-}
-
-.communityFocusCard {
-  min-width: 220px;
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(33, 33, 33, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.communityFocusCard strong {
-  display: block;
-  margin: 4px 0;
-  font-size: 1.1rem;
-}
-
-.communityFocusCard span {
-  color: var(--offwhite);
-  line-height: 1.5;
 }
 
 .channelCard {

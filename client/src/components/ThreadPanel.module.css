@@ -68,15 +68,6 @@
   min-width: 0;
 }
 
-.kicker {
-  margin: 0;
-  color: var(--offwhite);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
 .title {
   color: var(--text-h);
   font-size: 1.05rem;
