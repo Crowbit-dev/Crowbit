@@ -49,6 +49,7 @@
   height: 200px;
   object-fit: contain;
   filter: drop-shadow(0 0 12px var(--accent-border));
+  user-select: none;
 }
 
 .authForm {
