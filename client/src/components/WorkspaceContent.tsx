@@ -138,6 +138,21 @@ function DmConversation({
     scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'auto' })
   }, [messages])
 
+  // Typing anywhere outside a field jumps into the composer.
+  // Focusing during keydown lets the keystroke itself land in the box.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return
+      const target = document.activeElement as HTMLElement | null
+      const tag = target?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target?.isContentEditable) return
+      if ((tag === 'BUTTON' || tag === 'A') && e.key === ' ') return
+      if (document.activeElement !== inputRef.current) inputRef.current?.focus()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
   const send = () => {
     const body = draft.trim()
     if (!body && attachments.length === 0) return
