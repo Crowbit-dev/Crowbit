@@ -87,6 +87,7 @@ function ThreadPanel({ post, onClose }: { post: Post; onClose: () => void }) {
       <div className={styles.header}>
         <div className={styles.heading}>
           <strong className={styles.title}>{post.title}</strong>
+          {post.body && <p className={styles.body}>{post.body}</p>}
           <span className={styles.meta}>{post.author} · {post.community || 'Profile'} · {post.stats.comments + comments.length} comments</span>
         </div>
         <button type="button" className={styles.close} onClick={onClose} aria-label="Close thread" title="Close thread">

@@ -43,6 +43,15 @@
   line-height: 1.35;
 }
 
+.body {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 .meta {
   color: var(--offwhite);
   font-size: 0.8rem;
