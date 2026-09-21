@@ -48,6 +48,7 @@
 
   .thread-wrap {
     left: 0;
-    width: auto;
+    /* Beats the inline drag width so the takeover stays full-screen. */
+    width: auto !important;
   }
 }

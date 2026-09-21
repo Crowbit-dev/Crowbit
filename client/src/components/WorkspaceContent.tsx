@@ -14,7 +14,7 @@ type WorkspaceContentProps = {
   activeDmId: string
   onOpenChannel: (communityName: string, channelId: string) => void
   onOpenThread: (post: Post) => void
-  threadOpen: boolean
+  threadShift: number
   searchQuery: string
   onSearchQuery: (query: string) => void
 }
@@ -233,7 +233,7 @@ function WorkspaceContent({
   activeDmId,
   onOpenChannel,
   onOpenThread,
-  threadOpen,
+  threadShift,
   searchQuery,
   onSearchQuery,
 }: WorkspaceContentProps) {
@@ -575,7 +575,10 @@ function WorkspaceContent({
         </div>
       </section>
 
-      <section className={`${styles.panelStack} ${styles.feedStack} ${threadOpen ? styles.threadShift : ''}`}>
+      <section
+        className={`${styles.panelStack} ${styles.feedStack} ${threadShift > 0 ? styles.threadShift : ''}`}
+        style={threadShift > 0 ? ({ '--thread-shift': `${threadShift}px` } as CSSProperties) : undefined}
+      >
         {visiblePosts.length === 0 ? (
           <article className={styles.infoCard}>
             <strong>No posts here yet</strong>

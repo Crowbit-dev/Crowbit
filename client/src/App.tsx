@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import PostModal from './components/PostModal'
 import ThreadPanel from './components/ThreadPanel'
@@ -18,6 +18,16 @@ function App() {
   const [activeThread, setActiveThread] = useState<Post | null>(null)
   const [threadVisible, setThreadVisible] = useState(false)
   const threadCloseTimer = useRef<number | null>(null)
+  const [windowWidth, setWindowWidth] = useState(() => window.innerWidth)
+  const [threadWidth, setThreadWidth] = useState<number>(() => {
+    try {
+      const saved = Number(localStorage.getItem('thread-width'))
+      if (Number.isFinite(saved) && saved >= 280 && saved <= 720) return saved
+    } catch {
+      // Storage unavailable — fall through to the default.
+    }
+    return 400
+  })
 
   const selectCommunity = (communityName: string) => {
     if (communityName === 'all' || communityName === 'home') {
@@ -88,6 +98,30 @@ function App() {
     }
   }
 
+  const handleThreadWidth = (width: number) => {
+    const clamped = Math.round(Math.min(threadMaxWidth, Math.max(280, width)))
+    setThreadWidth(clamped)
+    try {
+      localStorage.setItem('thread-width', String(clamped))
+    } catch {
+      // Storage unavailable — width still applies for this session.
+    }
+  }
+
+  useEffect(() => {
+    const onResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  // Rail (84) + sidebar (320) + content padding (48) + full post width (760).
+  // The panel stops growing before posts would have to shrink.
+  const threadMaxWidth = Math.max(280, windowWidth - 1212)
+
+  useEffect(() => {
+    setThreadWidth((prev) => Math.min(prev, Math.max(280, windowWidth - 1212)))
+  }, [windowWidth])
+
   const closeThreadNow = () => {
     if (threadCloseTimer.current !== null) {
       window.clearTimeout(threadCloseTimer.current)
@@ -135,17 +169,23 @@ function App() {
           activeDmId={activeDmId}
           onOpenChannel={openChannel}
           onOpenThread={toggleThread}
-          threadOpen={activeThread !== null}
+          threadShift={activeThread ? threadWidth : 0}
           searchQuery={searchQuery}
           onSearchQuery={setSearchQuery}
         />
 
         {activeThread && (
-          <div className={`thread-wrap${threadVisible ? ' open' : ''}`}>
+          <div
+            className={`thread-wrap${threadVisible ? ' open' : ''}`}
+            style={{ width: threadWidth }}
+          >
             <ThreadPanel
               key={`${activeThread.author}-${activeThread.title}`}
               post={activeThread}
               onClose={closeThread}
+              width={threadWidth}
+              maxWidth={threadMaxWidth}
+              onResizeWidth={handleThreadWidth}
             />
           </div>
         )}

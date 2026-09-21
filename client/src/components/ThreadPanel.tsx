@@ -31,9 +31,11 @@ const mockComments: Record<string, ThreadComment[]> = {
   ],
 }
 
-function ThreadPanel({ post, onClose }: { post: Post; onClose: () => void }) {
+function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: Post; onClose: () => void; width: number; maxWidth: number; onResizeWidth: (width: number) => void }) {
   const [comments, setComments] = useState<ThreadComment[]>(() => mockComments[post.title] ?? [])
   const [draft, setDraft] = useState('')
+  const [dragging, setDragging] = useState(false)
+  const dragState = useRef<{ startX: number; startWidth: number } | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const stuckToBottomRef = useRef(true)
@@ -82,8 +84,48 @@ function ThreadPanel({ post, onClose }: { post: Post; onClose: () => void }) {
     inputRef.current?.focus()
   }
 
+  const clampWidth = (value: number) => Math.round(Math.min(maxWidth, Math.max(280, value)))
+
+  const endWindowDrag = () => {
+    dragState.current = null
+    setDragging(false)
+    document.body.style.userSelect = ''
+    window.removeEventListener('pointermove', onWindowDragMove)
+    window.removeEventListener('pointerup', endWindowDrag)
+    window.removeEventListener('pointercancel', endWindowDrag)
+  }
+
+  const onWindowDragMove = (e: PointerEvent) => {
+    const drag = dragState.current
+    if (!drag) return
+    onResizeWidth(clampWidth(drag.startWidth + (drag.startX - e.clientX)))
+  }
+
   return (
     <aside className={styles.thread} aria-label={`Comments on ${post.title}`}>
+      <div
+        className={`${styles.resizeHandle} ${dragging ? styles.dragging : ''}`}
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize thread panel"
+        aria-valuenow={width}
+        aria-valuemin={280}
+        aria-valuemax={maxWidth}
+        tabIndex={0}
+        onDoubleClick={() => onResizeWidth(clampWidth(400))}
+        onPointerDown={(e) => {
+          dragState.current = { startX: e.clientX, startWidth: width }
+          setDragging(true)
+          document.body.style.userSelect = 'none'
+          window.addEventListener('pointermove', onWindowDragMove)
+          window.addEventListener('pointerup', endWindowDrag)
+          window.addEventListener('pointercancel', endWindowDrag)
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowLeft') onResizeWidth(clampWidth(width + 16))
+          else if (e.key === 'ArrowRight') onResizeWidth(clampWidth(width - 16))
+        }}
+      />
       <div className={styles.header}>
         <div className={styles.heading}>
           <strong className={styles.title}>{post.title}</strong>

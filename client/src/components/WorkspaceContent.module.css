@@ -484,9 +484,9 @@
   transition: margin-right 200ms ease;
 }
 
-@media (min-width: 1401px) {
+@media (min-width: 1500px) {
   .feedStack.threadShift {
-    margin-right: 400px;
+    margin-right: var(--thread-shift, 400px);
   }
 }
 
