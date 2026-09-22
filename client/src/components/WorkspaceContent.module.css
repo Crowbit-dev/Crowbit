@@ -130,7 +130,6 @@
   font-size: 0.86rem;
 }
 
-.communityDetailCard,
 .infoCard {
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -139,8 +138,7 @@
   border-radius: 18px;
 }
 
-.resultsCard h2,
-.communityDetailCard h2 {
+.resultsCard h2 {
   margin: 0;
 }
 
@@ -590,23 +588,58 @@
 }
 
 .searchGrid,
-.settingsGrid,
-.communityGrid {
+.settingsGrid {
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.communityGrid .communityDetailCard {
-  width: 100%;
-  max-width: 300px;
-  box-sizing: border-box;
+.communitiesLayout {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.communitiesLayout > .contentHero {
+  margin: 24px 24px 0;
+}
+
+.communitiesBody {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  margin-top: 18px;
+}
+
+.channelPane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: 280px;
+  min-height: 0;
+}
+
+.channelPane::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 18px;
+  right: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .channelGrid {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 2px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  padding: 12px 8px 16px;
 }
 
 .searchHeroCard {
@@ -806,7 +839,6 @@
 }
 
 @media (max-width: 1280px) {
-  .communityGrid,
   .settingsGrid,
   .searchGrid {
     grid-template-columns: 1fr;
@@ -818,6 +850,33 @@
     order: 3;
     overflow: visible;
   }
+
+  .communitiesLayout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .communitiesBody {
+    flex-direction: column;
+    margin-top: 18px;
+  }
+
+  .channelPane {
+    width: auto;
+  }
+
+  .channelPane::after {
+    top: auto;
+    right: 14px;
+    bottom: 0;
+    left: 14px;
+    width: auto;
+    height: 1px;
+  }
+
+  .channelPane .channelGrid {
+    overflow: visible;
+  }
 }
 
 @media (max-width: 640px) {
@@ -825,18 +884,11 @@
     padding: 16px;
   }
 
-  .contentHero {
-    padding: 20px;
-    flex-direction: column;
+  .communitiesLayout {
+    padding: 0;
   }
 
-  .feedStatRow,
-  .conversationMetaRow {
-    width: 100%;
-  }
-
-  .searchHeroCard {
-    width: 100%;
-    min-width: 0;
+  .communitiesLayout > .contentHero {
+    margin: 16px 16px 0;
   }
 }

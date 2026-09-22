@@ -580,7 +580,7 @@ function WorkspaceContent({
 
   if (mode === 'communities') {
     return (
-      <main className={styles.workspaceContent}>
+      <main className={`${styles.workspaceContent} ${styles.communitiesLayout}`}>
         <section className={`${styles.contentHero} ${styles.communityHero}`}>
           <div>
             <h2>{activeCommunity.name}</h2>
@@ -590,11 +590,8 @@ function WorkspaceContent({
           </div>
         </section>
 
-        <section className={`${styles.panelStack} ${styles.communityGrid}`}>
-          <article className={styles.communityDetailCard}>
-            <div className={styles.sectionHeadingRow}>
-              <h2>Channels</h2>
-            </div>
+        <div className={styles.communitiesBody}>
+          <aside className={styles.channelPane} aria-label={`${activeCommunity.name} channels`}>
             <div className={styles.channelGrid}>
               {activeCommunity.channels.map((channel) => (
                 <button
@@ -611,8 +608,8 @@ function WorkspaceContent({
                 </button>
               ))}
             </div>
-          </article>
-        </section>
+          </aside>
+        </div>
       </main>
     )
   }
