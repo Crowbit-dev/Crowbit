@@ -153,6 +153,42 @@
   color: var(--text-h);
 }
 
+.dmBarSearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 170px;
+  height: 34px;
+  margin-left: 8px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--offwhite);
+  cursor: text;
+}
+
+.dmBarSearch input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.dmBarSearch input:focus {
+  outline: none;
+}
+
+.dmBarSearch input::placeholder {
+  color: var(--offwhite);
+  opacity: 1;
+}
+
 .conversationMetaRow,
 .resultList,
 .channelGrid,

@@ -1,4 +1,4 @@
-import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Phone, Reply, SendHorizontal, Share2, Shield, Trash2, Users, Video, X } from 'lucide-react'
+import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Phone, Pin, Reply, Search, SendHorizontal, Share2, Shield, Trash2, UserPlus, Users, Video, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
@@ -408,6 +408,19 @@ function WorkspaceContent({
             <button type="button" className={styles.dmBarAction} aria-label="Start video call">
               <Video size={17} aria-hidden="true" />
             </button>
+            {/* TEMPORARY: decorative until pins land. */}
+            <button type="button" className={styles.dmBarAction} aria-label="Pinned messages (coming soon)">
+              <Pin size={17} aria-hidden="true" />
+            </button>
+            {/* TEMPORARY: decorative until group DMs land. */}
+            <button type="button" className={styles.dmBarAction} aria-label="Create group (coming soon)">
+              <UserPlus size={17} aria-hidden="true" />
+            </button>
+            {/* TEMPORARY: decorative until message search lands. */}
+            <label className={styles.dmBarSearch}>
+              <Search size={15} aria-hidden="true" />
+              <input type="search" placeholder="Search" aria-label="Search conversation (coming soon)" />
+            </label>
           </div>
         </header>
 
