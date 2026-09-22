@@ -1,4 +1,4 @@
-import { ArrowBigUp, Copy, Link2, MessageCircle, Paperclip, Phone, Reply, Search, SendHorizontal, Share2, Shield, Trash2, Users, Video, X } from 'lucide-react'
+import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Phone, Reply, Search, SendHorizontal, Share2, Shield, Trash2, Users, Video, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
@@ -601,11 +601,13 @@ function WorkspaceContent({
                   key={channel.id}
                   type="button"
                   onClick={() => onOpenChannel(activeCommunity.name, channel.id)}
+                  title={channel.topic}
+                  aria-current={activeChannel.id === channel.id ? 'true' : undefined}
                   className={`${styles.channelCard} ${activeChannel.id === channel.id ? styles.active : ''}`}
-                  style={{ '--community-color': activeCommunity.color } as CSSProperties}
                 >
-                  <strong>#{channel.name}</strong>
-                  <p>{channel.topic}</p>
+                  <Hash size={16} aria-hidden="true" />
+                  <strong>{channel.name}</strong>
+                  {(channel.unread ?? 0) > 0 && <span className={shared.sidebarUnreadCount}>{channel.unread}</span>}
                 </button>
               ))}
             </div>

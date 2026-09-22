@@ -164,7 +164,6 @@
 
 .resultRow p,
 .settingsCard p,
-.channelCard p,
 .infoCard p {
   color: var(--offwhite);
 }
@@ -598,9 +597,16 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.communityGrid .communityDetailCard {
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+
 .channelGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .searchHeroCard {
@@ -643,35 +649,56 @@
 }
 
 .channelCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow-card);
-  background: rgba(49, 49, 49, 0.82);
-  border-radius: 18px;
-  border-left: 3px solid var(--community-color, var(--accent));
-  color: inherit;
+  padding: 7px 10px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--offwhite);
   font: inherit;
+  font-size: 0.92rem;
   text-align: left;
   cursor: pointer;
-  transition:
-    transform 120ms ease,
-    background 120ms ease;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.channelCard svg {
+  flex: 0 0 auto;
+  color: var(--offwhite);
+}
+
+.channelCard strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 .channelCard:hover,
 .channelCard:focus-visible {
   outline: none;
-  transform: translateY(-1px);
-  background: rgba(83, 62, 82, 0.25);
+  background: rgba(83, 62, 82, 0.34);
+  color: var(--text-h);
 }
 
-.channelCard p {
-  color: var(--offwhite);
+.channelCard:hover svg,
+.channelCard:focus-visible svg {
+  color: var(--text-h);
 }
 
 .channelCard.active {
-  background: rgba(83, 62, 82, 0.25);
+  background: rgba(83, 62, 82, 0.45);
+  color: var(--text-h);
+}
+
+.channelCard.active svg {
+  color: var(--text-h);
 }
 
 .postCard {
