@@ -558,6 +558,12 @@
   font-size: 0.78rem;
 }
 
+.pinnedMark {
+  display: inline-flex;
+  color: var(--offwhite);
+  flex: 0 0 auto;
+}
+
 .messageAvatar,
 .avatar {
   display: grid;

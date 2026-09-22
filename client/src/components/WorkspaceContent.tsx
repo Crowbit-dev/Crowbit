@@ -103,6 +103,8 @@ function DmConversation({
   const [replyTarget, setReplyTarget] = useState<MessageEntry | null>(null)
   const [flashId, setFlashId] = useState<string | null>(null)
   const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([])
+  // LOCAL-ONLY: pinned ids live in memory; no backend persists them yet.
+  const [pinnedIds, setPinnedIds] = useState<Set<string>>(new Set())
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const feedRef = useRef<HTMLDivElement>(null)
@@ -194,6 +196,15 @@ function DmConversation({
     inputRef.current?.focus()
   }
 
+  const togglePin = (id: string) => {
+    setPinnedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
   const jumpToMessage = (id: string) => {
     document.getElementById(`msg-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     setFlashId(id)
@@ -209,6 +220,7 @@ function DmConversation({
       ...(selection ? [{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy', hint: 'Ctrl + C', onSelect: () => void copyText(selection) }] : []),
       { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(message.body) },
       { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyTo(message) },
+      { icon: <Pin size={16} aria-hidden="true" />, label: pinnedIds.has(message.id) ? 'Unpin Message' : 'Pin Message', onSelect: () => togglePin(message.id) },
       // LOCAL-ONLY: fake link; no backend route exists for it yet.
       { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Message Link', onSelect: () => void copyText(`https://crowbit.net/m/${message.id}`) },
     ]
@@ -219,7 +231,15 @@ function DmConversation({
         icon: <Trash2 size={16} aria-hidden="true" />,
         label: 'Delete Message',
         danger: true,
-        onSelect: () => setMessages((prev) => prev.filter((entry) => entry.id !== message.id)),
+        onSelect: () => {
+          setMessages((prev) => prev.filter((entry) => entry.id !== message.id))
+          setPinnedIds((prev) => {
+            if (!prev.has(message.id)) return prev
+            const next = new Set(prev)
+            next.delete(message.id)
+            return next
+          })
+        },
       })
     }
     openMenu(e.clientX, e.clientY, items, e.currentTarget)
@@ -277,6 +297,7 @@ function DmConversation({
                   <div className={styles.chatMessageTopline}>
                     <strong>{message.author}</strong>
                     <span>{message.time}</span>
+                    {pinnedIds.has(message.id) && <span className={styles.pinnedMark} title="Pinned"><Pin size={12} aria-hidden="true" /></span>}
                   </div>
                   <p>{message.body}</p>
                   {message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
