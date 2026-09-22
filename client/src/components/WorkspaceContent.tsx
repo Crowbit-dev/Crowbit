@@ -1,4 +1,4 @@
-import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Phone, Reply, Search, SendHorizontal, Share2, Shield, Trash2, Users, Video, X } from 'lucide-react'
+import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Phone, Reply, SendHorizontal, Share2, Shield, Trash2, Users, Video, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
@@ -428,17 +428,6 @@ function WorkspaceContent({
 
     return (
       <main className={styles.workspaceContent}>
-        <section className={`${styles.contentHero} ${styles.notificationsHero}`}>
-          <div>
-            <h2>Activity</h2>
-            <p className={styles.contentSubcopy}>Unread messages across your communities, newest first.</p>
-          </div>
-          <div className={styles.contentChipRow}>
-            <span className={styles.contentChip}>{totalUnread} unread</span>
-            <span className={styles.contentChip}>{unreadChannels.length} channels</span>
-          </div>
-        </section>
-
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
             <h2>Unread</h2>
@@ -489,17 +478,6 @@ function WorkspaceContent({
 
     return (
       <main className={styles.workspaceContent}>
-        <section className={`${styles.contentHero} ${styles.searchHero}`}>
-          <div>
-            <h2>Find posts, people, and spaces</h2>
-            <p className={styles.contentSubcopy}>Search in one place without changing screens.</p>
-          </div>
-          <div className={styles.searchHeroCard}>
-            <Search aria-hidden="true" />
-            <span>{q ? `Results for “${searchQuery.trim()}”` : 'Search the network'}</span>
-          </div>
-        </section>
-
         <section className={`${styles.panelStack} ${styles.searchGrid}`}>
           {[
             { title: 'Privacy by default', copy: 'Search results respect visibility and data ownership.' },
@@ -558,13 +536,6 @@ function WorkspaceContent({
   if (mode === 'settings') {
     return (
       <main className={styles.workspaceContent}>
-        <section className={`${styles.contentHero} ${styles.settingsHero}`}>
-          <div>
-            <h2>Privacy, notifications, and appearance</h2>
-            <p className={styles.contentSubcopy}>Tune the app around how public or private you want to be.</p>
-          </div>
-        </section>
-
         <section className={`${styles.panelStack} ${styles.settingsGrid}`}>
           <article className={styles.settingsCard}>
             <Shield aria-hidden="true" />
@@ -594,15 +565,13 @@ function WorkspaceContent({
 
   if (mode === 'communities') {
     return (
-      <main className={`${styles.workspaceContent} ${styles.communitiesLayout}`}>
-        <section className={`${styles.contentHero} ${styles.communityHero}`}>
-          <div>
-            <h2>{activeCommunity.name}</h2>
-            <p className={styles.contentSubcopy}>
-              {activeCommunity.channels.length} channels · {activeCommunity.members.length} members
-            </p>
-          </div>
-        </section>
+      <main
+        className={`${styles.workspaceContent} ${styles.communitiesLayout}`}
+        style={{ '--community-color': activeCommunity.color } as CSSProperties}
+      >
+        <header className={styles.communityBar}>
+          <h2>{activeCommunity.name}</h2>
+        </header>
 
         <div className={styles.communitiesBody}>
           <aside className={styles.channelPane} aria-label={`${activeCommunity.name} channels`}>
@@ -660,28 +629,8 @@ function WorkspaceContent({
         ? posts.filter((post) => post.community === '' || joinedCommunityNames.has(post.community))
         : posts.filter((post) => post.community === activeCommunityName)
 
-  const feedHighlights = [
-    { value: `${communities.length}`, label: 'communities' },
-    { value: `${directMessages.filter((message) => message.status === 'online').length}`, label: 'friends online' },
-  ]
-
   return (
     <main className={styles.workspaceContent}>
-      <section className={`${styles.contentHero} ${styles.feedHero}`}>
-        <div>
-          <h2>What’s happening now</h2>
-          <p className={styles.contentSubcopy}>A fast stream of posts, ideas, and activity across the network.</p>
-        </div>
-        <div className={styles.feedStatRow}>
-          {feedHighlights.map((item) => (
-            <div key={item.label} className={styles.miniStatCard}>
-              <strong>{item.value}</strong>
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section
         className={`${styles.panelStack} ${styles.feedStack} ${threadShift > 0 ? styles.threadShift : ''}`}
         style={threadShift > 0 ? ({ '--thread-shift': `${threadShift}px` } as CSSProperties) : undefined}
