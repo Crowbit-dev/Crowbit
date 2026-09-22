@@ -51,7 +51,6 @@
 }
 
 .feedHero,
-.dmHero,
 .communityHero,
 .searchHero,
 .settingsHero,
@@ -64,18 +63,100 @@
   line-height: 1.55;
 }
 
-.dmName {
+.dmBar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
+  min-height: 56px;
+  margin: -24px -24px 0;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)),
+    rgba(49, 49, 49, 0.7);
 }
 
-.dmUsername {
-  color: var(--offwhite);
-  font-size: 0.6em;
-  font-weight: 500;
+.dmBarAvatarWrap {
   position: relative;
-  top: 0.2em;
+  flex: 0 0 auto;
+}
+
+.dmBarAvatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #313131);
+  color: white;
+  font-weight: 800;
+  user-select: none;
+}
+
+.dmBarIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dmBarName {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.dmBarHandle {
+  color: var(--offwhite);
+  font-size: 0.78rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dmBarStatus {
+  margin: 0;
+  color: var(--offwhite);
+  font-size: 0.78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dmBarActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.dmBarAction {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--offwhite);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.dmBarAction:hover,
+.dmBarAction:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.4);
+  color: var(--text-h);
 }
 
 .contentChipRow,
@@ -223,8 +304,26 @@
 
 .conversationMetaRow {
   align-items: stretch;
-  padding-left: 10px;
-  margin-top: -10px;
+  max-height: 0;
+  margin-top: 0;
+  padding: 0 0 0 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 0;
+  border-bottom: 1px solid transparent;
+  transition:
+    max-height 220ms ease,
+    opacity 180ms ease,
+    padding 220ms ease,
+    border-color 220ms ease;
+}
+
+.dmBar:hover + .conversationPanel .conversationMetaRow,
+.conversationPanel .conversationMetaRow:hover {
+  max-height: 64px;
+  padding: 10px 0 6px 10px;
+  opacity: 1;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .mutualStats {
@@ -273,6 +372,7 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  margin-top: -18px;
 }
 
 .conversationFeed {
@@ -283,7 +383,7 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
   gap: 10px;
-  padding: 4px 2px;
+  padding: 0 2px 4px;
 }
 
 .chatMessage {
@@ -882,6 +982,10 @@
 @media (max-width: 640px) {
   .workspaceContent {
     padding: 16px;
+  }
+
+  .dmBar {
+    margin: -16px -16px 0;
   }
 
   .communitiesLayout {

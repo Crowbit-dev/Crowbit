@@ -92,6 +92,8 @@ function DmConversation({
   openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => void
 }) {
   const mutualFriends = mutualFriendsByDm[activeDm.id] ?? []
+  const hasMutualCommunities = mutualCommunities.length > 0
+  const hasMutualFriends = mutualFriends.length > 0
   const [messages, setMessages] = useState<MessageEntry[]>([
     { id: `${activeDm.id}-1`, author: activeDm.name, time: 'Yesterday', body: activeDm.preview },
     { id: `${activeDm.id}-2`, author: 'You', time: 'Yesterday', body: 'I left feedback on the latest update and marked the next steps.' },
@@ -230,15 +232,25 @@ function DmConversation({
 
   return (
     <>
-          <div className={styles.conversationMetaRow}>
-            <p className={styles.mutualStats}>
-              <AvatarGroup items={mutualCommunities.map((community) => ({ name: community.name, background: community.color }))} />
-              <strong>{mutualCommunities.length}</strong> mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}
-              {' · '}
-              <AvatarGroup items={mutualFriends} />
-              <strong>{mutualFriends.length}</strong> mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}
-            </p>
-          </div>
+      {(hasMutualCommunities || hasMutualFriends) && (
+        <div className={styles.conversationMetaRow}>
+          <p className={styles.mutualStats}>
+            {hasMutualCommunities && (
+              <>
+                <AvatarGroup items={mutualCommunities.map((community) => ({ name: community.name, background: community.color }))} />
+                <strong>{mutualCommunities.length}</strong> mutual {mutualCommunities.length === 1 ? 'community' : 'communities'}
+              </>
+            )}
+            {hasMutualCommunities && hasMutualFriends && ' · '}
+            {hasMutualFriends && (
+              <>
+                <AvatarGroup items={mutualFriends} />
+                <strong>{mutualFriends.length}</strong> mutual {mutualFriends.length === 1 ? 'friend' : 'friends'}
+              </>
+            )}
+          </p>
+        </div>
+      )}
 
       <div ref={feedRef} className={styles.conversationFeed}>
           {messages.map((message) => (
@@ -380,22 +392,24 @@ function WorkspaceContent({
   if (mode === 'dms') {
     return (
       <main className={styles.workspaceContent}>
-        <section className={`${styles.contentHero} ${styles.dmHero}`}>
-          <div>
-            <h2 className={styles.dmName}><span className={`${shared.statusDot} ${shared[activeDm.status]}`} />{activeDm.name}<span className={styles.dmUsername}>@{activeDm.id}</span></h2>
-            <p className={styles.contentSubcopy}>{activeDm.customStatus}</p>
+        <header className={styles.dmBar}>
+          <span className={styles.dmBarAvatarWrap}>
+            <span className={styles.dmBarAvatar}>{activeDm.name[0]}</span>
+            <span className={`${shared.statusDot} ${shared[activeDm.status]} ${shared.presenceDot}`} />
+          </span>
+          <div className={styles.dmBarIdentity}>
+            <h2 className={styles.dmBarName}>{activeDm.name}<span className={styles.dmBarHandle}>@{activeDm.id}</span></h2>
+            <p className={styles.dmBarStatus}>{activeDm.customStatus}</p>
           </div>
-          <div className={styles.contentChipRow}>
-            <button type="button" className={styles.contentChip} aria-label="Start voice call">
-              <Phone size={16} aria-hidden="true" />
-              Call
+          <div className={styles.dmBarActions}>
+            <button type="button" className={styles.dmBarAction} aria-label="Start voice call">
+              <Phone size={17} aria-hidden="true" />
             </button>
-            <button type="button" className={styles.contentChip} aria-label="Start video call">
-              <Video size={16} aria-hidden="true" />
-              Video call
+            <button type="button" className={styles.dmBarAction} aria-label="Start video call">
+              <Video size={17} aria-hidden="true" />
             </button>
           </div>
-        </section>
+        </header>
 
         <section className={`${styles.panelStack} ${styles.conversationPanel}`}>
           <DmConversation key={activeDm.id} activeDm={activeDm} mutualCommunities={mutualCommunities} openMenu={openMenu} />
