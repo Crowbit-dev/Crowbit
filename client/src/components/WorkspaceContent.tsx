@@ -652,7 +652,11 @@ function WorkspaceContent({
           <div className={styles.communityBarCommunity}>
             <h2>{activeCommunity.name}</h2>
           </div>
-          <div className={styles.communityBarMain} aria-hidden="true" />
+          <div className={styles.communityBarMain}>
+            <strong># {activeChannel.name}</strong>
+            <span className={styles.postDivider}>·</span>
+            <span className={styles.communityBarTopic}>{activeChannel.topic}</span>
+          </div>
         </header>
 
         <div className={styles.communitiesBody}>

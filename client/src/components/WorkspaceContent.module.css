@@ -68,8 +68,27 @@
 }
 
 .communityBarMain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex: 1;
   min-width: 0;
+  padding: 8px 0 8px 16px;
+  color: var(--offwhite);
+  font-size: 0.9rem;
+}
+
+.communityBarMain strong {
+  flex: 0 0 auto;
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.communityBarTopic {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dmBar {
