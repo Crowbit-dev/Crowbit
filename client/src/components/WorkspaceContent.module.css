@@ -91,6 +91,14 @@
   white-space: nowrap;
 }
 
+.communityBarActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
 .dmBar {
   display: flex;
   align-items: center;
@@ -212,6 +220,10 @@
   color: var(--text);
   font: inherit;
   font-size: 0.84rem;
+}
+
+.dmBarSearch input::-webkit-search-cancel-button {
+  cursor: pointer;
 }
 
 .dmBarSearch input:focus {

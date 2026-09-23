@@ -292,6 +292,17 @@ function WorkspaceContent({
             <strong># {activeChannel.name}</strong>
             <span className={styles.postDivider}>·</span>
             <span className={styles.communityBarTopic}>{activeChannel.topic}</span>
+            <div className={styles.communityBarActions}>
+              {/* TEMPORARY: decorative until channel pins land. */}
+              <button type="button" className={styles.dmBarAction} aria-label="Pinned messages (coming soon)">
+                <Pin size={17} aria-hidden="true" />
+              </button>
+              {/* TEMPORARY: decorative until channel search lands. */}
+              <label className={styles.dmBarSearch}>
+                <Search size={15} aria-hidden="true" />
+                <input type="search" placeholder="Search" aria-label="Search channel (coming soon)" />
+              </label>
+            </div>
           </div>
         </header>
 
