@@ -558,10 +558,44 @@
   font-size: 0.78rem;
 }
 
+.editedMark {
+  font-size: 0.7rem;
+  color: #7d7d7d;
+}
+
 .pinnedMark {
   display: inline-flex;
   color: var(--offwhite);
   flex: 0 0 auto;
+}
+
+.messageEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.messageEditor textarea {
+  width: 100%;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.45;
+  resize: none;
+}
+
+.messageEditor textarea:focus {
+  outline: none;
+  border-color: var(--accent-border);
+}
+
+.messageEditor span {
+  color: var(--offwhite);
+  font-size: 0.76rem;
 }
 
 .messageAvatar,

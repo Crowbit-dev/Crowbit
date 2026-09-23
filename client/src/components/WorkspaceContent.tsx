@@ -1,4 +1,4 @@
-import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Phone, Pin, Reply, Search, SendHorizontal, Share2, Shield, Trash2, UserPlus, Users, Video, X } from 'lucide-react'
+import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Paperclip, Pencil, Phone, Pin, Reply, Search, SendHorizontal, Share2, Shield, Trash2, UserPlus, Users, Video, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
@@ -30,6 +30,7 @@ type MessageEntry = {
   time: string
   body: string
   image?: string
+  edited?: boolean
   // LOCAL-ONLY: quoted reference; a real backend would resolve this from an id.
   replyTo?: { id: string; author: string; body: string }
 }
@@ -105,6 +106,8 @@ function DmConversation({
   const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([])
   // LOCAL-ONLY: pinned ids live in memory; no backend persists them yet.
   const [pinnedIds, setPinnedIds] = useState<Set<string>>(new Set())
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editDraft, setEditDraft] = useState('')
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const feedRef = useRef<HTMLDivElement>(null)
@@ -196,6 +199,25 @@ function DmConversation({
     inputRef.current?.focus()
   }
 
+  const startEdit = (message: MessageEntry) => {
+    setEditingId(message.id)
+    setEditDraft(message.body)
+  }
+
+  const saveEdit = () => {
+    const body = editDraft.trim()
+    if (!editingId || !body) return
+    // LOCAL-ONLY: edits apply to in-memory state; nothing persists without a backend.
+    setMessages((prev) => prev.map((entry) => (entry.id === editingId ? { ...entry, body, edited: true } : entry)))
+    setEditingId(null)
+    setEditDraft('')
+  }
+
+  const cancelEdit = () => {
+    setEditingId(null)
+    setEditDraft('')
+  }
+
   const togglePin = (id: string) => {
     setPinnedIds((prev) => {
       const next = new Set(prev)
@@ -225,6 +247,7 @@ function DmConversation({
       { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Message Link', onSelect: () => void copyText(`https://crowbit.net/m/${message.id}`) },
     ]
     if (message.author === 'You') {
+      items.unshift({ icon: <Pencil size={16} aria-hidden="true" />, label: 'Edit Message', onSelect: () => startEdit(message) })
       items.push({ type: 'separator' })
       // LOCAL-ONLY: deletes from in-memory state; nothing persists without a backend.
       items.push({
@@ -299,7 +322,29 @@ function DmConversation({
                     <span>{message.time}</span>
                     {pinnedIds.has(message.id) && <span className={styles.pinnedMark} title="Pinned"><Pin size={12} aria-hidden="true" /></span>}
                   </div>
-                  <p>{message.body}</p>
+                  {editingId === message.id ? (
+                    <div className={styles.messageEditor}>
+                      <textarea
+                        autoFocus
+                        rows={2}
+                        value={editDraft}
+                        onChange={(e) => setEditDraft(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault()
+                            saveEdit()
+                          } else if (e.key === 'Escape') {
+                            e.stopPropagation()
+                            cancelEdit()
+                          }
+                        }}
+                        aria-label="Edit message"
+                      />
+                      <span>Enter to save · Esc to cancel</span>
+                    </div>
+                  ) : (
+                    <p>{message.body}{message.edited && <span className={styles.editedMark}> (edited)</span>}</p>
+                  )}
                   {message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
             </div>
           </article>
