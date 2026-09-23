@@ -649,7 +649,10 @@ function WorkspaceContent({
         style={{ '--community-color': activeCommunity.color } as CSSProperties}
       >
         <header className={styles.communityBar}>
-          <h2>{activeCommunity.name}</h2>
+          <div className={styles.communityBarCommunity}>
+            <h2>{activeCommunity.name}</h2>
+          </div>
+          <div className={styles.communityBarMain} aria-hidden="true" />
         </header>
 
         <div className={styles.communitiesBody}>
