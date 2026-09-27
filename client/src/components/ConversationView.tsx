@@ -143,7 +143,6 @@ function ConversationView({
   }, [messages])
 
   // Typing anywhere outside a field jumps into the composer.
-  // Focusing during keydown lets the keystroke itself land in the box.
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return

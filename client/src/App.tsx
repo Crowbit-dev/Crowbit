@@ -20,6 +20,7 @@ function App() {
   const [threadVisible, setThreadVisible] = useState(false)
   const threadCloseTimer = useRef<number | null>(null)
   const [menu, setMenu] = useState<ContextMenuState | null>(null)
+  const modalityRef = useRef<'mouse' | 'keyboard'>('mouse')
   const [windowWidth, setWindowWidth] = useState(() => window.innerWidth)
   const [threadWidth, setThreadWidth] = useState<number>(() => {
     try {
@@ -76,8 +77,23 @@ function App() {
     setActiveThread((prev) => (prev && prev.author === post.author && prev.title === post.title ? null : prev))
   }
 
+  useEffect(() => {
+    const onPointerDown = () => {
+      modalityRef.current = 'mouse'
+    }
+    const onKeyDown = () => {
+      modalityRef.current = 'keyboard'
+    }
+    window.addEventListener('pointerdown', onPointerDown, true)
+    window.addEventListener('keydown', onKeyDown, true)
+    return () => {
+      window.removeEventListener('pointerdown', onPointerDown, true)
+      window.removeEventListener('keydown', onKeyDown, true)
+    }
+  }, [])
+
   const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => {
-    setMenu({ x, y, items, invoker })
+    setMenu({ x, y, items, invoker, keyboard: modalityRef.current === 'keyboard' })
   }
 
   const closeMenu = () => setMenu(null)

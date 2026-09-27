@@ -18,11 +18,13 @@ export type ContextMenuState = {
   y: number
   invoker: HTMLElement | null
   items: ContextMenuItem[]
+  keyboard: boolean
 }
 
 function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const keyboardRef = useRef(false)
   const [position, setPosition] = useState({ x: menu.x, y: menu.y, origin: 'top left' })
 
   // Clamp into the viewport (flip up/left near edges) in a layout effect,
@@ -36,11 +38,13 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
     const x = Math.max(8, fitsRight ? menu.x : menu.x - rect.width)
     const y = Math.max(8, fitsBottom ? menu.y : menu.y - rect.height)
     setPosition({ x, y, origin: `${fitsBottom ? 'top' : 'bottom'} ${fitsRight ? 'left' : 'right'}` })
-    itemRefs.current[0]?.focus()
+    if (menu.keyboard) itemRefs.current[0]?.focus()
   }, [menu])
 
-  // Return focus to whatever opened the menu.
-  useEffect(() => () => menu.invoker?.focus?.(), [menu])
+  // Return focus to the invoker after keyboard dismissal.
+  useEffect(() => () => {
+    if (keyboardRef.current) menu.invoker?.focus?.()
+  }, [menu])
 
   // Dismiss on outside pointerdown, scroll, resize, or Escape.
   useEffect(() => {
@@ -50,7 +54,10 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
     const onScroll = () => onClose()
     const onResize = () => onClose()
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        keyboardRef.current = true
+        onClose()
+      }
     }
     window.addEventListener('pointerdown', onPointerDown, true)
     window.addEventListener('scroll', onScroll, true)
@@ -71,6 +78,9 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
   }
 
   const handleItemKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Home' || e.key === 'End') {
+      keyboardRef.current = true
+    }
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       focusItem(index + 1)
@@ -111,7 +121,9 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
             role="menuitem"
             disabled={item.disabled}
             className={`${styles.item} ${item.danger ? styles.danger : ''}`}
-            onClick={() => {
+            onClick={(e) => {
+              // Keyboard-activated clicks (Enter/Space) report detail 0.
+              if (e.detail === 0) keyboardRef.current = true
               item.onSelect()
               onClose()
             }}
