@@ -434,6 +434,7 @@
   padding-left: 24px;
   padding-bottom: 8px;
   box-sizing: border-box;
+  --feed-pad-left: 0;
 }
 
 .channelPane {
