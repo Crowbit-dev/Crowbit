@@ -174,7 +174,7 @@ function App() {
         onCompose={() => setComposerOpen(true)}
       />
 
-      <div className="workspace-frame">
+      <div className={`workspace-frame${mode === 'communities' ? ' narrow-sidebar' : ''}`}>
         <WorkspaceSidebar
           mode={mode}
           communities={communities}

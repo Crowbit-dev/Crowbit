@@ -303,13 +303,12 @@ function WorkspaceSidebar({
             <button
               key={community.name}
               type="button"
-              className={`${styles.sidebarItem} ${activeCommunity.name === community.name ? styles.active : ''}`}
+              className={`${styles.sidebarItem} ${styles.compact} ${activeCommunity.name === community.name ? styles.active : ''}`}
               onClick={() => onSelectCommunity(community.name)}
             >
               <span className={shared.sidebarDot} style={{ background: community.color }} />
               <span className={styles.sidebarItemCopy}>
                 <strong>{community.name}</strong>
-                <span>{community.members.length} members</span>
               </span>
             </button>
           ))}
