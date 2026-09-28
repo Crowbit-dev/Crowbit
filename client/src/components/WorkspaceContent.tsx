@@ -74,7 +74,7 @@ function WorkspaceContent({
 
   if (mode === 'dms') {
     return (
-      <main className={styles.workspaceContent}>
+      <main className={`${styles.workspaceContent} ${styles.dmLayout}`}>
         <header
           className={styles.dmBar}
           onMouseEnter={() => setMetaOpen(true)}
