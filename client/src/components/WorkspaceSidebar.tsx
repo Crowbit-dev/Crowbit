@@ -1,4 +1,5 @@
 import { Hash, House, LayoutGrid, Search, Settings, Users, X } from 'lucide-react'
+import { useState } from 'react'
 import type { Community, DirectMessage, WorkspaceMode } from '../appData'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
@@ -38,6 +39,25 @@ function SidebarSearch({ value, onChange, placeholder }: { value: string; onChan
   )
 }
 
+function SidebarHeading({ id, kicker, title, copy }: { id: string; kicker: string; title: string; copy: string }) {
+  const [dismissed, setDismissed] = useState(() => localStorage.getItem(`sidebar-heading-dismissed:${id}`) === '1')
+  if (dismissed) return null
+  const dismiss = () => {
+    localStorage.setItem(`sidebar-heading-dismissed:${id}`, '1')
+    setDismissed(true)
+  }
+  return (
+    <div className={styles.sidebarHeadingBlock}>
+      <button type="button" className={styles.sidebarHeadingDismiss} onClick={dismiss} aria-label="Dismiss introduction" title="Dismiss">
+        <X size={14} aria-hidden="true" />
+      </button>
+      <p className={styles.sidebarKicker}>{kicker}</p>
+      <h2>{title}</h2>
+      <p className={styles.sidebarCopy}>{copy}</p>
+    </div>
+  )
+}
+
 function WorkspaceSidebar({
   mode,
   communities,
@@ -61,11 +81,7 @@ function WorkspaceSidebar({
 
     return (
       <aside className={styles.workspaceSidebar}>
-        <div className={styles.sidebarHeadingBlock}>
-          <p className={styles.sidebarKicker}>Feed</p>
-          <h2>Your spaces</h2>
-          <p className={styles.sidebarCopy}>Choose a space to catch up on its latest posts.</p>
-        </div>
+        <SidebarHeading key="feed" id="feed" kicker="Feed" title="Your spaces" copy="Choose a space to catch up on its latest posts." />
 
         <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search the network" />
 
@@ -131,11 +147,7 @@ function WorkspaceSidebar({
 
     return (
       <aside className={styles.workspaceSidebar}>
-        <div className={styles.sidebarHeadingBlock}>
-          <p className={styles.sidebarKicker}>Direct messages</p>
-          <h2>Conversations</h2>
-          <p className={styles.sidebarCopy}>Pick up where you left off with friends.</p>
-        </div>
+        <SidebarHeading key="dms" id="dms" kicker="Direct messages" title="Conversations" copy="Pick up where you left off with friends." />
 
         <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search friends" />
 
@@ -186,11 +198,7 @@ function WorkspaceSidebar({
 
     return (
       <aside className={styles.workspaceSidebar}>
-        <div className={styles.sidebarHeadingBlock}>
-          <p className={styles.sidebarKicker}>Notifications</p>
-          <h2>Inbox</h2>
-          <p className={styles.sidebarCopy}>Unread Activity.</p>
-        </div>
+        <SidebarHeading key="notifications" id="notifications" kicker="Notifications" title="Inbox" copy="Unread Activity." />
 
         <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search unread" />
 
@@ -227,11 +235,7 @@ function WorkspaceSidebar({
   if (mode === 'search') {
     return (
       <aside className={styles.workspaceSidebar}>
-        <div className={styles.sidebarHeadingBlock}>
-          <p className={styles.sidebarKicker}>Search</p>
-          <h2>Find anything</h2>
-          <p className={styles.sidebarCopy}>Search posts, people, and communities from one place.</p>
-        </div>
+        <SidebarHeading key="search" id="search" kicker="Search" title="Find anything" copy="Search posts, people, and communities from one place." />
 
         <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search the network" />
 
@@ -252,11 +256,7 @@ function WorkspaceSidebar({
   if (mode === 'settings') {
     return (
       <aside className={styles.workspaceSidebar}>
-        <div className={styles.sidebarHeadingBlock}>
-          <p className={styles.sidebarKicker}>Settings</p>
-          <h2>Preferences</h2>
-          <p className={styles.sidebarCopy}>Control visibility, notifications, and privacy defaults.</p>
-        </div>
+        <SidebarHeading key="settings" id="settings" kicker="Settings" title="Preferences" copy="Control visibility, notifications, and privacy defaults." />
 
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
@@ -289,11 +289,7 @@ function WorkspaceSidebar({
 
   return (
     <aside className={styles.workspaceSidebar}>
-      <div className={styles.sidebarHeadingBlock}>
-        <p className={styles.sidebarKicker}>Communities</p>
-        <h2>All spaces</h2>
-        <p className={styles.sidebarCopy}>Select a community to view its channels and members.</p>
-      </div>
+      <SidebarHeading key="communities" id="communities" kicker="Communities" title="All spaces" copy="Select a community to view its channels and members." />
 
       <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search communities" />
 
