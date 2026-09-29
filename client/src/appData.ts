@@ -138,7 +138,7 @@ export const posts: Post[] = [
     body:
       'I am trying to keep my portfolio, content, and design process aligned without burning out. Curious what other creators are doing.',
     image: crowPhotograph,
-    stats: { comments: 182, upvotes: 2.4, shares: 42 },
+    stats: { comments: 182, upvotes: 2400, shares: 42 },
   },
   {
     author: 'Milo',
@@ -149,7 +149,7 @@ export const posts: Post[] = [
     body:
       'I am comparing auth, dashboards, and deployment speed. I want something practical, not just shiny demos.',
     image: crowSideProfile,
-    stats: { comments: 96, upvotes: 1.8, shares: 21 },
+    stats: { comments: 96, upvotes: 1800, shares: 21 },
   },
   {
     author: 'Ava',
@@ -159,7 +159,7 @@ export const posts: Post[] = [
     title: 'Founders: what do your best community rituals look like?',
     body:
       'The most sustainable communities usually feel less like a launch and more like a habit. I am collecting examples.',
-    stats: { comments: 243, upvotes: 3.1, shares: 58 },
+    stats: { comments: 243, upvotes: 3100, shares: 58 },
   },
   {
     author: 'Noor',
@@ -169,7 +169,7 @@ export const posts: Post[] = [
     title: 'What is on your security audit checklist this quarter?',
     body:
       'I am putting together a lightweight checklist for small teams: access reviews, dependency updates, and backup drills. What am I missing?',
-    stats: { comments: 64, upvotes: 1.2, shares: 15 },
+    stats: { comments: 64, upvotes: 1200, shares: 15 },
   },
 ]
 

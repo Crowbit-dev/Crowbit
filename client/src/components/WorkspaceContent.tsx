@@ -27,8 +27,14 @@ type WorkspaceContentProps = {
   onSearchQuery: (query: string) => void
 }
 
-// TEMPORARY: formats mock upvote counts until the backend provides real numbers.
-const formatUpvotes = (value: number) => (value < 100 ? `${value}` : `${value}k`)
+// TEMPORARY: formats mock counts until the backend provides real numbers.
+const formatCount = (value: number) => {
+  if (value < 1000) return `${value}`
+  if (value < 1_000_000) return `${trimZeros(value / 1000)}k`
+  return `${trimZeros(value / 1_000_000)}m`
+}
+
+const trimZeros = (value: number) => (Number.isInteger(value) ? `${value}` : value.toFixed(1))
 
 const mutualFriendsByDm: Record<string, string[]> = {
   maya: ['Jules', 'Sami', 'Theo'],
@@ -327,7 +333,7 @@ function WorkspaceContent({
                     <strong>{post.title}</strong>
                     <p>{post.community ? `${post.community} · ` : ''}{post.author}</p>
                   </div>
-                  <span>{post.stats.comments} comments</span>
+                  <span>{formatCount(post.stats.comments)} comments</span>
                 </article>
               ))}
               {matchedCommunities.map((community) => (
@@ -564,15 +570,15 @@ function WorkspaceContent({
             <div className={styles.postStats}>
               <button type="button" className={styles.postAction} aria-label={`Upvote ${post.title}`}>
                 <ArrowBigUp aria-hidden="true" />
-                <span>{formatUpvotes(post.stats.upvotes)}</span>
+                <span>{formatCount(post.stats.upvotes)}</span>
               </button>
               <button type="button" className={styles.postAction} aria-label={`View comments for ${post.title}`} onClick={() => onOpenThread(post)}>
                 <MessageCircle aria-hidden="true" />
-                <span>{post.stats.comments}</span>
+                <span>{formatCount(post.stats.comments)}</span>
               </button>
               <button type="button" className={styles.postAction} aria-label={`Share ${post.title}`}>
                 <Share2 aria-hidden="true" />
-                <span>{post.stats.shares}</span>
+                <span>{formatCount(post.stats.shares)}</span>
               </button>
             </div>
           </article>
