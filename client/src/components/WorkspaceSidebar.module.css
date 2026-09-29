@@ -1,7 +1,7 @@
 .workspaceSidebar {
   min-width: 0;
   min-height: 0;
-  padding: 24px 18px 24px 24px;
+  padding: 24px 14px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -68,7 +68,7 @@
   align-items: center;
   gap: 10px;
   justify-content: flex-start;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: var(--shadow);
   border-radius: 16px;
