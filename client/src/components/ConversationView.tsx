@@ -28,7 +28,7 @@ type ConversationViewProps = {
   mutuals?: ConversationMutuals
   metaOpen?: boolean
   edgeScrollbar?: boolean
-  openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => void
+  openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void
 }
 
 // LOCAL-ONLY: fabricated per-channel threads until a backend exists.
@@ -242,13 +242,16 @@ function ConversationView({
     const items: ContextMenuItem[] = [
       ...(selection ? [{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy', hint: 'Ctrl + C', onSelect: () => void copyText(selection) }] : []),
       { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(message.body) },
-      { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyTo(message) },
-      { icon: <Pin size={16} aria-hidden="true" />, label: pinnedIds.has(message.id) ? 'Unpin Message' : 'Pin Message', onSelect: () => togglePin(message.id) },
       // LOCAL-ONLY: fake link; no backend route exists for it yet.
       { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Message Link', onSelect: () => void copyText(`https://crowbit.net/m/${message.id}`) },
+      { type: 'separator' },
+      { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyTo(message) },
+      { icon: <Pin size={16} aria-hidden="true" />, label: pinnedIds.has(message.id) ? 'Unpin Message' : 'Pin Message', onSelect: () => togglePin(message.id) },
+      ...(message.author === 'You'
+        ? [{ icon: <Pencil size={16} aria-hidden="true" />, label: 'Edit Message', onSelect: () => startEdit(message) }]
+        : []),
     ]
     if (message.author === 'You') {
-      items.unshift({ icon: <Pencil size={16} aria-hidden="true" />, label: 'Edit Message', onSelect: () => startEdit(message) })
       items.push({ type: 'separator' })
       // LOCAL-ONLY: deletes from in-memory state; nothing persists without a backend.
       items.push({

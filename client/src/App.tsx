@@ -92,10 +92,10 @@ function App() {
     }
   }, [])
 
-  const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => {
-    setMenu((prev) => (prev && invoker !== null && prev.invoker === invoker
+  const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle = false) => {
+    setMenu((prev) => (toggle && prev && invoker !== null && prev.invoker === invoker
       ? null
-      : { x, y, items, invoker, keyboard: modalityRef.current === 'keyboard' }))
+      : { x, y, items, invoker, keyboard: modalityRef.current === 'keyboard', toggle }))
   }
 
   const closeMenu = () => setMenu(null)

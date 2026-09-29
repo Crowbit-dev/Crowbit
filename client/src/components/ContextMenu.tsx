@@ -19,6 +19,7 @@ export type ContextMenuState = {
   invoker: HTMLElement | null
   items: ContextMenuItem[]
   keyboard: boolean
+  toggle: boolean
 }
 
 function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () => void }) {
@@ -47,11 +48,11 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
   }, [menu])
 
   // Dismiss on outside pointerdown, scroll, resize, or Escape.
-  // A left-click on the invoker itself is left alone so it can toggle the menu.
+  // A left-click on a toggle invoker itself is left alone so it can toggle the menu.
   useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
       const target = e.target as Node
-      if (e.button === 0 && menu.invoker?.contains(target)) return
+      if (e.button === 0 && menu.toggle && menu.invoker?.contains(target)) return
       if (!panelRef.current?.contains(target)) onClose()
     }
     const onScroll = () => onClose()

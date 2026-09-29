@@ -19,7 +19,7 @@ type WorkspaceContentProps = {
   onOpenThread: (post: Post) => void
   onDeletePost: (post: Post) => void
   threadShift: number
-  openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => void
+  openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void
   searchQuery: string
   onSearchQuery: (query: string) => void
 }
@@ -73,7 +73,7 @@ function WorkspaceContent({
   const [metaOpen, setMetaOpen] = useState(false)
   const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels')
 
-  const openMemberMenu = (x: number, y: number, member: CommunityMember, invoker: HTMLElement | null) => {
+  const openMemberMenu = (x: number, y: number, member: CommunityMember, invoker: HTMLElement | null, toggle = false) => {
     // LOCAL-ONLY: handle and id are derived from the mock name; a real backend would provide both.
     const handle = `@${member.name.toLowerCase()}`
     const id = member.name.toLowerCase()
@@ -92,12 +92,12 @@ function WorkspaceContent({
       { icon: <UserX size={16} aria-hidden="true" />, label: 'Kick', danger: true, onSelect: () => {} },
       { icon: <Ban size={16} aria-hidden="true" />, label: 'Ban', danger: true, onSelect: () => {} },
     ]
-    openMenu(x, y, items, invoker)
+    openMenu(x, y, items, invoker, toggle)
   }
 
-  const openMemberMenuAtEvent = (e: ReactMouseEvent<HTMLElement>, member: CommunityMember) => {
+  const openMemberMenuAtEvent = (e: ReactMouseEvent<HTMLElement>, member: CommunityMember, toggle = false) => {
     e.preventDefault()
-    openMemberMenu(e.clientX, e.clientY, member, e.currentTarget)
+    openMemberMenu(e.clientX, e.clientY, member, e.currentTarget, toggle)
   }
 
   if (mode === 'dms') {
@@ -384,7 +384,7 @@ function WorkspaceContent({
                   <button
                     type="button"
                     className={styles.memberOptions}
-                    onClick={(e) => openMemberMenuAtEvent(e, member)}
+                    onClick={(e) => openMemberMenuAtEvent(e, member, true)}
                     aria-label={`${member.name} options`}
                     title="Member options"
                   > 
