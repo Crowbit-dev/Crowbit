@@ -1,0 +1,45 @@
+name: Dependabot auto-merge
+
+# Auto-merges only what is safe to take blind:
+# - security fixes with CVSS >= 7.0 (high/critical), or
+# - semver-patch version updates.
+# Everything else waits for a human. Merging still requires green CI
+# (enforced by branch protection), and the repo must have
+# "Allow auto-merge" enabled in Settings for this to take effect.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions: {}
+
+jobs:
+  automerge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: dependabot/fetch-metadata@v2
+        id: metadata
+
+      - name: Evaluate auto-merge policy
+        id: policy
+        run: |
+          update_type='${{ steps.metadata.outputs.update-type }}'
+          ghsa_id='${{ steps.metadata.outputs.ghsa-id }}'
+          cvss='${{ steps.metadata.outputs.cvss }}'
+          automerge=false
+          if [ -n "$ghsa_id" ] && [ -n "$cvss" ] && python3 -c "import sys; sys.exit(0 if float('$cvss') >= 7.0 else 1)"; then
+            automerge=true
+          elif [ "$update_type" = "version-update:semver-patch" ]; then
+            automerge=true
+          fi
+          echo "automerge=$automerge" >> "$GITHUB_OUTPUT"
+
+      - name: Enable squash auto-merge
+        if: steps.policy.outputs.automerge == 'true'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
