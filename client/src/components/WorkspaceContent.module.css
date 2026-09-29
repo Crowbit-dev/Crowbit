@@ -623,6 +623,7 @@
   border-radius: 8px;
   color: var(--offwhite);
   font-size: 0.92rem;
+  cursor: default;
 }
 
 .memberCard + .memberCard {
@@ -664,6 +665,23 @@
 .memberCopy strong {
   color: var(--text-h);
   font-weight: 500;
+}
+
+.memberNameRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.memberNameRow strong {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.memberHandle {
+  flex: 1;
+  font-size: 0.78rem;
 }
 
 .memberCopy span {

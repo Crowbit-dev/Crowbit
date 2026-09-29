@@ -342,10 +342,13 @@ function WorkspaceContent({
                     <span className={styles.memberAvatar}>{member.name[0]}</span>
                     <span className={`${shared.statusDot} ${shared[member.status]} ${shared.presenceDot}`} />
                   </span>
-                  <span className={styles.memberCopy}>
-                    <strong>{member.name}</strong>
-                    <span>{member.role}</span>
-                  </span>
+                    <span className={styles.memberCopy}>
+                      <span className={styles.memberNameRow}>
+                        <strong>{member.name}</strong>
+                        <span className={styles.memberHandle}>@{member.name.toLowerCase()}</span>
+                      </span>
+                      <span>{member.role}</span>
+                    </span>
                   <button
                     type="button"
                     className={styles.memberOptions}
