@@ -114,11 +114,16 @@ function ConversationView({
   useEffect(() => {
     const ta = inputRef.current
     if (!ta) return
-    ta.style.height = 'auto'
-    const fullHeight = ta.scrollHeight
-    const cappedHeight = Math.min(fullHeight, 140)
-    ta.style.height = `${cappedHeight}px`
-    ta.style.overflowY = fullHeight > cappedHeight ? 'auto' : 'hidden'
+    const syncHeight = () => {
+      ta.style.height = 'auto'
+      const fullHeight = ta.scrollHeight
+      const cappedHeight = Math.min(fullHeight, 140)
+      ta.style.height = `${cappedHeight}px`
+      ta.style.overflowY = fullHeight > cappedHeight ? 'auto' : 'hidden'
+    }
+    syncHeight()
+    window.addEventListener('resize', syncHeight)
+    return () => window.removeEventListener('resize', syncHeight)
   }, [draft])
 
   // Within 40px of the bottom counts as "at bottom" so rounding never breaks stickiness.

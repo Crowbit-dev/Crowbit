@@ -349,9 +349,9 @@ function WorkspaceContent({
                   <button
                     type="button"
                     className={styles.memberOptions}
-                    aria-label={`${member.name} options (coming soon)`}
+                    aria-label={`${member.name} options`}
                     title="Member options"
-                  >
+                  > 
                     <Ellipsis size={16} aria-hidden="true" />
                   </button>
                 </div>
