@@ -8,11 +8,75 @@ import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
 import { communities, directMessages, posts, type Post, type WorkspaceMode } from './appData'
 
+type LastVisited = {
+  community: string
+  channels: Record<string, string>
+  dm: string
+  feed: string
+}
+
+const LAST_VISITED_KEY = 'crowbit-last-visited'
+
+function isFeedScope(value: unknown): value is string {
+  return value === 'all' ||
+    value === 'home' ||
+    (typeof value === 'string' && communities.some((entry) => entry.name === value))
+}
+
+function channelFor(communityName: string, channels: Record<string, string>): string {
+  const community = communities.find((entry) => entry.name === communityName) ?? communities[0]
+  const stored = channels[community.name]
+  if (stored && community.channels.some((channel) => channel.id === stored)) return stored
+  return community.channels[0]?.id ?? 'general'
+}
+
+function loadLastVisited(): LastVisited {
+  const fallback: LastVisited = {
+    community: communities[0].name,
+    channels: {},
+    dm: directMessages[0].id,
+    feed: 'home',
+  }
+  try {
+    const raw = localStorage.getItem(LAST_VISITED_KEY)
+    if (!raw) return fallback
+    const parsed = JSON.parse(raw) as Partial<LastVisited>
+    const community = typeof parsed.community === 'string' &&
+      parsed.community !== 'all' &&
+      parsed.community !== 'home' &&
+      communities.some((entry) => entry.name === parsed.community)
+      ? parsed.community
+      : fallback.community
+    const channels: Record<string, string> = {}
+    if (parsed.channels && typeof parsed.channels === 'object') {
+      for (const [name, id] of Object.entries(parsed.channels)) {
+        const owner = communities.find((entry) => entry.name === name)
+        if (owner && typeof id === 'string' && owner.channels.some((channel) => channel.id === id)) {
+          channels[name] = id
+        }
+      }
+    }
+    const dm = typeof parsed.dm === 'string' && directMessages.some((entry) => entry.id === parsed.dm)
+      ? parsed.dm
+      : fallback.dm
+    return {
+      community,
+      channels,
+      dm,
+      feed: isFeedScope(parsed.feed) ? parsed.feed : fallback.feed,
+    }
+  } catch {
+    return fallback
+  }
+}
+
 function App() {
   const [mode, setMode] = useState<WorkspaceMode>('feed')
-  const [activeCommunityName, setActiveCommunityName] = useState('home')
-  const [activeChannelId, setActiveChannelId] = useState(communities[0].channels[0].id)
-  const [activeDmId, setActiveDmId] = useState(directMessages[0].id)
+  const [lastVisited, setLastVisited] = useState<LastVisited>(loadLastVisited)
+  const [activeCommunityName, setActiveCommunityName] = useState(lastVisited.community)
+  const [feedScope, setFeedScope] = useState(lastVisited.feed)
+  const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels))
+  const [activeDmId, setActiveDmId] = useState(lastVisited.dm)
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -32,23 +96,31 @@ function App() {
     return 400
   })
 
+  const selectFeedScope = (scope: string) => {
+    setFeedScope(scope)
+    setLastVisited((prev) => ({ ...prev, feed: scope }))
+  }
+
   const selectCommunity = (communityName: string) => {
-    if (communityName === 'all' || communityName === 'home') {
-      setActiveCommunityName(communityName)
-      return
-    }
     const community = communities.find((entry) => entry.name === communityName) ?? communities[0]
     setActiveCommunityName(community.name)
-    setActiveChannelId(community.channels[0]?.id ?? 'general')
+    setActiveChannelId(channelFor(community.name, lastVisited.channels))
+    setLastVisited((prev) => ({ ...prev, community: community.name }))
   }
 
   const selectChannel = (communityName: string, channelId: string) => {
     setActiveCommunityName(communityName)
     setActiveChannelId(channelId)
+    setLastVisited((prev) => ({
+      ...prev,
+      community: communityName,
+      channels: { ...prev.channels, [communityName]: channelId },
+    }))
   }
 
   const selectDm = (dmId: string) => {
     setActiveDmId(dmId)
+    setLastVisited((prev) => ({ ...prev, dm: dmId }))
   }
 
   const openChannel = (communityName: string, channelId: string) => {
@@ -63,7 +135,9 @@ function App() {
 
   const composerDefault = communities.some((community) => community.name === activeCommunityName)
     ? activeCommunityName
-    : (communities.find((community) => community.joined)?.name ?? communities[0].name)
+    : (communities.some((community) => community.name === feedScope)
+      ? feedScope
+      : (communities.find((community) => community.joined)?.name ?? communities[0].name))
 
   const handlePost = (post: Post) => {
     setLocalPosts((prev) => [post, ...prev])
@@ -91,6 +165,14 @@ function App() {
       window.removeEventListener('keydown', onKeyDown, true)
     }
   }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LAST_VISITED_KEY, JSON.stringify(lastVisited))
+    } catch {
+      // Storage unavailable — tracking still applies for this session.
+    }
+  }, [lastVisited])
 
   const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle = false) => {
     setMenu((prev) => (toggle && prev && invoker !== null && prev.invoker === invoker
@@ -169,6 +251,14 @@ function App() {
         mode={mode}
         totalUnread={totalUnread}
         onChangeMode={(nextMode) => {
+          if (nextMode === 'feed') {
+            setFeedScope(lastVisited.feed)
+          } else if (nextMode === 'communities') {
+            setActiveCommunityName(lastVisited.community)
+            setActiveChannelId(channelFor(lastVisited.community, lastVisited.channels))
+          } else if (nextMode === 'dms') {
+            setActiveDmId(lastVisited.dm)
+          }
           setMode(nextMode)
           closeThreadNow()
           closeMenu()
@@ -184,6 +274,8 @@ function App() {
           activeCommunityName={activeCommunityName}
           activeChannelId={activeChannelId}
           activeDmId={activeDmId}
+          feedScope={feedScope}
+          onSelectFeedScope={selectFeedScope}
           onSelectCommunity={selectCommunity}
           onSelectChannel={selectChannel}
           onSelectDm={selectDm}
@@ -200,6 +292,7 @@ function App() {
           activeCommunityName={activeCommunityName}
           activeChannelId={activeChannelId}
           activeDmId={activeDmId}
+          feedScope={feedScope}
           onOpenChannel={openChannel}
           onOpenThread={toggleThread}
           onDeletePost={handleDeletePost}

@@ -15,6 +15,7 @@ type WorkspaceContentProps = {
   activeCommunityName: string
   activeChannelId: string
   activeDmId: string
+  feedScope: string
   onOpenChannel: (communityName: string, channelId: string) => void
   onOpenThread: (post: Post) => void
   onDeletePost: (post: Post) => void
@@ -42,6 +43,7 @@ function WorkspaceContent({
   activeCommunityName,
   activeChannelId,
   activeDmId,
+  feedScope,
   onOpenChannel,
   onOpenThread,
   onDeletePost,
@@ -440,11 +442,11 @@ function WorkspaceContent({
   }
 
   const visiblePosts =
-    activeCommunityName === 'all'
+    feedScope === 'all'
       ? posts
-      : activeCommunityName === 'home'
+      : feedScope === 'home'
         ? posts.filter((post) => post.community === '' || joinedCommunityNames.has(post.community))
-        : posts.filter((post) => post.community === activeCommunityName)
+        : posts.filter((post) => post.community === feedScope)
 
   return (
     <main className={styles.workspaceContent}>
@@ -455,7 +457,7 @@ function WorkspaceContent({
         {visiblePosts.length === 0 ? (
           <article className={styles.infoCard}>
             <strong>No posts here yet</strong>
-            <p>Nothing from {activeCommunityName === 'home' ? 'your spaces' : activeCommunityName} so far — try another space.</p>
+            <p>Nothing from {feedScope === 'home' ? 'your spaces' : feedScope} so far — try another space.</p>
           </article>
         ) : (
           visiblePosts.map((post) => (

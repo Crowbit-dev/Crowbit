@@ -11,6 +11,8 @@ type WorkspaceSidebarProps = {
   activeCommunityName: string
   activeChannelId: string
   activeDmId: string
+  feedScope: string
+  onSelectFeedScope: (scope: string) => void
   onSelectCommunity: (communityName: string) => void
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
@@ -65,6 +67,8 @@ function WorkspaceSidebar({
   activeCommunityName,
   activeChannelId,
   activeDmId,
+  feedScope,
+  onSelectFeedScope,
   onSelectCommunity,
   onSelectDm,
   onOpenChannel,
@@ -95,8 +99,8 @@ function WorkspaceSidebar({
               <>
                 <button
                   type="button"
-                  className={`${styles.sidebarItem} ${activeCommunityName === 'all' ? styles.active : ''}`}
-                  onClick={() => onSelectCommunity('all')}
+                  className={`${styles.sidebarItem} ${feedScope === 'all' ? styles.active : ''}`}
+                  onClick={() => onSelectFeedScope('all')}
                 >
                   <span className={styles.sidebarItemIcon}><LayoutGrid aria-hidden="true" /></span>
                   <span className={styles.sidebarItemCopy}>
@@ -106,8 +110,8 @@ function WorkspaceSidebar({
                 </button>
                 <button
                   type="button"
-                  className={`${styles.sidebarItem} ${activeCommunityName === 'home' ? styles.active : ''}`}
-                  onClick={() => onSelectCommunity('home')}
+                  className={`${styles.sidebarItem} ${feedScope === 'home' ? styles.active : ''}`}
+                  onClick={() => onSelectFeedScope('home')}
                 >
                   <span className={styles.sidebarItemIcon}><House aria-hidden="true" /></span>
                   <span className={styles.sidebarItemCopy}>
@@ -121,8 +125,8 @@ function WorkspaceSidebar({
               <button
                 key={community.name}
                 type="button"
-                className={`${styles.sidebarItem} ${activeCommunityName === community.name ? styles.active : ''}`}
-                onClick={() => onSelectCommunity(community.name)}
+                className={`${styles.sidebarItem} ${feedScope === community.name ? styles.active : ''}`}
+                onClick={() => onSelectFeedScope(community.name)}
               >
                 <span className={shared.sidebarDot} style={{ background: community.color }} />
                 <span className={styles.sidebarItemCopy}>
