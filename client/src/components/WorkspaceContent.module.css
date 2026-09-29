@@ -52,19 +52,49 @@
 .communityBarCommunity {
   display: flex;
   align-items: center;
+  gap: 8px;
   flex: 0 0 auto;
   width: 280px;
   box-sizing: border-box;
+  margin: 0;
   padding: 8px 16px 8px 24px;
+  border: 0;
   border-right: 1px solid color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
-.communityBarCommunity h2 {
+.communityBarCommunity:hover .communityBarName,
+.communityBarCommunity:focus-visible .communityBarName {
+  color: var(--text-h);
+}
+
+.communityBarCommunity:focus-visible {
+  outline: none;
+}
+
+.communityBarName {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--text-h);
   font-size: 1rem;
   font-weight: 600;
+}
+
+.communityBarChevron {
+  flex: 0 0 auto;
+  color: var(--offwhite);
+  transition: transform 160ms ease;
+}
+
+.communityBarCommunity[aria-expanded='true'] .communityBarChevron {
+  transform: rotate(180deg);
 }
 
 .communityBarMain {
@@ -450,6 +480,7 @@
   flex: 0 0 auto;
   width: 280px;
   min-height: 0;
+  overflow: hidden;
 }
 
 .channelPane::after {
@@ -472,6 +503,38 @@
   overscroll-behavior-y: contain;
   scrollbar-gutter: stable;
   padding: 12px 8px 16px;
+}
+
+.memberOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  padding: 12px 8px 16px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(
+      640px 320px at 18% 0%,
+      color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(180deg, #232323 0%, #171717 100%);
+  transform: translateY(-100%);
+  visibility: hidden;
+  transition:
+    transform 220ms ease-out,
+    visibility 0s linear 220ms;
+}
+
+.memberOverlayOpen {
+  transform: none;
+  visibility: visible;
+  transition: transform 280ms ease-out;
 }
 
 .settingsCard svg {
@@ -548,6 +611,61 @@
 
 .channelCard.active svg {
   color: color-mix(in srgb, var(--community-color, var(--accent)) 60%, white);
+}
+
+.memberCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  color: var(--offwhite);
+  font-size: 0.92rem;
+}
+
+.memberPresence {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.memberAvatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--community-color, var(--accent)), #313131);
+  color: white;
+  font-weight: 800;
+  user-select: none;
+}
+
+.memberCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.memberCopy strong,
+.memberCopy span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.memberCopy strong {
+  color: var(--text-h);
+  font-weight: 500;
+}
+
+.memberCopy span {
+  font-size: 0.78rem;
+  color: var(--offwhite);
 }
 
 .postCard {

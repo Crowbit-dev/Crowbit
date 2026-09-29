@@ -1,4 +1,4 @@
-import { ArrowBigUp, Copy, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, UserPlus, Users, Video } from 'lucide-react'
+import { ArrowBigUp, ChevronDown, Copy, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, UserPlus, Users, Video } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
@@ -71,6 +71,7 @@ function WorkspaceContent({
     [communities],
   )
   const [metaOpen, setMetaOpen] = useState(false)
+  const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels')
 
   if (mode === 'dms') {
     return (
@@ -285,9 +286,16 @@ function WorkspaceContent({
         style={{ '--community-color': activeCommunity.color } as CSSProperties}
       >
         <header className={styles.communityBar}>
-          <div className={styles.communityBarCommunity}>
-            <h2>{activeCommunity.name}</h2>
-          </div>
+          <button
+            type="button"
+            className={styles.communityBarCommunity}
+            onClick={() => setPaneTab((prev) => (prev === 'channels' ? 'members' : 'channels'))}
+            aria-expanded={paneTab === 'members'}
+            aria-label={`${activeCommunity.name}: ${paneTab === 'channels' ? 'show members' : 'show channels'}`}
+          >
+            <span className={styles.communityBarName}>{activeCommunity.name}</span>
+            <ChevronDown size={17} aria-hidden="true" className={styles.communityBarChevron} />
+          </button>
           <div className={styles.communityBarMain}>
             <strong># {activeChannel.name}</strong>
             <span className={styles.postDivider}>·</span>
@@ -307,7 +315,7 @@ function WorkspaceContent({
         </header>
 
         <div className={styles.communitiesBody}>
-          <aside className={styles.channelPane} aria-label={`${activeCommunity.name} channels`}>
+          <aside className={styles.channelPane} aria-label={paneTab === 'channels' ? `${activeCommunity.name} channels` : `${activeCommunity.name} members`}>
             <div className={styles.channelGrid}>
               {activeCommunity.channels.map((channel) => (
                 <button
@@ -322,6 +330,23 @@ function WorkspaceContent({
                   <strong>{channel.name}</strong>
                   {(channel.unread ?? 0) > 0 && <span className={shared.sidebarUnreadCount}>{channel.unread}</span>}
                 </button>
+              ))}
+            </div>
+            <div
+              className={`${styles.memberOverlay} ${paneTab === 'members' ? styles.memberOverlayOpen : ''}`}
+              aria-hidden={paneTab !== 'members'}
+            >
+              {activeCommunity.members.map((member) => (
+                <div key={member.name} className={styles.memberCard} title={member.role}>
+                  <span className={styles.memberPresence}>
+                    <span className={styles.memberAvatar}>{member.name[0]}</span>
+                    <span className={`${shared.statusDot} ${shared[member.status]} ${shared.presenceDot}`} />
+                  </span>
+                  <span className={styles.memberCopy}>
+                    <strong>{member.name}</strong>
+                    <span>{member.role}</span>
+                  </span>
+                </div>
               ))}
             </div>
           </aside>
