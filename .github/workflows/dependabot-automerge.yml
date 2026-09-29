@@ -35,6 +35,7 @@ jobs:
           elif [ "$update_type" = "version-update:semver-patch" ]; then
             automerge=true
           fi
+          echo "update-type=$update_type ghsa-id=$ghsa_id cvss=$cvss automerge=$automerge"
           echo "automerge=$automerge" >> "$GITHUB_OUTPUT"
 
       - name: Enable squash auto-merge
