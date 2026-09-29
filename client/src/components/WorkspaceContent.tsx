@@ -363,6 +363,7 @@ function WorkspaceContent({
               className={`${styles.memberOverlay} ${paneTab === 'members' ? styles.memberOverlayOpen : ''}`}
               aria-hidden={paneTab !== 'members'}
             >
+              <div className={styles.memberOverlaySlide}>
               {activeCommunity.members.map((member) => (
                 <div
                   key={member.name}
@@ -392,6 +393,7 @@ function WorkspaceContent({
                   </button>
                 </div>
               ))}
+              </div>
             </div>
           </aside>
           <div className={styles.channelConversation}>
