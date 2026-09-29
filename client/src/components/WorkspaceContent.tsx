@@ -1,4 +1,4 @@
-import { ArrowBigUp, ChevronDown, Copy, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, UserPlus, Users, Video } from 'lucide-react'
+import { ArrowBigUp, ChevronDown, Copy, Ellipsis, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, UserPlus, Users, Video } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
@@ -346,6 +346,14 @@ function WorkspaceContent({
                     <strong>{member.name}</strong>
                     <span>{member.role}</span>
                   </span>
+                  <button
+                    type="button"
+                    className={styles.memberOptions}
+                    aria-label={`${member.name} options (coming soon)`}
+                    title="Member options"
+                  >
+                    <Ellipsis size={16} aria-hidden="true" />
+                  </button>
                 </div>
               ))}
             </div>

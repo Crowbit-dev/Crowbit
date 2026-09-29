@@ -667,6 +667,27 @@
   color: var(--offwhite);
 }
 
+.memberOptions {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--offwhite);
+  cursor: pointer;
+}
+
+.memberOptions:hover,
+.memberOptions:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.4);
+  color: var(--text-h);
+}
+
 .postCard {
   display: flex;
   flex-direction: column;
