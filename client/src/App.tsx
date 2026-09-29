@@ -93,7 +93,9 @@ function App() {
   }, [])
 
   const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null) => {
-    setMenu({ x, y, items, invoker, keyboard: modalityRef.current === 'keyboard' })
+    setMenu((prev) => (prev && invoker !== null && prev.invoker === invoker
+      ? null
+      : { x, y, items, invoker, keyboard: modalityRef.current === 'keyboard' }))
   }
 
   const closeMenu = () => setMenu(null)
