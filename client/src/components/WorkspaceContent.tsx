@@ -1,6 +1,6 @@
-import { ArrowBigUp, ChevronDown, Copy, Ellipsis, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, UserPlus, Users, Video } from 'lucide-react'
+import { ArrowBigUp, Ban, ChevronDown, Copy, Ellipsis, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
-import type { Community, DirectMessage, Post, WorkspaceMode } from '../appData'
+import type { Community, CommunityMember, DirectMessage, Post, WorkspaceMode } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
@@ -72,6 +72,33 @@ function WorkspaceContent({
   )
   const [metaOpen, setMetaOpen] = useState(false)
   const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels')
+
+  const openMemberMenu = (x: number, y: number, member: CommunityMember, invoker: HTMLElement | null) => {
+    // LOCAL-ONLY: handle and id are derived from the mock name; a real backend would provide both.
+    const handle = `@${member.name.toLowerCase()}`
+    const id = member.name.toLowerCase()
+    const items: ContextMenuItem[] = [
+      { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Username', onSelect: () => void copyText(handle) },
+      { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy User ID', onSelect: () => void copyText(id) },
+      // LOCAL-ONLY: fake link; no backend route exists for it yet.
+      { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Profile Link', onSelect: () => void copyText(`https://crowbit.net/u/${id}`) },
+      { type: 'separator' },
+      // TEMPORARY: decorative until DMs and profiles land.
+      { icon: <MessageCircle size={16} aria-hidden="true" />, label: 'Message', onSelect: () => {} },
+      { icon: <User size={16} aria-hidden="true" />, label: 'View Profile', onSelect: () => {} },
+      { type: 'separator' },
+      // TEMPORARY: decorative until moderation lands.
+      { icon: <VolumeX size={16} aria-hidden="true" />, label: 'Mute', onSelect: () => {} },
+      { icon: <UserX size={16} aria-hidden="true" />, label: 'Kick', danger: true, onSelect: () => {} },
+      { icon: <Ban size={16} aria-hidden="true" />, label: 'Ban', danger: true, onSelect: () => {} },
+    ]
+    openMenu(x, y, items, invoker)
+  }
+
+  const openMemberMenuAtEvent = (e: ReactMouseEvent<HTMLElement>, member: CommunityMember) => {
+    e.preventDefault()
+    openMemberMenu(e.clientX, e.clientY, member, e.currentTarget)
+  }
 
   if (mode === 'dms') {
     return (
@@ -337,7 +364,12 @@ function WorkspaceContent({
               aria-hidden={paneTab !== 'members'}
             >
               {activeCommunity.members.map((member) => (
-                <div key={member.name} className={styles.memberCard} title={member.role}>
+                <div
+                  key={member.name}
+                  className={styles.memberCard}
+                  title={member.role}
+                  onContextMenu={(e) => openMemberMenuAtEvent(e, member)}
+                >
                   <span className={styles.memberPresence}>
                     <span className={styles.memberAvatar}>{member.name[0]}</span>
                     <span className={`${shared.statusDot} ${shared[member.status]} ${shared.presenceDot}`} />
@@ -352,6 +384,7 @@ function WorkspaceContent({
                   <button
                     type="button"
                     className={styles.memberOptions}
+                    onClick={(e) => openMemberMenuAtEvent(e, member)}
                     aria-label={`${member.name} options`}
                     title="Member options"
                   > 
