@@ -245,6 +245,7 @@
 .chatMessageTopline span {
   color: var(--offwhite);
   font-size: 0.78rem;
+  cursor: default;
 }
 
 .editedMark {
