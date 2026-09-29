@@ -6,7 +6,7 @@ import ThreadPanel from './components/ThreadPanel'
 import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
-import { communities, directMessages, posts, type Post, type WorkspaceMode } from './appData'
+import { communities, directMessages, posts, type NotificationKind, type Post, type WorkspaceMode } from './appData'
 
 type LastVisited = {
   community: string
@@ -77,6 +77,7 @@ function App() {
   const [feedScope, setFeedScope] = useState(lastVisited.feed)
   const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels))
   const [activeDmId, setActiveDmId] = useState(lastVisited.dm)
+  const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all')
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -272,14 +273,14 @@ function App() {
           communities={communities}
           directMessages={directMessages}
           activeCommunityName={activeCommunityName}
-          activeChannelId={activeChannelId}
           activeDmId={activeDmId}
           feedScope={feedScope}
           onSelectFeedScope={selectFeedScope}
           onSelectCommunity={selectCommunity}
           onSelectChannel={selectChannel}
+          notifFilter={notifFilter}
+          onSelectNotifFilter={setNotifFilter}
           onSelectDm={selectDm}
-          onOpenChannel={openChannel}
           searchQuery={searchQuery}
           onSearchQuery={setSearchQuery}
         />
@@ -294,6 +295,7 @@ function App() {
           activeDmId={activeDmId}
           feedScope={feedScope}
           onOpenChannel={openChannel}
+          notifFilter={notifFilter}
           onOpenThread={toggleThread}
           onDeletePost={handleDeletePost}
           threadShift={activeThread ? threadWidth : 0}

@@ -68,7 +68,11 @@
 }
 
 .communityBarCommunity:hover .communityBarName,
-.communityBarCommunity:focus-visible .communityBarName {
+.communityBarCommunity:focus-visible .communityBarName,
+.communityBarCommunity:hover .communityBarMembers,
+.communityBarCommunity:focus-visible .communityBarMembers,
+.communityBarCommunity:hover .communityBarChevron,
+.communityBarCommunity:focus-visible .communityBarChevron {
   color: var(--text-h);
 }
 
@@ -85,6 +89,12 @@
   color: var(--text-h);
   font-size: 1rem;
   font-weight: 600;
+}
+
+.communityBarMembers {
+  flex: 0 0 auto;
+  margin-right: -4px;
+  color: var(--offwhite);
 }
 
 .communityBarChevron {
@@ -350,15 +360,39 @@
   color: var(--offwhite);
 }
 
-.notificationRow {
-  width: 100%;
-  flex-direction: row;
+.notifBar {
+  display: flex;
   align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  margin: -24px -24px 0;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)),
+    rgba(49, 49, 49, 0.7);
+}
+
+.notifBar h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.notifList {
+  display: flex;
+  flex-direction: column;
+}
+
+.notifRow {
+  display: flex;
+  align-items: flex-start;
   gap: 12px;
-  padding: 14px 12px;
+  width: 100%;
+  padding: 12px 2px;
+  box-sizing: border-box;
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 12px;
   background: transparent;
   color: inherit;
   font: inherit;
@@ -367,29 +401,77 @@
   transition: background 120ms ease;
 }
 
-.notificationRow:first-child {
+.notifRow:first-child {
   border-top: 0;
 }
 
-.notificationRow:hover,
-.notificationRow:focus-visible {
+.notifRow:hover,
+.notifRow:focus-visible {
   outline: none;
-  background: rgba(83, 62, 82, 0.24);
+  background: rgba(83, 62, 82, 0.18);
 }
 
-.notificationRow > div {
+.notifAvatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #313131);
+  color: white;
+  font-weight: 800;
+  user-select: none;
+}
+
+.notifKind {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  margin-top: 5px;
+  border-radius: 9px;
+  background: rgba(83, 62, 82, 0.4);
+  color: var(--text-h);
+}
+
+.notifCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   flex: 1;
   min-width: 0;
 }
 
-.notificationRow strong {
-  display: block;
+.notifText {
+  font-size: 0.9rem;
 }
 
-.notificationRow p {
+.notifText strong {
+  color: var(--text-h);
+}
+
+.notifSnippet {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--offwhite);
+  font-size: 0.84rem;
+}
+
+.notifMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--offwhite);
+  font-size: 0.76rem;
+}
+
+.notifFollowActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
 }
 
 .conversationPanel {
@@ -880,6 +962,10 @@
   }
 
   .dmBar {
+    margin: -16px -16px 0;
+  }
+
+  .notifBar {
     margin: -16px -16px 0;
   }
 

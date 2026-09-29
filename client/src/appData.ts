@@ -179,3 +179,32 @@ export const directMessages: DirectMessage[] = [
   { id: 'sami', name: 'Sami', status: 'online', customStatus: 'probably breaking prod', preview: 'We should ship the beta this week', time: '1h' },
   { id: 'theo', name: 'Theo', status: 'offline', customStatus: '✍️ drafting the next post', preview: 'Thanks for the feedback on the post', time: '3h' },
 ]
+
+export type NotificationKind = 'mention' | 'like' | 'follow_request' | 'reply' | 'comment'
+
+export type NotificationItem = {
+  id: string
+  kind: NotificationKind
+  actor: string
+  community: string
+  channel: string
+  snippet: string
+  time: string
+  postTitle?: string
+}
+
+// LOCAL-ONLY: fabricated activity until a backend exists.
+export const notifications: NotificationItem[] = [
+  { id: 'n1', kind: 'mention', actor: 'Nyra', community: 'Design', channel: 'general', snippet: 'Can you look at the landing grid when you get a sec?', time: '12m' },
+  { id: 'n2', kind: 'like', actor: 'Jun', community: 'Design', channel: 'showcase', snippet: 'How are you building your personal brand in 2026?', time: '26m', postTitle: 'How are you building your personal brand in 2026?' },
+  { id: 'n3', kind: 'reply', actor: 'Jun', community: 'Design', channel: 'feedback', snippet: 'Good call on the spacing — pushed a revision.', time: '44m' },
+  { id: 'n4', kind: 'follow_request', actor: 'Kai', community: 'Art', channel: 'sketches', snippet: 'wants to follow you', time: '58m' },
+  { id: 'n5', kind: 'mention', actor: 'Tess', community: 'Dev', channel: 'backend', snippet: 'The auth thread needs your eyes before we merge.', time: '1h' },
+  { id: 'n6', kind: 'comment', actor: 'Milo', community: 'Dev', channel: 'backend', snippet: 'This matches what we saw on the dashboard work.', time: '2h', postTitle: 'What is everyone using for fast internal tooling right now?' },
+  { id: 'n7', kind: 'reply', actor: 'Rowan', community: 'Dev', channel: 'ship-room', snippet: 'Cache tuning worked. Deploys are green again.', time: '2h' },
+  { id: 'n8', kind: 'like', actor: 'Ava', community: 'Startup', channel: 'launch', snippet: 'Founders: what do your best community rituals look like?', time: '3h', postTitle: 'Founders: what do your best community rituals look like?' },
+  { id: 'n9', kind: 'mention', actor: 'Ava', community: 'Startup', channel: 'launch', snippet: 'Quoting you in the launch notes — okay?', time: '3h' },
+  { id: 'n10', kind: 'follow_request', actor: 'Sage', community: 'Art', channel: 'inspiration', snippet: 'wants to follow you', time: '4h' },
+  { id: 'n11', kind: 'reply', actor: 'Noor', community: 'Tech', channel: 'ops', snippet: 'Added secret rotation to the checklist.', time: '5h' },
+  { id: 'n12', kind: 'mention', actor: 'Mira', community: 'Art', channel: 'sketches', snippet: 'Saved your palette study to the moodboard.', time: '1d' },
+]

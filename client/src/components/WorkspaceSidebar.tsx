@@ -1,6 +1,7 @@
-import { Hash, House, LayoutGrid, Search, Settings, Users, X } from 'lucide-react'
+import { AtSign, Hash, Heart, House, LayoutGrid, MessageCircle, Reply, Search, Settings, UserPlus, Users, X } from 'lucide-react'
 import { useState } from 'react'
-import type { Community, DirectMessage, WorkspaceMode } from '../appData'
+import type { Community, DirectMessage, NotificationKind, WorkspaceMode } from '../appData'
+import { notifications } from '../appData'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
 
@@ -9,14 +10,14 @@ type WorkspaceSidebarProps = {
   communities: Community[]
   directMessages: DirectMessage[]
   activeCommunityName: string
-  activeChannelId: string
   activeDmId: string
   feedScope: string
   onSelectFeedScope: (scope: string) => void
+  notifFilter: 'all' | NotificationKind
+  onSelectNotifFilter: (filter: 'all' | NotificationKind) => void
   onSelectCommunity: (communityName: string) => void
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
-  onOpenChannel: (communityName: string, channelId: string) => void
   searchQuery: string
   onSearchQuery: (query: string) => void
 }
@@ -65,13 +66,13 @@ function WorkspaceSidebar({
   communities,
   directMessages,
   activeCommunityName,
-  activeChannelId,
   activeDmId,
   feedScope,
   onSelectFeedScope,
+  notifFilter,
+  onSelectNotifFilter,
   onSelectCommunity,
   onSelectDm,
-  onOpenChannel,
   searchQuery,
   onSearchQuery,
 }: WorkspaceSidebarProps) {
@@ -188,48 +189,43 @@ function WorkspaceSidebar({
   }
 
   if (mode === 'notifications') {
-    const unreadChannels = communities.flatMap((community) =>
-      community.channels
-        .filter((channel) => (channel.unread ?? 0) > 0)
-        .map((channel) => ({ community, channel })),
-    )
-    const totalUnread = unreadChannels.reduce((sum, entry) => sum + (entry.channel.unread ?? 0), 0)
-    const visibleUnread = query
-      ? unreadChannels.filter(({ community, channel }) =>
-          `${community.name} ${channel.name} ${channel.topic}`.toLowerCase().includes(query),
-        )
-      : unreadChannels
+    const filters = [
+      { id: 'all', label: 'All activity', icon: <LayoutGrid size={16} aria-hidden="true" /> },
+      { id: 'mention', label: 'Mentions', icon: <AtSign size={16} aria-hidden="true" /> },
+      { id: 'like', label: 'Likes', icon: <Heart size={16} aria-hidden="true" /> },
+      { id: 'follow_request', label: 'Follow requests', icon: <UserPlus size={16} aria-hidden="true" /> },
+      { id: 'reply', label: 'Replies', icon: <Reply size={16} aria-hidden="true" /> },
+      { id: 'comment', label: 'Comments', icon: <MessageCircle size={16} aria-hidden="true" /> },
+    ] as const
+    const countFor = (id: 'all' | NotificationKind) =>
+      id === 'all' ? notifications.length : notifications.filter((item) => item.kind === id).length
 
     return (
       <aside className={styles.workspaceSidebar}>
         <SidebarHeading key="notifications" id="notifications" kicker="Notifications" title="Inbox" copy="Unread Activity." />
 
-        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search unread" />
+        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search activity" />
 
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
-            <span>Unread</span>
-            <span>{totalUnread}</span>
+            <span>Filters</span>
+            <span>{notifications.length}</span>
           </div>
           <div className={styles.sidebarList}>
-            {visibleUnread.map(({ community, channel }) => (
+            {filters.map((filter) => (
               <button
-                key={`${community.name}-${channel.id}`}
+                key={filter.id}
                 type="button"
-                className={`${styles.sidebarItem} ${activeCommunityName === community.name && activeChannelId === channel.id ? styles.active : ''}`}
-                onClick={() => onOpenChannel(community.name, channel.id)}
+                className={`${styles.sidebarItem} ${notifFilter === filter.id ? styles.active : ''}`}
+                onClick={() => onSelectNotifFilter(filter.id)}
               >
-                <span className={shared.sidebarDot} style={{ background: community.color }} />
+                <span className={styles.sidebarItemIcon}>{filter.icon}</span>
                 <span className={styles.sidebarItemCopy}>
-                  <strong>#{channel.name}</strong>
-                  <span>{community.name}</span>
+                  <strong>{filter.label}</strong>
                 </span>
-                <span className={shared.sidebarUnreadCount}>{channel.unread}</span>
+                <span className={shared.sidebarUnreadCount}>{countFor(filter.id)}</span>
               </button>
             ))}
-            {visibleUnread.length === 0 && (
-              <p className={styles.sidebarEmpty}>No unread channels match “{searchQuery.trim()}”.</p>
-            )}
           </div>
         </div>
       </aside>

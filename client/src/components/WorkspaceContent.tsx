@@ -1,6 +1,7 @@
-import { ArrowBigUp, Ban, ChevronDown, Copy, Ellipsis, Hash, Link2, MessageCircle, Phone, Pin, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
+import { ArrowBigUp, AtSign, Ban, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
-import type { Community, CommunityMember, DirectMessage, Post, WorkspaceMode } from '../appData'
+import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, WorkspaceMode } from '../appData'
+import { notifications } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
@@ -16,6 +17,7 @@ type WorkspaceContentProps = {
   activeChannelId: string
   activeDmId: string
   feedScope: string
+  notifFilter: 'all' | NotificationItem['kind']
   onOpenChannel: (communityName: string, channelId: string) => void
   onOpenThread: (post: Post) => void
   onDeletePost: (post: Post) => void
@@ -44,6 +46,7 @@ function WorkspaceContent({
   activeChannelId,
   activeDmId,
   feedScope,
+  notifFilter,
   onOpenChannel,
   onOpenThread,
   onDeletePost,
@@ -164,44 +167,109 @@ function WorkspaceContent({
   }
 
   if (mode === 'notifications') {
-    const unreadChannels = communities.flatMap((community) =>
-      community.channels
-        .filter((channel) => (channel.unread ?? 0) > 0)
-        .map((channel) => ({ community, channel })),
+    const q = searchQuery.trim().toLowerCase()
+    const visibleItems = notifications.filter((item) =>
+      (notifFilter === 'all' || item.kind === notifFilter) &&
+      (!q || `${item.actor} ${item.community} ${item.channel} ${item.snippet}`.toLowerCase().includes(q)),
     )
-    const totalUnread = unreadChannels.reduce((sum, entry) => sum + (entry.channel.unread ?? 0), 0)
+    const openItem = (item: NotificationItem) => {
+      if ((item.kind === 'like' || item.kind === 'comment') && item.postTitle) {
+        const post = posts.find((entry) => entry.title === item.postTitle)
+        if (post) {
+          onOpenThread(post)
+          return
+        }
+      }
+      onOpenChannel(item.community, item.channel)
+    }
 
     return (
       <main className={styles.workspaceContent}>
-        <section className={`${styles.panelStack} ${styles.resultsCard}`}>
-          <div className={styles.sectionHeadingRow}>
-            <h2>Unread</h2>
-            <span>{totalUnread} messages</span>
-          </div>
-          {unreadChannels.length === 0 ? (
+        <header className={styles.notifBar}>
+          <h2>Inbox</h2>
+          <span className={shared.sidebarUnreadCount}>{notifications.length}</span>
+        </header>
+
+        <section className={`${styles.panelStack} ${styles.notifList}`}>
+          {notifications.length === 0 ? (
             <article className={styles.infoCard}>
               <strong>You&apos;re all caught up</strong>
               <p>New mentions and replies will land here.</p>
             </article>
+          ) : visibleItems.length === 0 ? (
+            <article className={styles.infoCard}>
+              <strong>Nothing here</strong>
+              <p>No activity matches this filter yet — try another one.</p>
+            </article>
           ) : (
-            <div className={styles.resultList}>
-              {unreadChannels.map(({ community, channel }) => (
+            visibleItems.map((item) => {
+              const color = communities.find((community) => community.name === item.community)?.color ?? '#533e52'
+              if (item.kind === 'follow_request') {
+                return (
+                  <article key={item.id} className={styles.notifRow}>
+                    <span className={styles.notifAvatar}>{item.actor[0]}</span>
+                    <span className={styles.notifKind}>
+                      <UserPlus size={14} aria-hidden="true" />
+                    </span>
+                    <span className={styles.notifCopy}>
+                      <span className={styles.notifText}>
+                        <strong>{item.actor}</strong>
+                        {' requested to follow you'}
+                      </span>
+                      <span className={styles.notifMeta}>
+                        <span className={shared.sidebarDot} style={{ background: color }} />
+                        {item.community} · {item.time}
+                      </span>
+                      <span className={styles.notifFollowActions}>
+                        {/* TEMPORARY: decorative until follow requests land. */}
+                        <button type="button" className={styles.contentChip} title="Coming soon">Accept</button>
+                        <button type="button" className={styles.contentChip} title="Coming soon">Decline</button>
+                      </span>
+                    </span>
+                  </article>
+                )
+              }
+              const kindIcon = item.kind === 'mention'
+                ? <AtSign size={14} aria-hidden="true" />
+                : item.kind === 'like'
+                  ? <Heart size={14} aria-hidden="true" />
+                  : item.kind === 'comment'
+                    ? <MessageCircle size={14} aria-hidden="true" />
+                    : <Reply size={14} aria-hidden="true" />
+              const kindVerb = item.kind === 'mention'
+                ? 'mentioned you'
+                : item.kind === 'like'
+                  ? 'liked your post'
+                  : item.kind === 'comment'
+                    ? 'commented on your post'
+                    : 'replied to you'
+              return (
                 <button
-                  key={`${community.name}-${channel.id}`}
+                  key={item.id}
                   type="button"
-                  className={`${styles.resultRow} ${styles.notificationRow}`}
-                  onClick={() => onOpenChannel(community.name, channel.id)}
-                  aria-label={`Open ${channel.name} in ${community.name}, ${channel.unread} unread messages`}
+                  className={styles.notifRow}
+                  onClick={() => openItem(item)}
+                  aria-label={`${item.actor} ${kindVerb} — ${item.snippet}`}
                 >
-                  <span className={shared.sidebarDot} style={{ background: community.color }} />
-                  <div>
-                    <strong>#{channel.name}</strong>
-                    <p>{community.name} · {channel.topic}</p>
-                  </div>
-                  <span className={shared.sidebarUnreadCount}>{channel.unread}</span>
+                  <span className={styles.notifAvatar}>{item.actor[0]}</span>
+                  <span className={styles.notifKind}>{kindIcon}</span>
+                  <span className={styles.notifCopy}>
+                    <span className={styles.notifText}>
+                      <strong>{item.actor}</strong>
+                      {` ${kindVerb} `}
+                      {(item.kind === 'mention' || item.kind === 'reply') && (
+                        <>in <strong>#{item.channel}</strong></>
+                      )}
+                    </span>
+                    <span className={styles.notifSnippet}>{item.snippet}</span>
+                    <span className={styles.notifMeta}>
+                      <span className={shared.sidebarDot} style={{ background: color }} />
+                      {item.community} · {item.time}
+                    </span>
+                  </span>
                 </button>
-              ))}
-            </div>
+              )
+            })
           )}
         </section>
       </main>
@@ -323,6 +391,7 @@ function WorkspaceContent({
             aria-label={`${activeCommunity.name}: ${paneTab === 'channels' ? 'show members' : 'show channels'}`}
           >
             <span className={styles.communityBarName}>{activeCommunity.name}</span>
+            <Users size={17} aria-hidden="true" className={styles.communityBarMembers} />
             <ChevronDown size={17} aria-hidden="true" className={styles.communityBarChevron} />
           </button>
           <div className={styles.communityBarMain}>
