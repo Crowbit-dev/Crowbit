@@ -11,9 +11,6 @@ updates:
         update-types:
           - minor
           - patch
-      dev:
-        dev-dependency-types:
-          - development
 
   - package-ecosystem: github-actions
     directory: /
