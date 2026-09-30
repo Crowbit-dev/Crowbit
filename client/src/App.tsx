@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import ContextMenu, { type ContextMenuItem, type ContextMenuState } from './components/ContextMenu'
 import PostModal from './components/PostModal'
@@ -6,7 +6,7 @@ import ThreadPanel from './components/ThreadPanel'
 import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
-import { communities, directMessages, posts } from './appData'
+import { communities, directMessages, notifications, posts } from './appData'
 import type { NotificationKind, Post, WorkspaceMode } from './types'
 
 type LastVisited = {
@@ -130,10 +130,7 @@ function App() {
     setMode('communities')
   }
 
-  const totalUnread = useMemo(
-    () => communities.reduce((sum, community) => sum + community.channels.reduce((inner, channel) => inner + (channel.unread ?? 0), 0), 0),
-    [],
-  )
+  const totalUnread = notifications.length
 
   const composerDefault = communities.some((community) => community.name === activeCommunityName)
     ? activeCommunityName
