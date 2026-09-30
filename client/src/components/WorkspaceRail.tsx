@@ -1,7 +1,7 @@
 import { Bell, Check, HeadphoneOff, Headphones, Layers3, LogOut, Menu, MessageCircle, Mic, MicOff, Plus, Search, Settings } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { WorkspaceMode } from '../appData'
+import type { WorkspaceMode } from '../types'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceRail.module.css'

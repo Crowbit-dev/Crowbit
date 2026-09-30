@@ -1,4 +1,4 @@
-import type { NotificationKind } from '../appData'
+import type { NotificationKind } from '../types'
 
 export const notifFilterLabels: Record<'all' | NotificationKind, string> = {
   all: 'All activity',

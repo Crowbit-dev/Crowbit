@@ -1,6 +1,6 @@
 import { SendHorizontal, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import type { Post } from '../appData'
+import type { Post } from '../types'
 import styles from './ThreadPanel.module.css'
 
 export type ThreadComment = {

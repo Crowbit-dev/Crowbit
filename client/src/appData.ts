@@ -1,53 +1,8 @@
+// LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in
+// types.ts — delete this file when real data arrives.
 import crowPhotograph from './assets/crowphotograph.png'
 import crowSideProfile from './assets/crowsideprofile.png'
-
-export type WorkspaceMode = 'feed' | 'dms' | 'communities' | 'notifications' | 'search' | 'settings'
-
-export type CommunityChannel = {
-  id: string
-  name: string
-  topic: string
-  unread?: number
-}
-
-export type CommunityMember = {
-  name: string
-  status: 'online' | 'away' | 'offline'
-  role: string
-  preview: string
-}
-
-export type Community = {
-  name: string
-  color: string
-  joined: boolean
-  channels: CommunityChannel[]
-  members: CommunityMember[]
-}
-
-export type DirectMessage = {
-  id: string
-  name: string
-  status: 'online' | 'away' | 'offline'
-  customStatus: string
-  preview: string
-  time: string
-}
-
-export type Post = {
-  author: string
-  handle: string
-  time: string
-  community: string
-  title: string
-  body: string
-  image?: string
-  stats: {
-    comments: number
-    upvotes: number
-    shares: number
-  }
-}
+import type { Community, DirectMessage, NotificationItem, Post } from './types'
 
 export const communities: Community[] = [
   {
@@ -179,19 +134,6 @@ export const directMessages: DirectMessage[] = [
   { id: 'sami', name: 'Sami', status: 'online', customStatus: 'probably breaking prod', preview: 'We should ship the beta this week', time: '1h' },
   { id: 'theo', name: 'Theo', status: 'offline', customStatus: '✍️ drafting the next post', preview: 'Thanks for the feedback on the post', time: '3h' },
 ]
-
-export type NotificationKind = 'mention' | 'like' | 'follow_request' | 'reply' | 'comment'
-
-export type NotificationItem = {
-  id: string
-  kind: NotificationKind
-  actor: string
-  community: string
-  channel: string
-  snippet: string
-  time: string
-  postTitle?: string
-}
 
 // LOCAL-ONLY: fabricated activity until a backend exists.
 export const notifications: NotificationItem[] = [

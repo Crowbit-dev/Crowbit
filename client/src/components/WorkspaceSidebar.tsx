@@ -1,6 +1,6 @@
 import { AtSign, Hash, Heart, House, LayoutGrid, MessageCircle, Reply, Search, Settings, UserPlus, Users, X } from 'lucide-react'
 import { useState } from 'react'
-import type { Community, DirectMessage, NotificationKind, WorkspaceMode } from '../appData'
+import type { Community, DirectMessage, NotificationKind, WorkspaceMode } from '../types'
 import { notifications } from '../appData'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import shared from '../styles/shared.module.css'

@@ -6,7 +6,8 @@ import ThreadPanel from './components/ThreadPanel'
 import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
-import { communities, directMessages, posts, type NotificationKind, type Post, type WorkspaceMode } from './appData'
+import { communities, directMessages, posts } from './appData'
+import type { NotificationKind, Post, WorkspaceMode } from './types'
 
 type LastVisited = {
   community: string

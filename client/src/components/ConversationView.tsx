@@ -1,6 +1,6 @@
 import { Copy, Link2, Paperclip, Pencil, Pin, Reply, SendHorizontal, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
-import type { CommunityChannel } from '../appData'
+import type { CommunityChannel } from '../types'
 import { copyText } from '../lib/clipboard'
 import type { ContextMenuItem } from './ContextMenu'
 import styles from './ConversationView.module.css'

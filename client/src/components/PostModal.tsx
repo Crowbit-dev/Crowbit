@@ -1,6 +1,6 @@
 import { AlignLeft, Check, ChevronDown, Paperclip, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
-import type { Community, Post } from '../appData'
+import type { Community, Post } from '../types'
 import styles from './PostModal.module.css'
 
 const MAIN_LIMIT = 280

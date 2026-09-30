@@ -1,6 +1,6 @@
 import { ArrowBigUp, AtSign, Ban, CheckCheck, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
-import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, WorkspaceMode } from '../appData'
+import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, WorkspaceMode } from '../types'
 import { notifications } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
