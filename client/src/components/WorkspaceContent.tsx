@@ -1,4 +1,4 @@
-import { ArrowBigUp, AtSign, Ban, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
+import { ArrowBigUp, AtSign, Ban, CheckCheck, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, WorkspaceMode } from '../appData'
 import { notifications } from '../appData'
@@ -6,6 +6,7 @@ import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
 import ConversationView, { buildChannelThread } from './ConversationView'
+import { notifFilterLabels } from '../lib/notifFilterLabels'
 import styles from './WorkspaceContent.module.css'
 
 type WorkspaceContentProps = {
@@ -193,6 +194,18 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <header className={styles.notifBar}>
           <h2>Inbox</h2>
+          {notifFilter !== 'all' && (
+            <>
+              <span className={styles.postDivider}>·</span>
+              <span className={styles.notifBarFilter}>{notifFilterLabels[notifFilter]}</span>
+            </>
+          )}
+          <div className={styles.notifBarActions}>
+            {/* TEMPORARY: decorative until read-state lands. */}
+            <button type="button" className={styles.dmBarAction} aria-label="Mark all read" title="Mark all read">
+              <CheckCheck size={17} aria-hidden="true" />
+            </button>
+          </div>
         </header>
 
         <section className={`${styles.panelStack} ${styles.notifList}`}>

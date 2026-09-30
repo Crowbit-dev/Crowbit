@@ -397,6 +397,23 @@
   font-weight: 600;
 }
 
+.notifBarFilter {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--offwhite);
+  font-size: 0.85rem;
+}
+
+.notifBarActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
 .notifList {
   display: flex;
   flex-direction: column;

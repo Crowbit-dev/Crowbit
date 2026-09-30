@@ -2,6 +2,7 @@ import { AtSign, Hash, Heart, House, LayoutGrid, MessageCircle, Reply, Search, S
 import { useState } from 'react'
 import type { Community, DirectMessage, NotificationKind, WorkspaceMode } from '../appData'
 import { notifications } from '../appData'
+import { notifFilterLabels } from '../lib/notifFilterLabels'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
 
@@ -190,12 +191,12 @@ function WorkspaceSidebar({
 
   if (mode === 'notifications') {
     const filters = [
-      { id: 'all', label: 'All activity', icon: <LayoutGrid size={16} aria-hidden="true" /> },
-      { id: 'mention', label: 'Mentions', icon: <AtSign size={16} aria-hidden="true" /> },
-      { id: 'like', label: 'Likes', icon: <Heart size={16} aria-hidden="true" /> },
-      { id: 'follow_request', label: 'Follow requests', icon: <UserPlus size={16} aria-hidden="true" /> },
-      { id: 'reply', label: 'Replies', icon: <Reply size={16} aria-hidden="true" /> },
-      { id: 'comment', label: 'Comments', icon: <MessageCircle size={16} aria-hidden="true" /> },
+      { id: 'all', icon: <LayoutGrid size={16} aria-hidden="true" /> },
+      { id: 'mention', icon: <AtSign size={16} aria-hidden="true" /> },
+      { id: 'like', icon: <Heart size={16} aria-hidden="true" /> },
+      { id: 'follow_request', icon: <UserPlus size={16} aria-hidden="true" /> },
+      { id: 'reply', icon: <Reply size={16} aria-hidden="true" /> },
+      { id: 'comment', icon: <MessageCircle size={16} aria-hidden="true" /> },
     ] as const
     const countFor = (id: 'all' | NotificationKind) =>
       id === 'all' ? notifications.length : notifications.filter((item) => item.kind === id).length
@@ -220,7 +221,7 @@ function WorkspaceSidebar({
               >
                 <span className={styles.sidebarItemIcon}>{filter.icon}</span>
                 <span className={styles.sidebarItemCopy}>
-                  <strong>{filter.label}</strong>
+                  <strong>{notifFilterLabels[filter.id]}</strong>
                 </span>
                 <span className={shared.sidebarUnreadCount}>{countFor(filter.id)}</span>
               </button>
