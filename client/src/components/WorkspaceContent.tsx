@@ -396,9 +396,11 @@ function WorkspaceContent({
             aria-expanded={paneTab === 'members'}
             aria-label={`${activeCommunity.name}: ${paneTab === 'channels' ? 'show members' : 'show channels'}`}
           >
-            <span className={styles.communityBarName}>{activeCommunity.name}</span>
-            <Users size={17} aria-hidden="true" className={styles.communityBarMembers} />
-            <ChevronDown size={17} aria-hidden="true" className={styles.communityBarChevron} />
+            <span className={styles.communityBarPill}>
+              <span className={styles.communityBarName}>{activeCommunity.name}</span>
+              <Users size={17} aria-hidden="true" className={styles.communityBarMembers} />
+              <ChevronDown size={17} aria-hidden="true" className={styles.communityBarChevron} />
+            </span>
           </button>
           <div className={styles.communityBarMain}>
             <strong># {activeChannel.name}</strong>

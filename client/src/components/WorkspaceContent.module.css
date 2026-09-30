@@ -57,7 +57,7 @@
   width: 280px;
   box-sizing: border-box;
   margin: 0;
-  padding: 8px 16px 8px 24px;
+  padding: 8px 14px 8px 14px;
   border: 0;
   border-right: 1px solid color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
   background: transparent;
@@ -76,8 +76,21 @@
   color: var(--text-h);
 }
 
+.communityBarCommunity:hover,
 .communityBarCommunity:focus-visible {
   outline: none;
+}
+
+.communityBarPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .communityBarName {
@@ -87,8 +100,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--text-h);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
+}
+
+.communityBarCommunity:hover .communityBarPill,
+.communityBarCommunity:focus-visible .communityBarPill {
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .communityBarMembers {
