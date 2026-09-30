@@ -230,10 +230,7 @@ function App() {
   // Rail (84) + sidebar (320) + content padding (48) + full post width (760).
   // The panel stops growing before posts would have to shrink.
   const threadMaxWidth = Math.max(280, windowWidth - 1212)
-
-  useEffect(() => {
-    setThreadWidth((prev) => Math.min(prev, Math.max(280, windowWidth - 1212)))
-  }, [windowWidth])
+  const clampedThreadWidth = Math.min(threadWidth, threadMaxWidth)
 
   const closeThreadNow = () => {
     if (threadCloseTimer.current !== null) {
@@ -296,7 +293,7 @@ function App() {
           notifFilter={notifFilter}
           onOpenThread={toggleThread}
           onDeletePost={handleDeletePost}
-          threadShift={activeThread ? threadWidth : 0}
+          threadShift={activeThread ? clampedThreadWidth : 0}
           openMenu={openMenu}
           searchQuery={searchQuery}
           onSearchQuery={setSearchQuery}
@@ -305,13 +302,13 @@ function App() {
         {activeThread && (
           <div
             className={`thread-wrap${threadVisible ? ' open' : ''}`}
-            style={{ width: threadWidth }}
+            style={{ width: clampedThreadWidth }}
           >
             <ThreadPanel
               key={`${activeThread.author}-${activeThread.title}`}
               post={activeThread}
               onClose={closeThread}
-              width={threadWidth}
+              width={clampedThreadWidth}
               maxWidth={threadMaxWidth}
               onResizeWidth={handleThreadWidth}
             />

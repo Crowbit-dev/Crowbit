@@ -59,3 +59,24 @@ export type NotificationItem = {
   time: string
   postTitle?: string
 }
+
+export type MessageEntry = {
+  id: string
+  author: string
+  time: string
+  body: string
+  image?: string
+  edited?: boolean
+  replyTo?: { id: string; author: string; body: string }
+}
+
+export type ThreadComment = {
+  author: string
+  time: string
+  body: string
+}
+
+export type ConversationMutuals = {
+  communities: { name: string; background?: string }[]
+  friends: string[]
+}

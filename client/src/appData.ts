@@ -1,7 +1,7 @@
 // LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in types.ts — delete this file when real data arrives.
 import crowPhotograph from './assets/crowphotograph.png'
 import crowSideProfile from './assets/crowsideprofile.png'
-import type { Community, DirectMessage, NotificationItem, Post } from './types'
+import type { Community, CommunityChannel, DirectMessage, MessageEntry, NotificationItem, Post, ThreadComment } from './types'
 
 export const communities: Community[] = [
   {
@@ -134,7 +134,6 @@ export const directMessages: DirectMessage[] = [
   { id: 'theo', name: 'Theo', status: 'offline', customStatus: '✍️ drafting the next post', preview: 'Thanks for the feedback on the post', time: '3h' },
 ]
 
-// LOCAL-ONLY: fabricated activity until a backend exists.
 export const notifications: NotificationItem[] = [
   { id: 'n1', kind: 'mention', actor: 'Nyra', community: 'Design', channel: 'general', snippet: 'Can you look at the landing grid when you get a sec?', time: '12m' },
   { id: 'n2', kind: 'like', actor: 'Jun', community: 'Design', channel: 'showcase', snippet: 'How are you building your personal brand in 2026?', time: '26m', postTitle: 'How are you building your personal brand in 2026?' },
@@ -149,3 +148,53 @@ export const notifications: NotificationItem[] = [
   { id: 'n11', kind: 'reply', actor: 'Noor', community: 'Tech', channel: 'ops', snippet: 'Added secret rotation to the checklist.', time: '5h' },
   { id: 'n12', kind: 'mention', actor: 'Mira', community: 'Art', channel: 'sketches', snippet: 'Saved your palette study to the moodboard.', time: '1d' },
 ]
+
+export const mockCurrentUser = { displayName: 'Nova', username: '@nova' }
+
+export const mutualFriendsByDm: Record<string, string[]> = {
+  maya: ['Jules', 'Sami', 'Theo'],
+  jules: ['Maya', 'Sami'],
+  sami: ['Maya', 'Jules', 'Theo', 'Noor'],
+  theo: ['Maya'],
+}
+
+export const mockComments: Record<string, ThreadComment[]> = {
+  'How are you building your personal brand in 2026?': [
+    { author: 'Jun', time: '1h ago', body: 'Batching content one weekend a month saved me. The rest runs on a queue.' },
+    { author: 'Nyra', time: '44m ago', body: 'That is exactly the system I keep avoiding. What do you use for scheduling?' },
+    { author: 'Mira', time: '12m ago', body: 'Portfolio first, content second. Everything else is just distribution.' },
+  ],
+  'What is everyone using for fast internal tooling right now?': [
+    { author: 'Tess', time: '4h ago', body: 'We moved dashboards onto the same auth as production. One login to rule them all.' },
+    { author: 'Rowan', time: '2h ago', body: 'Seconded. The fastest tool is the one you stop maintaining.' },
+  ],
+  'Founders: what do your best community rituals look like?': [
+    { author: 'Theo', time: '20h ago', body: 'Weekly demo thread. Same time, same channel, no exceptions for a year.' },
+    { author: 'Nia', time: '18h ago', body: 'Monthly AMA with a member instead of a guest. Way better attendance.' },
+    { author: 'Ava', time: '9h ago', body: 'Both of these are going straight into the notes. Keep them coming.' },
+  ],
+  'What is on your security audit checklist this quarter?': [
+    { author: 'Ivy', time: '2h ago', body: 'Add secret rotation to that list. Everyone forgets it until the incident.' },
+    { author: 'Zed', time: '1h ago', body: 'Dependency pinning plus a weekly audit job. Boring and effective.' },
+  ],
+}
+
+export function buildChannelThread(channel: CommunityChannel, communityName: string, authors: string[]): MessageEntry[] {
+  const [first = 'Ari', second = 'Jun'] = authors
+  const base = `${communityName}-${channel.id}`
+  return [
+    { id: `${base}-1`, author: first, time: 'Yesterday', body: `Kicking off #${channel.name} — ${channel.topic.charAt(0).toLowerCase()}${channel.topic.slice(1)}` },
+    { id: `${base}-2`, author: second, time: 'Yesterday', body: 'Good timing, I was just looking at this. I will post my notes once they are cleaned up.' },
+    { id: `${base}-3`, author: 'You', time: 'Yesterday', body: 'Same here — where should we keep the running decisions so they do not get buried?' },
+    { id: `${base}-4`, author: first, time: 'Today', body: 'Pinned thread at the top works for now. I will summarize every Friday.', replyTo: { id: `${base}-3`, author: 'You', body: 'Same here — where should we keep the running decisions so they do not get buried?' } },
+    { id: `${base}-5`, author: second, time: 'Today', body: 'Sounds good. I will send the revised version before the next check-in.' },
+  ]
+}
+
+export function buildDmThread(id: string, name: string, preview: string): MessageEntry[] {
+  return [
+    { id: `${id}-1`, author: name, time: 'Yesterday', body: preview },
+    { id: `${id}-2`, author: 'You', time: 'Yesterday', body: 'I left feedback on the latest update and marked the next steps.' },
+    { id: `${id}-3`, author: name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
+  ]
+}

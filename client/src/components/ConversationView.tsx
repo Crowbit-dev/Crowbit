@@ -1,26 +1,9 @@
 import { Copy, Link2, Paperclip, Pencil, Pin, Reply, SendHorizontal, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type MouseEvent as ReactMouseEvent } from 'react'
-import type { CommunityChannel } from '../types'
 import { copyText } from '../lib/clipboard'
+import type { ConversationMutuals, MessageEntry } from '../types'
 import type { ContextMenuItem } from './ContextMenu'
 import styles from './ConversationView.module.css'
-
-export type MessageEntry = {
-  // LOCAL-ONLY: mock ids so messages have stable keys/links with no backend.
-  id: string
-  author: string
-  time: string
-  body: string
-  image?: string
-  edited?: boolean
-  // LOCAL-ONLY: quoted reference; a real backend would resolve this from an id.
-  replyTo?: { id: string; author: string; body: string }
-}
-
-export type ConversationMutuals = {
-  communities: { name: string; background?: string }[]
-  friends: string[]
-}
 
 type ConversationViewProps = {
   peerName: string
@@ -29,23 +12,6 @@ type ConversationViewProps = {
   metaOpen?: boolean
   edgeScrollbar?: boolean
   openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void
-}
-
-// LOCAL-ONLY: fabricated per-channel threads until a backend exists.
-export function buildChannelThread(
-  channel: CommunityChannel,
-  communityName: string,
-  authors: string[],
-): MessageEntry[] {
-  const [first = 'Ari', second = 'Jun'] = authors
-  const base = `${communityName}-${channel.id}`
-  return [
-    { id: `${base}-1`, author: first, time: 'Yesterday', body: `Kicking off #${channel.name} — ${channel.topic.charAt(0).toLowerCase()}${channel.topic.slice(1)}` },
-    { id: `${base}-2`, author: second, time: 'Yesterday', body: 'Good timing, I was just looking at this. I will post my notes once they are cleaned up.' },
-    { id: `${base}-3`, author: 'You', time: 'Yesterday', body: 'Same here — where should we keep the running decisions so they do not get buried?' },
-    { id: `${base}-4`, author: first, time: 'Today', body: 'Pinned thread at the top works for now. I will summarize every Friday.', replyTo: { id: `${base}-3`, author: 'You', body: 'Same here — where should we keep the running decisions so they do not get buried?' } },
-    { id: `${base}-5`, author: second, time: 'Today', body: 'Sounds good. I will send the revised version before the next check-in.' },
-  ]
 }
 
 // Shortens quoted text with an explicit ellipsis (the CSS container

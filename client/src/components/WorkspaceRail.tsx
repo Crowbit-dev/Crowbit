@@ -2,6 +2,7 @@ import { Bell, Check, HeadphoneOff, Headphones, Layers3, LogOut, Menu, MessageCi
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { WorkspaceMode } from '../types'
+import { mockCurrentUser as currentUser } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceRail.module.css'
@@ -26,8 +27,6 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
   // Deafening implies mute, like Discord: undeafening restores the prior mic state.
   const micMuted = muted || deafened
 
-  // TEMPORARY: mock current user until the backend provides session data.
-  const currentUser = { displayName: 'Nova', username: '@nova' }
   const [status, setStatus] = useState<'online' | 'away' | 'offline'>('online')
   const [statusMenuOpen, setStatusMenuOpen] = useState(false)
   const avatarRef = useRef<HTMLButtonElement>(null)

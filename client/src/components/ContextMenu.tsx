@@ -100,8 +100,6 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
     }
   }
 
-  let buttonIndex = -1
-
   return (
     <div
       ref={panelRef}
@@ -113,8 +111,7 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
         if (item.type === 'separator') {
           return <div key={`sep-${index}`} className={styles.separator} role="separator" />
         }
-        buttonIndex += 1
-        const current = buttonIndex
+        const current = menu.items.slice(0, index).filter((entry) => entry.type !== 'separator').length
         return (
           <button
             key={item.label}

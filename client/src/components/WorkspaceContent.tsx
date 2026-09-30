@@ -1,11 +1,11 @@
 import { ArrowBigUp, AtSign, Ban, CheckCheck, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, WorkspaceMode } from '../types'
-import { notifications } from '../appData'
+import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
-import ConversationView, { buildChannelThread } from './ConversationView'
+import ConversationView from './ConversationView'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import styles from './WorkspaceContent.module.css'
 
@@ -36,13 +36,6 @@ const formatCount = (value: number) => {
 }
 
 const trimZeros = (value: number) => (Number.isInteger(value) ? `${value}` : value.toFixed(1))
-
-const mutualFriendsByDm: Record<string, string[]> = {
-  maya: ['Jules', 'Sami', 'Theo'],
-  jules: ['Maya', 'Sami'],
-  sami: ['Maya', 'Jules', 'Theo', 'Noor'],
-  theo: ['Maya'],
-}
 
 function WorkspaceContent({
   mode,
@@ -155,11 +148,7 @@ function WorkspaceContent({
           <ConversationView
             key={activeDm.id}
             peerName={activeDm.name}
-            initialMessages={[
-              { id: `${activeDm.id}-1`, author: activeDm.name, time: 'Yesterday', body: activeDm.preview },
-              { id: `${activeDm.id}-2`, author: 'You', time: 'Yesterday', body: 'I left feedback on the latest update and marked the next steps.' },
-              { id: `${activeDm.id}-3`, author: activeDm.name, time: 'Today', body: 'I will send the revised version before the next check-in.' },
-            ]}
+            initialMessages={buildDmThread(activeDm.id, activeDm.name, activeDm.preview)}
             mutuals={{
               communities: mutualCommunities.map((community) => ({ name: community.name, background: community.color })),
               friends: mutualFriendsByDm[activeDm.id] ?? [],

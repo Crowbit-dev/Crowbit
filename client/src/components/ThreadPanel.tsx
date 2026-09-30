@@ -1,37 +1,8 @@
 import { SendHorizontal, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import type { Post } from '../types'
+import { mockComments } from '../appData'
+import type { Post, ThreadComment } from '../types'
 import styles from './ThreadPanel.module.css'
-
-export type ThreadComment = {
-  author: string
-  time: string
-  body: string
-}
-
-// TODO: add a read more button for long comments
-
-// TEMPORARY: mock comments keyed by post title until the backend provides real data.
-const mockComments: Record<string, ThreadComment[]> = {
-  'How are you building your personal brand in 2026?': [
-    { author: 'Jun', time: '1h ago', body: 'Batching content one weekend a month saved me. The rest runs on a queue.' },
-    { author: 'Nyra', time: '44m ago', body: 'That is exactly the system I keep avoiding. What do you use for scheduling?' },
-    { author: 'Mira', time: '12m ago', body: 'Portfolio first, content second. Everything else is just distribution.' },
-  ],
-  'What is everyone using for fast internal tooling right now?': [
-    { author: 'Tess', time: '4h ago', body: 'We moved dashboards onto the same auth as production. One login to rule them all.' },
-    { author: 'Rowan', time: '2h ago', body: 'Seconded. The fastest tool is the one you stop maintaining.' },
-  ],
-  'Founders: what do your best community rituals look like?': [
-    { author: 'Theo', time: '20h ago', body: 'Weekly demo thread. Same time, same channel, no exceptions for a year.' },
-    { author: 'Nia', time: '18h ago', body: 'Monthly AMA with a member instead of a guest. Way better attendance.' },
-    { author: 'Ava', time: '9h ago', body: 'Both of these are going straight into the notes. Keep them coming.' },
-  ],
-  'What is on your security audit checklist this quarter?': [
-    { author: 'Ivy', time: '2h ago', body: 'Add secret rotation to that list. Everyone forgets it until the incident.' },
-    { author: 'Zed', time: '1h ago', body: 'Dependency pinning plus a weekly audit job. Boring and effective.' },
-  ],
-}
 
 function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: Post; onClose: () => void; width: number; maxWidth: number; onResizeWidth: (width: number) => void }) {
   const [comments, setComments] = useState<ThreadComment[]>(() => mockComments[post.title] ?? [])
@@ -88,21 +59,6 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
 
   const clampWidth = (value: number) => Math.round(Math.min(maxWidth, Math.max(280, value)))
 
-  const endWindowDrag = () => {
-    dragState.current = null
-    setDragging(false)
-    document.body.style.userSelect = ''
-    window.removeEventListener('pointermove', onWindowDragMove)
-    window.removeEventListener('pointerup', endWindowDrag)
-    window.removeEventListener('pointercancel', endWindowDrag)
-  }
-
-  const onWindowDragMove = (e: PointerEvent) => {
-    const drag = dragState.current
-    if (!drag) return
-    onResizeWidth(clampWidth(drag.startWidth + (drag.startX - e.clientX)))
-  }
-
   return (
     <aside className={styles.thread} aria-label={`Comments on ${post.title}`}>
       <div
@@ -119,9 +75,22 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
           dragState.current = { startX: e.clientX, startWidth: width }
           setDragging(true)
           document.body.style.userSelect = 'none'
-          window.addEventListener('pointermove', onWindowDragMove)
-          window.addEventListener('pointerup', endWindowDrag)
-          window.addEventListener('pointercancel', endWindowDrag)
+          const onMove = (ev: PointerEvent) => {
+            const drag = dragState.current
+            if (!drag) return
+            onResizeWidth(clampWidth(drag.startWidth + (drag.startX - ev.clientX)))
+          }
+          const onEnd = () => {
+            dragState.current = null
+            setDragging(false)
+            document.body.style.userSelect = ''
+            window.removeEventListener('pointermove', onMove)
+            window.removeEventListener('pointerup', onEnd)
+            window.removeEventListener('pointercancel', onEnd)
+          }
+          window.addEventListener('pointermove', onMove)
+          window.addEventListener('pointerup', onEnd)
+          window.addEventListener('pointercancel', onEnd)
         }}
         onKeyDown={(e) => {
           if (e.key === 'ArrowLeft') onResizeWidth(clampWidth(width + 16))
