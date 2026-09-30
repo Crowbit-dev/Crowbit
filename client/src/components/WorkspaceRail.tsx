@@ -125,7 +125,13 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
         >
           {deafened ? <HeadphoneOff aria-hidden="true" /> : <Headphones aria-hidden="true" />}
         </button>
-        <div className={styles.profileWrap} onMouseLeave={() => setStatusMenuOpen(false)}>
+        <div
+          className={styles.profileWrap}
+          onMouseLeave={() => setStatusMenuOpen(false)}
+          onClick={() => {
+            if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+          }}
+        >
           <button type="button" className={styles.railProfile} aria-label="Current user profile" title="Current user profile">
             <span className={styles.railAvatar}>N</span>
           </button>
@@ -149,10 +155,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
                 <button
                   type="button"
                   className={`${styles.profileCopyName} ${copied ? styles.copied : ''}`}
-                  onClick={(e) => {
-                    copyUsername()
-                    e.currentTarget.blur()
-                  }}
+                  onClick={copyUsername}
                   title="Copy username"
                 >
                   {copied ? 'Copied!' : currentUser.username}
@@ -177,7 +180,6 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
                   onClick={() => {
                     setStatus(option.value)
                     setStatusMenuOpen(false)
-                    avatarRef.current?.blur()
                   }}
                 >
                   <span aria-hidden="true" className={`${shared.statusDot} ${shared[option.value]}`} />
