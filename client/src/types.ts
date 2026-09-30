@@ -1,5 +1,4 @@
-// Permanent domain shapes. These describe what the backend will return, so they
-// live apart from the LOCAL-ONLY mock values in appData.ts.
+// Permanent domain shapes. These describe what the backend will return, so they live apart from the LOCAL-ONLY mock values in appData.ts.
 export type WorkspaceMode = 'feed' | 'dms' | 'communities' | 'notifications' | 'search' | 'settings'
 
 export type CommunityChannel = {

@@ -1,5 +1,4 @@
-// LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in
-// types.ts — delete this file when real data arrives.
+// LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in types.ts — delete this file when real data arrives.
 import crowPhotograph from './assets/crowphotograph.png'
 import crowSideProfile from './assets/crowsideprofile.png'
 import type { Community, DirectMessage, NotificationItem, Post } from './types'
