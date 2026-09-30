@@ -207,10 +207,9 @@ function WorkspaceSidebar({
         <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search activity" />
 
         <div className={styles.sidebarSection}>
-          <div className={styles.sidebarSectionHead}>
-            <span>Filters</span>
-            <span>{notifications.length}</span>
-          </div>
+            <div className={styles.sidebarSectionHead}>
+              <span>Filters</span>
+            </div>
           <div className={styles.sidebarList}>
             {filters.map((filter) => (
               <button

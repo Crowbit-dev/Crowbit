@@ -193,7 +193,6 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <header className={styles.notifBar}>
           <h2>Inbox</h2>
-          <span className={shared.sidebarUnreadCount}>{notifications.length}</span>
         </header>
 
         <section className={`${styles.panelStack} ${styles.notifList}`}>
