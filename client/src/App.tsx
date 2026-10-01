@@ -81,7 +81,14 @@ function App() {
   const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all')
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQueries, setSearchQueries] = useState<Record<WorkspaceMode, string>>({
+    feed: '',
+    dms: '',
+    communities: '',
+    notifications: '',
+    search: '',
+    settings: '',
+  })
   const [activeThread, setActiveThread] = useState<Post | null>(null)
   const [threadVisible, setThreadVisible] = useState(false)
   const threadCloseTimer = useRef<number | null>(null)
@@ -276,8 +283,8 @@ function App() {
           notifFilter={notifFilter}
           onSelectNotifFilter={setNotifFilter}
           onSelectDm={selectDm}
-          searchQuery={searchQuery}
-          onSearchQuery={setSearchQuery}
+          searchQuery={searchQueries[mode]}
+          onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
         />
 
         <WorkspaceContent
@@ -295,8 +302,8 @@ function App() {
           onDeletePost={handleDeletePost}
           threadShift={activeThread ? clampedThreadWidth : 0}
           openMenu={openMenu}
-          searchQuery={searchQuery}
-          onSearchQuery={setSearchQuery}
+          searchQuery={searchQueries[mode]}
+          onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
         />
 
         {activeThread && (
