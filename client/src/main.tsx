@@ -1,17 +1,13 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import {
-	BrowserRouter,
-	Routes,
-	Route,
-} from "react-router-dom";
-import "./index.css";
-import App from "./App.tsx";
-import Signup from "./Signup.tsx";
-import Login from "./Login.tsx";
-import RootRedirect from "./RootRedirect.tsx";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './index.css';
+import App from './App.tsx';
+import Signup from './Signup.tsx';
+import Login from './Login.tsx';
+import RootRedirect from './RootRedirect.tsx';
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<BrowserRouter>
 			<Routes>

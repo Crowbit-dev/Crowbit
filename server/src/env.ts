@@ -3,9 +3,7 @@ import { z } from 'zod';
 const envSchema = z.object({
 	PORT: z.coerce.number().positive().default(3001),
 	SESSION_SECRET: z.string().min(1, 'SESSION_SECRET is required'),
-	NODE_ENV: z
-		.enum(['development', 'production', 'test'])
-		.default('development'),
+	NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 
 const parsed = envSchema.safeParse(process.env);

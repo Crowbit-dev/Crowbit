@@ -1,136 +1,136 @@
 :root {
-  --text: #f4edf2;
-  --text-h: #ffffff;
-  --offwhite: #a8a8a8;
-  --bg: #212121;
-  --border: #515151;
-  --code-bg: #313131;
-  --accent: #533e52;
-  --accent-bg: rgba(83, 62, 82, 0.2);
-  --accent-border: rgba(83, 62, 82, 0.7);
-  --social-bg: rgba(66, 51, 65, 0.5);
-  --shadow: rgba(0, 0, 0, 0.25) 0 10px 15px -3px, rgba(0, 0, 0, 0.2) 0 4px 6px -2px;
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.45);
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	--text: #f4edf2;
+	--text-h: #ffffff;
+	--offwhite: #a8a8a8;
+	--bg: #212121;
+	--border: #515151;
+	--code-bg: #313131;
+	--accent: #533e52;
+	--accent-bg: rgba(83, 62, 82, 0.2);
+	--accent-border: rgba(83, 62, 82, 0.7);
+	--social-bg: rgba(66, 51, 65, 0.5);
+	--shadow: rgba(0, 0, 0, 0.25) 0 10px 15px -3px, rgba(0, 0, 0, 0.2) 0 4px 6px -2px;
+	--shadow-card: 0 2px 8px rgba(0, 0, 0, 0.45);
+	--sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+	--heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+	--mono: ui-monospace, Consolas, monospace;
+	font: 18px/145% var(--sans);
+	letter-spacing: 0.18px;
+	color-scheme: dark;
+	color: var(--text);
+	background: var(--bg);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 @media (max-width: 1024px) {
-  :root {
-    font-size: 16px;
-  }
+	:root {
+		font-size: 16px;
+	}
 }
 
 html,
 body,
 #root {
-  min-height: 100%;
+	min-height: 100%;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
 }
 
 #root {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  background: var(--bg);
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	background: var(--bg);
 }
 
 h1,
 h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+	font-family: var(--heading);
+	font-weight: 500;
+	color: var(--text-h);
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
+	font-size: 56px;
+	letter-spacing: -1.68px;
+	margin: 32px 0;
 }
 
 @media (max-width: 1024px) {
-  h1 {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+	h1 {
+		font-size: 36px;
+		margin: 20px 0;
+	}
 }
 
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
+	font-size: 24px;
+	line-height: 118%;
+	letter-spacing: -0.24px;
+	margin: 0 0 8px;
 }
 
 @media (max-width: 1024px) {
-  h2 {
-    font-size: 20px;
-  }
+	h2 {
+		font-size: 20px;
+	}
 }
 
 p {
-  margin: 0;
+	margin: 0;
 }
 
 button,
 input,
 textarea,
 select {
-  font: inherit;
+	font: inherit;
 }
 
 code {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+	font-family: var(--mono);
+	display: inline-flex;
+	border-radius: 4px;
+	color: var(--text-h);
+	font-size: 15px;
+	line-height: 135%;
+	padding: 4px 8px;
+	background: var(--code-bg);
 }
 
 * {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(83, 62, 82, 0.8) transparent;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(83, 62, 82, 0.8) transparent;
 }
 
 *::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+	width: 10px;
+	height: 10px;
 }
 
 *::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
-  border: 2px solid transparent;
-  border-radius: 999px;
-  background: rgba(83, 62, 82, 0.8);
-  background-clip: padding-box;
+	border: 2px solid transparent;
+	border-radius: 999px;
+	background: rgba(83, 62, 82, 0.8);
+	background-clip: padding-box;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-  background-clip: padding-box;
-  border: 2px solid transparent;
+	background: var(--accent);
+	background-clip: padding-box;
+	border: 2px solid transparent;
 }

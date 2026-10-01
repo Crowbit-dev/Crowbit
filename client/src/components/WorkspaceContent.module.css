@@ -1,70 +1,70 @@
 .workspaceContent {
-  min-width: 0;
-  min-height: 0;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  scrollbar-gutter: stable;
+	min-width: 0;
+	min-height: 0;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	overflow-y: auto;
+	overscroll-behavior-y: contain;
+	scrollbar-gutter: stable;
 }
 
 .workspaceContent h1 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
+	margin: 0;
+	font-size: clamp(2rem, 4vw, 3.5rem);
 }
 
 .workspaceContent h2 {
-  margin: 0;
-  font-size: 1.35rem;
+	margin: 0;
+	font-size: 1.35rem;
 }
 
 .panelStack {
-  min-width: 0;
+	min-width: 0;
 }
 
 .workspaceContent .panelStack {
-  padding: 0;
-  overflow: visible;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+	padding: 0;
+	overflow: visible;
+	background: transparent;
+	border: 0;
+	box-shadow: none;
 }
 
 .communityBar {
-  display: flex;
-  align-items: stretch;
-  min-height: 56px;
-  padding: 0 24px 0 0;
-  box-sizing: border-box;
-  border-bottom: 1px solid color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--community-color, var(--accent)) 32%, rgba(49, 49, 49, 0.88)),
-      rgba(49, 49, 49, 0.88)
-    ),
-    rgba(49, 49, 49, 0.7);
-  backdrop-filter: blur(8px);
+	display: flex;
+	align-items: stretch;
+	min-height: 56px;
+	padding: 0 24px 0 0;
+	box-sizing: border-box;
+	border-bottom: 1px solid color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
+	background:
+		linear-gradient(
+			135deg,
+			color-mix(in srgb, var(--community-color, var(--accent)) 32%, rgba(49, 49, 49, 0.88)),
+			rgba(49, 49, 49, 0.88)
+		),
+		rgba(49, 49, 49, 0.7);
+	backdrop-filter: blur(8px);
 }
 
 .communityBarCommunity {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-  width: 280px;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 8px 14px 8px 14px;
-  border: 0;
-  border-right: 1px solid color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 0 0 auto;
+	width: 280px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 8px 14px 8px 14px;
+	border: 0;
+	border-right: 1px solid color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
 }
 
 .communityBarCommunity:hover .communityBarName,
@@ -73,1144 +73,1147 @@
 .communityBarCommunity:focus-visible .communityBarMembers,
 .communityBarCommunity:hover .communityBarChevron,
 .communityBarCommunity:focus-visible .communityBarChevron {
-  color: var(--text-h);
+	color: var(--text-h);
 }
 
 .communityBarCommunity:hover,
 .communityBarCommunity:focus-visible {
-  outline: none;
+	outline: none;
 }
 
 .communityBarPill {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 1;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex: 1;
+	min-width: 0;
+	box-sizing: border-box;
+	padding: 6px 10px;
+	border-radius: 8px;
+	background: rgba(0, 0, 0, 0.1);
 }
 
 .communityBarName {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-h);
-  font-size: 0.9rem;
-  font-weight: 600;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--text-h);
+	font-size: 0.9rem;
+	font-weight: 600;
 }
 
 .communityBarCommunity:hover .communityBarPill,
 .communityBarCommunity:focus-visible .communityBarPill {
-  background: rgba(0, 0, 0, 0.15);
+	background: rgba(0, 0, 0, 0.15);
 }
 
 .communityBarMembers {
-  flex: 0 0 auto;
-  margin-right: -4px;
-  color: var(--offwhite);
+	flex: 0 0 auto;
+	margin-right: -4px;
+	color: var(--offwhite);
 }
 
 .communityBarChevron {
-  flex: 0 0 auto;
-  color: var(--offwhite);
-  transition: transform 160ms ease;
+	flex: 0 0 auto;
+	color: var(--offwhite);
+	transition: transform 160ms ease;
 }
 
 .communityBarCommunity[aria-expanded='true'] .communityBarChevron {
-  transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 
 .communityBarMain {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-  padding: 8px 0 8px 24px;
-  color: var(--offwhite);
-  font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+	padding: 8px 0 8px 24px;
+	color: var(--offwhite);
+	font-size: 0.9rem;
 }
 
 .communityBarMain strong {
-  flex: 0 0 auto;
-  color: var(--text-h);
-  font-weight: 600;
+	flex: 0 0 auto;
+	color: var(--text-h);
+	font-weight: 600;
 }
 
 .communityBarTopic {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .communityBarActions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 0 0 auto;
-  margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: 0 0 auto;
+	margin-left: auto;
 }
 
 .dmBar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 56px;
-  margin: -24px -24px 0;
-  padding: 8px 16px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)),
-    rgba(49, 49, 49, 0.7);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 56px;
+	margin: -24px -24px 0;
+	padding: 8px 16px;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	background: linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)), rgba(49, 49, 49, 0.7);
 }
 
 .dmBarAvatarWrap {
-  position: relative;
-  flex: 0 0 auto;
+	position: relative;
+	flex: 0 0 auto;
 }
 
 .dmBarAvatar {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #313131);
-  color: white;
-  font-weight: 800;
-  user-select: none;
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--accent), #313131);
+	color: white;
+	font-weight: 800;
+	user-select: none;
 }
 
 .dmBarIdentity {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  flex: 1;
-  min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+	flex: 1;
+	min-width: 0;
 }
 
 .dmBarName {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 0.95rem;
-  font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 0.95rem;
+	font-weight: 600;
 }
 
 .dmBarHandle {
-  color: var(--offwhite);
-  font-size: 0.78rem;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	color: var(--offwhite);
+	font-size: 0.78rem;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .dmBarStatus {
-  margin: 0;
-  color: var(--offwhite);
-  font-size: 0.78rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	margin: 0;
+	color: var(--offwhite);
+	font-size: 0.78rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .dmBarActions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: 0 0 auto;
 }
 
 .dmBarAction {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--offwhite);
-  cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: var(--offwhite);
+	cursor: pointer;
+	transition:
+		background 120ms ease,
+		color 120ms ease;
 }
 
 .dmBarAction:hover,
 .dmBarAction:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.4);
-  color: var(--text-h);
+	outline: none;
+	background: rgba(83, 62, 82, 0.4);
+	color: var(--text-h);
 }
 
 .dmBarSearch {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 170px;
-  height: 34px;
-  margin-left: 8px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: var(--offwhite);
-  cursor: text;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 170px;
+	height: 34px;
+	margin-left: 8px;
+	padding: 0 10px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	color: var(--offwhite);
+	cursor: text;
 }
 
 .dmBarSearch input {
-  flex: 1;
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  font-size: 0.84rem;
+	flex: 1;
+	min-width: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--text);
+	font: inherit;
+	font-size: 0.84rem;
 }
 
 .dmBarSearch input::-webkit-search-cancel-button {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .dmBarSearch input:focus {
-  outline: none;
+	outline: none;
 }
 
 .dmBarSearch input::placeholder {
-  color: var(--offwhite);
-  opacity: 1;
+	color: var(--offwhite);
+	opacity: 1;
 }
 
 .resultList,
 .channelGrid,
 .settingsGrid,
 .searchGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .contentChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 0.84rem;
-  transition:
-    transform 120ms ease,
-    background 120ms ease,
-    color 120ms ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 12px;
+	cursor: pointer;
+	user-select: none;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.04);
+	color: inherit;
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	font-size: 0.84rem;
+	transition:
+		transform 120ms ease,
+		background 120ms ease,
+		color 120ms ease;
 }
 
 .contentChip:hover,
 .contentChip:focus-visible {
-  outline: none;
-  transform: translateY(-1px);
-  background: rgba(83, 62, 82, 0.34);
-  color: var(--text-h);
+	outline: none;
+	transform: translateY(-1px);
+	background: rgba(83, 62, 82, 0.34);
+	color: var(--text-h);
 }
 
 .contentChip:active {
-  transform: translateY(0);
-  background: rgba(83, 62, 82, 0.5);
+	transform: translateY(0);
+	background: rgba(83, 62, 82, 0.5);
 }
 
 .sectionHeadingRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-  color: var(--offwhite);
-  font-size: 0.86rem;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	justify-content: space-between;
+	color: var(--offwhite);
+	font-size: 0.86rem;
 }
 
 .emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  text-align: center;
-  color: var(--offwhite);
-  font-size: 0.9rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 16px;
+	text-align: center;
+	color: var(--offwhite);
+	font-size: 0.9rem;
 }
 
 .emptyState strong {
-  color: var(--text-h);
-  font-size: 1rem;
-  font-weight: 600;
+	color: var(--text-h);
+	font-size: 1rem;
+	font-weight: 600;
 }
 
 .emptyState button {
-  margin-top: 6px;
+	margin-top: 6px;
 }
 
 .resultsCard h2 {
-  margin: 0;
+	margin: 0;
 }
 
 .resultsCard .sectionHeadingRow {
-  margin-bottom: 16px;
+	margin-bottom: 16px;
 }
 
 .resultFilterCrumb {
-  color: var(--offwhite);
+	color: var(--offwhite);
 }
 
 .resultList {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 .userDividerList {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .userRow {
-  display: flex;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 6px 0;
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+	display: flex;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 6px 0;
+	border: 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.04);
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
 }
 
 .userRow:first-child {
-  border-top: 0;
+	border-top: 0;
 }
 
 .userRowBox {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 6px 10px;
-  border-radius: 10px;
-  transition: background 120ms ease;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex: 1;
+	min-width: 0;
+	box-sizing: border-box;
+	padding: 6px 10px;
+	border-radius: 10px;
+	transition: background 120ms ease;
 }
 
 .userRow:hover .userRowBox,
 .userRow:focus-visible .userRowBox {
-  background: rgba(83, 62, 82, 0.18);
+	background: rgba(83, 62, 82, 0.18);
 }
 
 .userRow:focus-visible {
-  outline: none;
+	outline: none;
 }
 
 .settingsCard p {
-  color: var(--offwhite);
+	color: var(--offwhite);
 }
 
 .notifBar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 56px;
-  margin: -24px -24px 0;
-  padding: 8px 16px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)),
-    rgba(49, 49, 49, 0.7);
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 56px;
+	margin: -24px -24px 0;
+	padding: 8px 16px;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	background: linear-gradient(135deg, rgba(83, 62, 82, 0.32), rgba(49, 49, 49, 0.88)), rgba(49, 49, 49, 0.7);
 }
 
 .notifBar h2 {
-  font-size: 1rem;
-  font-weight: 600;
+	font-size: 1rem;
+	font-weight: 600;
 }
 
 .notifBarFilter {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--offwhite);
-  font-size: 0.85rem;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--offwhite);
+	font-size: 0.85rem;
 }
 
 .notifBarActions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 0 0 auto;
-  margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: 0 0 auto;
+	margin-left: auto;
 }
 
 .notifList {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .notifRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 2px 12px 12px;
-  box-sizing: border-box;
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background 120ms ease;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	width: 100%;
+	padding: 12px 2px 12px 12px;
+	box-sizing: border-box;
+	border: 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.04);
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: background 120ms ease;
 }
 
 .notifRow:first-child {
-  border-top: 0;
+	border-top: 0;
 }
 
 .notifRow:hover,
 .notifRow:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.18);
+	outline: none;
+	background: rgba(83, 62, 82, 0.18);
 }
 
 .notifAvatar {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #313131);
-  color: white;
-  font-weight: 800;
-  user-select: none;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--accent), #313131);
+	color: white;
+	font-weight: 800;
+	user-select: none;
 }
 
 .notifKind {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 28px;
-  height: 28px;
-  margin-top: 5px;
-  border-radius: 9px;
-  background: rgba(83, 62, 82, 0.4);
-  color: var(--text-h);
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 28px;
+	height: 28px;
+	margin-top: 5px;
+	border-radius: 9px;
+	background: rgba(83, 62, 82, 0.4);
+	color: var(--text-h);
 }
 
 .notifCopy {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 1;
+	min-width: 0;
 }
 
 .notifText {
-  font-size: 0.9rem;
+	font-size: 0.9rem;
 }
 
 .notifText strong {
-  color: var(--text-h);
+	color: var(--text-h);
 }
 
 .notifSnippet {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--offwhite);
-  font-size: 0.84rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--offwhite);
+	font-size: 0.84rem;
 }
 
 .notifMeta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--offwhite);
-  font-size: 0.76rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--offwhite);
+	font-size: 0.76rem;
 }
 
 .notifFollowActions {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
+	display: flex;
+	gap: 8px;
+	margin-top: 6px;
 }
 
 .conversationPanel {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  margin-top: -18px;
-  margin-right: -24px;
-  margin-bottom: -16px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+	margin-top: -18px;
+	margin-right: -24px;
+	margin-bottom: -16px;
 }
 
 .dmLayout {
-  overflow: hidden;
-  scrollbar-gutter: auto;
+	overflow: hidden;
+	scrollbar-gutter: auto;
 }
 
 .avatar {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, var(--accent), #313131);
-  color: white;
-  font-weight: 800;
-  user-select: none;
-  cursor: pointer;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	width: 42px;
+	height: 42px;
+	background: linear-gradient(135deg, var(--accent), #313131);
+	color: white;
+	font-weight: 800;
+	user-select: none;
+	cursor: pointer;
 }
 
 .feedStack {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 14px;
-  justify-items: center;
-  transition: margin-right 200ms ease;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 14px;
+	justify-items: center;
+	transition: margin-right 200ms ease;
 }
 
 .feedCommunityHeader {
-  width: 100%;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow-card);
-  background: rgba(49, 49, 49, 0.82);
-  border-radius: 18px;
+	width: 100%;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: var(--shadow-card);
+	background: rgba(49, 49, 49, 0.82);
+	border-radius: 18px;
 }
 
 .feedCommunityBanner {
-  position: relative;
-  height: 128px;
-  overflow: hidden;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--community-color) 55%, transparent),
-      color-mix(in srgb, var(--community-color) 12%, transparent)
-    );
+	position: relative;
+	height: 128px;
+	overflow: hidden;
+	background: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--community-color) 55%, transparent),
+		color-mix(in srgb, var(--community-color) 12%, transparent)
+	);
 }
 
 .feedCommunityBanner svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
 }
 
 .feedCommunityRow {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 14px 18px 16px;
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 14px 18px 16px;
 }
 
 .feedCommunityIcon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--community-color), #313131);
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 800;
-  user-select: none;
-  box-shadow: 0 0 0 4px rgba(49, 49, 49, 0.9);
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--community-color), #313131);
+	color: white;
+	font-size: 1.1rem;
+	font-weight: 800;
+	user-select: none;
+	box-shadow: 0 0 0 4px rgba(49, 49, 49, 0.9);
 }
 
 .feedCommunityCopy {
-  flex: 1;
-  min-width: 0;
+	flex: 1;
+	min-width: 0;
 }
 
 .feedCommunityCopy h2 {
-  margin: 0;
-  font-size: 1.2rem;
+	margin: 0;
+	font-size: 1.2rem;
 }
 
 .feedCommunityCopy p {
-  margin: 2px 0 0;
-  color: var(--offwhite);
-  font-size: 0.82rem;
+	margin: 2px 0 0;
+	color: var(--offwhite);
+	font-size: 0.82rem;
 }
 
 @media (min-width: 1500px) {
-  .feedStack.threadShift {
-    margin-right: var(--thread-shift, 400px);
-  }
+	.feedStack.threadShift {
+		margin-right: var(--thread-shift, 400px);
+	}
 }
 
 .searchGrid,
 .settingsGrid {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+	display: grid;
+	gap: 14px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .communitiesLayout {
-  gap: 0;
-  padding: 0;
-  overflow: hidden;
-  scrollbar-gutter: auto;
-  background:
-    radial-gradient(
-      640px 320px at 18% 0%,
-      color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent),
-      transparent 70%
-    );
+	gap: 0;
+	padding: 0;
+	overflow: hidden;
+	scrollbar-gutter: auto;
+	background: radial-gradient(
+		640px 320px at 18% 0%,
+		color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent),
+		transparent 70%
+	);
 }
 
 .communitiesBody {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  margin-top: 0;
+	display: flex;
+	flex: 1;
+	min-height: 0;
+	margin-top: 0;
 }
 
 .channelConversation {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  padding-left: 24px;
-  padding-bottom: 8px;
-  box-sizing: border-box;
-  --feed-pad-left: 0;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	min-height: 0;
+	padding-left: 24px;
+	padding-bottom: 8px;
+	box-sizing: border-box;
+	--feed-pad-left: 0;
 }
 
 .channelPane {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  width: 280px;
-  min-height: 0;
-  overflow: hidden;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 auto;
+	width: 280px;
+	min-height: 0;
+	overflow: hidden;
 }
 
 .channelPane::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  background: color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 1px;
+	background: color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
 }
 
 .channelGrid {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 2px;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  scrollbar-gutter: stable;
-  padding: 12px 8px 16px;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 2px;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior-y: contain;
+	scrollbar-gutter: stable;
+	padding: 12px 8px 16px;
 }
 
 .memberOverlay {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  overflow: hidden;
-  box-sizing: border-box;
-  background:
-    radial-gradient(
-      640px 320px at 18% 0%,
-      color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent),
-      transparent 70%
-    ),
-    linear-gradient(180deg, #232323 0%, #171717 100%);
-  visibility: hidden;
-  opacity: 0;
-  transition:
-    opacity 200ms ease,
-    visibility 0s linear 280ms;
+	position: absolute;
+	inset: 0;
+	z-index: 5;
+	overflow: hidden;
+	box-sizing: border-box;
+	background:
+		radial-gradient(
+			640px 320px at 18% 0%,
+			color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent),
+			transparent 70%
+		),
+		linear-gradient(180deg, #232323 0%, #171717 100%);
+	visibility: hidden;
+	opacity: 0;
+	transition:
+		opacity 200ms ease,
+		visibility 0s linear 280ms;
 }
 
 .memberOverlayOpen {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 200ms ease;
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 200ms ease;
 }
 
 .memberOverlaySlide {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-height: 100%;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  scrollbar-gutter: stable;
-  padding: 12px 8px 16px;
-  box-sizing: border-box;
-  transform: translateY(-100%);
-  transition: transform 280ms ease-out;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	max-height: 100%;
+	overflow-y: auto;
+	overscroll-behavior-y: contain;
+	scrollbar-gutter: stable;
+	padding: 12px 8px 16px;
+	box-sizing: border-box;
+	transform: translateY(-100%);
+	transition: transform 280ms ease-out;
 }
 
 .memberOverlayOpen .memberOverlaySlide {
-  transform: none;
-  transition: transform 280ms ease-out 40ms;
+	transform: none;
+	transition: transform 280ms ease-out 40ms;
 }
 
 .settingsCard svg {
-  flex: 0 0 auto;
-  color: var(--offwhite);
+	flex: 0 0 auto;
+	color: var(--offwhite);
 }
 
 .settingsCard {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow-card);
-  background: rgba(49, 49, 49, 0.82);
-  border-radius: 18px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 18px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: var(--shadow-card);
+	background: rgba(49, 49, 49, 0.82);
+	border-radius: 18px;
 }
 
 .settingsGrid .settingsCard {
-  min-height: 130px;
-  justify-content: flex-start;
+	min-height: 130px;
+	justify-content: flex-start;
 }
 
 .channelCard {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 7px 10px;
-  box-sizing: border-box;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--offwhite);
-  font: inherit;
-  font-size: 0.92rem;
-  text-align: left;
-  cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	padding: 7px 10px;
+	box-sizing: border-box;
+	border: 0;
+	border-radius: 8px;
+	background: transparent;
+	color: var(--offwhite);
+	font: inherit;
+	font-size: 0.92rem;
+	text-align: left;
+	cursor: pointer;
+	transition:
+		background 120ms ease,
+		color 120ms ease;
 }
 
 .channelCard svg {
-  flex: 0 0 auto;
-  color: var(--offwhite);
+	flex: 0 0 auto;
+	color: var(--offwhite);
 }
 
 .channelCard strong {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 500;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 500;
 }
 
 .channelCard:hover,
 .channelCard:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.34);
-  color: var(--text-h);
+	outline: none;
+	background: rgba(83, 62, 82, 0.34);
+	color: var(--text-h);
 }
 
 .channelCard:hover svg,
 .channelCard:focus-visible svg {
-  color: var(--text-h);
+	color: var(--text-h);
 }
 
 .channelCard.active {
-  background: color-mix(in srgb, var(--community-color, var(--accent)) 30%, transparent);
-  color: var(--text-h);
+	background: color-mix(in srgb, var(--community-color, var(--accent)) 30%, transparent);
+	color: var(--text-h);
 }
 
 .channelCard.active svg {
-  color: color-mix(in srgb, var(--community-color, var(--accent)) 60%, white);
+	color: color-mix(in srgb, var(--community-color, var(--accent)) 60%, white);
 }
 
 .memberCard {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 7px 10px;
-  box-sizing: border-box;
-  border-radius: 8px;
-  color: var(--offwhite);
-  font-size: 0.92rem;
-  cursor: default;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 7px 10px;
+	box-sizing: border-box;
+	border-radius: 8px;
+	color: var(--offwhite);
+	font-size: 0.92rem;
+	cursor: default;
 }
 
 .memberCard + .memberCard {
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+	border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .memberPresence {
-  position: relative;
-  flex: 0 0 auto;
+	position: relative;
+	flex: 0 0 auto;
 }
 
 .memberAvatar {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--community-color, var(--accent)), #313131);
-  color: white;
-  font-weight: 800;
-  user-select: none;
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--community-color, var(--accent)), #313131);
+	color: white;
+	font-weight: 800;
+	user-select: none;
 }
 
 .memberCopy {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
 }
 
 .memberCopy strong,
 .memberCopy span {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .memberCopy strong {
-  color: var(--text-h);
-  font-weight: 500;
+	color: var(--text-h);
+	font-weight: 500;
 }
 
 .memberNameRow {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  min-width: 0;
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+	min-width: 0;
 }
 
 .memberNameRow strong {
-  flex: 0 1 auto;
-  min-width: 0;
+	flex: 0 1 auto;
+	min-width: 0;
 }
 
 .memberHandle {
-  flex: 1;
-  font-size: 0.78rem;
+	flex: 1;
+	font-size: 0.78rem;
 }
 
 .memberCopy span {
-  font-size: 0.78rem;
-  color: var(--offwhite);
+	font-size: 0.78rem;
+	color: var(--offwhite);
 }
 
 .memberOptions {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--offwhite);
-  cursor: pointer;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	border-radius: 8px;
+	background: transparent;
+	color: var(--offwhite);
+	cursor: pointer;
 }
 
 .memberOptions:hover,
 .memberOptions:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.4);
-  color: var(--text-h);
+	outline: none;
+	background: rgba(83, 62, 82, 0.4);
+	color: var(--text-h);
 }
 
 .postCard {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: min(100%, 760px);
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow-card);
-  background: rgba(49, 49, 49, 0.82);
-  border-radius: 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: min(100%, 760px);
+	padding: 18px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: var(--shadow-card);
+	background: rgba(49, 49, 49, 0.82);
+	border-radius: 18px;
 }
 
 .postCard h3 {
-  margin: 0;
-  font-size: 1.22rem;
+	margin: 0;
+	font-size: 1.22rem;
 }
 
 .postHeader {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+	display: flex;
+	align-items: center;
+	gap: 14px;
 }
 
 .postMeta {
-  flex: 1;
-  min-width: 0;
+	flex: 1;
+	min-width: 0;
 }
 
 .postAuthorRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	font-size: 0.85rem;
 }
 
 .postAuthorRow strong {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .postAuthorRow strong:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 .postHandle,
 .postTime,
 .postDivider {
-  color: var(--offwhite);
+	color: var(--offwhite);
 }
 
 .postHandle {
-  margin-left: -4px;
-  cursor: pointer;
+	margin-left: -4px;
+	cursor: pointer;
 }
 
 .postDivider {
-  user-select: none;
+	user-select: none;
 }
 
 .communityTag {
-  display: inline-flex;
-  align-items: center;
-  color: color-mix(in srgb, var(--community-color) 55%, white);
-  font-size: 0.74rem;
-  font-weight: 700;
-  cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	color: color-mix(in srgb, var(--community-color) 55%, white);
+	font-size: 0.74rem;
+	font-weight: 700;
+	cursor: pointer;
 }
 
 .communityTag:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 .postImage {
-  display: block;
-  width: min(100%, 560px);
-  height: auto;
-  align-self: center;
-  max-height: 320px;
-  object-fit: contain;
-  background: rgba(16, 16, 16, 0.32);
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+	display: block;
+	width: min(100%, 560px);
+	height: auto;
+	align-self: center;
+	max-height: 320px;
+	object-fit: contain;
+	background: rgba(16, 16, 16, 0.32);
+	border-radius: 14px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .postBody {
-  margin: 0;
-  line-height: 1.65;
-  color: var(--offwhite);
+	margin: 0;
+	line-height: 1.65;
+	color: var(--offwhite);
 }
 
 .postStats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	padding-top: 10px;
+	border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .postAction {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  transition: background 120ms ease, transform 120ms ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 10px;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	transition:
+		background 120ms ease,
+		transform 120ms ease;
 }
 
 .postAction:hover,
 .postAction:focus-visible {
-  outline: none;
-  transform: translateY(-1px);
-  background: rgba(83, 62, 82, 0.28);
+	outline: none;
+	transform: translateY(-1px);
+	background: rgba(83, 62, 82, 0.28);
 }
 
 .resultPostCard {
-  cursor: pointer;
-  transition: border-color 120ms ease, transform 120ms ease;
+	cursor: pointer;
+	transition:
+		border-color 120ms ease,
+		transform 120ms ease;
 }
 
 .resultPostCard:hover,
 .resultPostCard:focus-visible {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.14);
-  transform: translateY(-1px);
+	outline: none;
+	border-color: rgba(255, 255, 255, 0.14);
+	transform: translateY(-1px);
 }
 
 .postStat {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 10px;
-  color: var(--offwhite);
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 10px;
+	color: var(--offwhite);
 }
 
 .resultCommunityRow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+	display: flex;
+	align-items: center;
+	gap: 14px;
 }
 
 .resultCommunityCard {
-  width: min(100%, 760px);
-  box-sizing: border-box;
-  padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--community-color) 40%, transparent);
-  box-shadow: var(--shadow-card);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--community-color) 30%, rgba(49, 49, 49, 0.82)),
-      rgba(49, 49, 49, 0.82)
-    );
-  border-radius: 14px;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 120ms ease, transform 120ms ease;
+	width: min(100%, 760px);
+	box-sizing: border-box;
+	padding: 12px 14px;
+	border: 1px solid color-mix(in srgb, var(--community-color) 40%, transparent);
+	box-shadow: var(--shadow-card);
+	background: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--community-color) 30%, rgba(49, 49, 49, 0.82)),
+		rgba(49, 49, 49, 0.82)
+	);
+	border-radius: 14px;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition:
+		border-color 120ms ease,
+		transform 120ms ease;
 }
 
 .resultCommunityCard:hover,
 .resultCommunityCard:focus-visible {
-  outline: none;
-  border-color: color-mix(in srgb, var(--community-color) 65%, transparent);
-  transform: translateY(-1px);
+	outline: none;
+	border-color: color-mix(in srgb, var(--community-color) 65%, transparent);
+	transform: translateY(-1px);
 }
 
 .resultCommunityCopy {
-  flex: 1;
-  min-width: 0;
+	flex: 1;
+	min-width: 0;
 }
 
 .resultCommunityCopy strong {
-  display: block;
-  font-size: 1.05rem;
+	display: block;
+	font-size: 1.05rem;
 }
 
 .resultCommunityCopy p {
-  margin: 2px 0 0;
-  color: var(--offwhite);
-  font-size: 0.85rem;
+	margin: 2px 0 0;
+	color: var(--offwhite);
+	font-size: 0.85rem;
 }
 
 @media (max-width: 1280px) {
-  .settingsGrid,
-  .searchGrid {
-    grid-template-columns: 1fr;
-  }
+	.settingsGrid,
+	.searchGrid {
+		grid-template-columns: 1fr;
+	}
 }
 
 @media (max-width: 980px) {
-  .workspaceContent {
-    order: 3;
-    overflow: visible;
-  }
+	.workspaceContent {
+		order: 3;
+		overflow: visible;
+	}
 
-  .dmLayout {
-    overflow: visible;
-  }
+	.dmLayout {
+		overflow: visible;
+	}
 
-  .communitiesLayout {
-    flex-direction: column;
-    overflow: visible;
-  }
+	.communitiesLayout {
+		flex-direction: column;
+		overflow: visible;
+	}
 
-  .communitiesBody {
-    flex-direction: column;
-    margin-top: 0;
-  }
+	.communitiesBody {
+		flex-direction: column;
+		margin-top: 0;
+	}
 
-  .communityBarCommunity {
-    width: auto;
-    flex: 1 1 auto;
-    border-right: 0;
-  }
+	.communityBarCommunity {
+		width: auto;
+		flex: 1 1 auto;
+		border-right: 0;
+	}
 
-  .channelPane {
-    width: auto;
-  }
+	.channelPane {
+		width: auto;
+	}
 
-  .channelPane::after {
-    top: auto;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: auto;
-    height: 1px;
-  }
+	.channelPane::after {
+		top: auto;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		width: auto;
+		height: 1px;
+	}
 
-  .channelPane .channelGrid {
-    overflow: visible;
-  }
+	.channelPane .channelGrid {
+		overflow: visible;
+	}
 }
 
 @media (max-width: 640px) {
-  .workspaceContent {
-    padding: 16px;
-  }
+	.workspaceContent {
+		padding: 16px;
+	}
 
-  .dmBar {
-    margin: -16px -16px 0;
-  }
+	.dmBar {
+		margin: -16px -16px 0;
+	}
 
-  .notifBar {
-    margin: -16px -16px 0;
-  }
+	.notifBar {
+		margin: -16px -16px 0;
+	}
 
-  .conversationPanel {
-    margin-right: -16px;
-    margin-bottom: -8px;
-  }
+	.conversationPanel {
+		margin-right: -16px;
+		margin-bottom: -8px;
+	}
 
-  .communitiesLayout {
-    padding: 0;
-  }
+	.communitiesLayout {
+		padding: 0;
+	}
 }

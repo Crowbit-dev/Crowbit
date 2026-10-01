@@ -1,396 +1,400 @@
 .workspaceRail {
-  position: fixed;
-  inset: 0 auto 0 0;
-  z-index: 10;
-  width: 84px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 12px 18px;
-  box-sizing: border-box;
-  background: rgba(20, 20, 20, 0.96);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(16px);
+	position: fixed;
+	inset: 0 auto 0 0;
+	z-index: 10;
+	width: 84px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 12px 18px;
+	box-sizing: border-box;
+	background: rgba(20, 20, 20, 0.96);
+	border-right: 1px solid rgba(255, 255, 255, 0.06);
+	backdrop-filter: blur(16px);
 }
 
 .workspaceRailTop {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .workspaceRailBottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
 }
 
 .railDivider {
-  width: 28px;
-  height: 1px;
-  margin: 2px 0;
-  align-self: center;
-  background: rgba(255, 255, 255, 0.1);
+	width: 28px;
+	height: 1px;
+	margin: 2px 0;
+	align-self: center;
+	background: rgba(255, 255, 255, 0.1);
 }
 
 .railButton {
-  display: grid;
-  position: relative;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: 14px;
-  color: var(--offwhite);
-  background: rgba(255, 255, 255, 0.03);
-  cursor: pointer;
-  transition:
-    transform 120ms ease,
-    background 120ms ease,
-    color 120ms ease;
+	display: grid;
+	position: relative;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: 14px;
+	color: var(--offwhite);
+	background: rgba(255, 255, 255, 0.03);
+	cursor: pointer;
+	transition:
+		transform 120ms ease,
+		background 120ms ease,
+		color 120ms ease;
 }
 
 .railButton:hover,
 .railButton:focus-visible,
 .railProfile:hover,
 .railProfile:focus-visible {
-  outline: none;
-  transform: translateY(-1px);
+	outline: none;
+	transform: translateY(-1px);
 }
 
 .railButton:hover,
 .railButton:focus-visible {
-  background: rgba(83, 62, 82, 0.34);
-  color: var(--text-h);
+	background: rgba(83, 62, 82, 0.34);
+	color: var(--text-h);
 }
 
 .railButton.active {
-  background: rgba(83, 62, 82, 0.56);
-  color: var(--text-h);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+	background: rgba(83, 62, 82, 0.56);
+	color: var(--text-h);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
 .railButton.toggled {
-  background: rgba(225, 29, 72, 0.22);
-  color: #fb7185;
+	background: rgba(225, 29, 72, 0.22);
+	color: #fb7185;
 }
 
 .railButton.toggled:hover,
 .railButton.toggled:focus-visible {
-  background: rgba(225, 29, 72, 0.34);
-  color: #fda4af;
+	background: rgba(225, 29, 72, 0.34);
+	color: #fda4af;
 }
 
 .railButton:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+	opacity: 0.45;
+	cursor: not-allowed;
 }
 
 .railButton:disabled:hover,
 .railButton:disabled:focus-visible {
-  transform: none;
+	transform: none;
 }
 
 .railBadge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  display: grid;
-  place-items: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  box-sizing: border-box;
-  border-radius: 999px;
-  background: #e11d48;
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 800;
-  user-select: none;
+	position: absolute;
+	top: -6px;
+	right: -6px;
+	display: grid;
+	place-items: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 6px;
+	box-sizing: border-box;
+	border-radius: 999px;
+	background: #e11d48;
+	color: #fff;
+	font-size: 0.68rem;
+	font-weight: 800;
+	user-select: none;
 }
 
 .railProfile {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.03);
-  cursor: pointer;
+	display: grid;
+	place-items: center;
+	width: 48px;
+	height: 48px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.03);
+	cursor: pointer;
 }
 
 .railAvatar {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #6f5b6d);
-  color: white;
-  font-weight: 800;
-  user-select: none;
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--accent), #6f5b6d);
+	color: white;
+	font-weight: 800;
+	user-select: none;
 }
 
 .profileWrap {
-  position: relative;
-  display: grid;
-  place-items: center;
+	position: relative;
+	display: grid;
+	place-items: center;
 }
 
 .profileCard {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  width: max-content;
-  max-width: 48px;
-  height: 48px;
-  padding: 4px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  background: rgba(28, 28, 28, 0.98);
-  border: 0;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  white-space: nowrap;
-  transition:
-    max-width 220ms ease,
-    border-radius 220ms ease,
-    padding 220ms ease,
-    gap 220ms ease;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	gap: 0;
+	width: max-content;
+	max-width: 48px;
+	height: 48px;
+	padding: 4px;
+	box-sizing: border-box;
+	border-radius: 50%;
+	background: rgba(28, 28, 28, 0.98);
+	border: 0;
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+	white-space: nowrap;
+	transition:
+		max-width 220ms ease,
+		border-radius 220ms ease,
+		padding 220ms ease,
+		gap 220ms ease;
 }
 
 .profileWrap:hover .profileCard,
 .profileWrap:focus-within .profileCard {
-  max-width: 260px;
-  border-radius: 200px;
-  padding: 4px 10px 4px 4px;
-  gap: 8px;
+	max-width: 260px;
+	border-radius: 200px;
+	padding: 4px 10px 4px 4px;
+	gap: 8px;
 }
 
 .profileAvatar {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #6f5b6d);
-  color: white;
-  font: inherit;
-  font-weight: 800;
-  user-select: none;
-  cursor: pointer;
+	position: relative;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--accent), #6f5b6d);
+	color: white;
+	font: inherit;
+	font-weight: 800;
+	user-select: none;
+	cursor: pointer;
 }
 
 .profileDetails {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 140ms ease, visibility 0s linear 200ms;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex: 1;
+	min-width: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 140ms ease,
+		visibility 0s linear 200ms;
 }
 
 .profileWrap:hover .profileDetails,
 .profileWrap:focus-within .profileDetails {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 140ms ease 90ms;
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 140ms ease 90ms;
 }
 
 .profileCopy {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  min-width: 0;
-  line-height: 1.3;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	min-width: 0;
+	line-height: 1.3;
 }
 
 .profileCopy strong {
-  color: var(--text-h);
-  font-size: 0.85rem;
+	color: var(--text-h);
+	font-size: 0.85rem;
 }
 
 .profileCopy span {
-  color: var(--offwhite);
-  font-size: 0.72rem;
+	color: var(--offwhite);
+	font-size: 0.72rem;
 }
 
 .profileCopyName {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--offwhite);
-  font: inherit;
-  font-size: 0.72rem;
-  text-align: left;
-  cursor: pointer;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--offwhite);
+	font: inherit;
+	font-size: 0.72rem;
+	text-align: left;
+	cursor: pointer;
 }
 
 .profileCopyName:hover,
 .profileCopyName:focus-visible {
-  outline: none;
-  color: var(--text-h);
+	outline: none;
+	color: var(--text-h);
 }
 
 .profileCopyName.copied {
-  color: #5ee6a8;
-  font-weight: 700;
+	color: #5ee6a8;
+	font-weight: 700;
 }
 
 .profileLogout {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--offwhite);
-  cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: var(--offwhite);
+	cursor: pointer;
+	transition:
+		background 120ms ease,
+		color 120ms ease;
 }
 
 .profileLogout:hover,
 .profileLogout:focus-visible {
-  outline: none;
-  background: rgba(225, 29, 72, 0.25);
-  color: #fda4af;
+	outline: none;
+	background: rgba(225, 29, 72, 0.25);
+	color: #fda4af;
 }
 
 .statusMenu {
-  position: absolute;
-  left: 0;
-  bottom: 100%;
-  z-index: 5;
-  padding-bottom: 8px;
+	position: absolute;
+	left: 0;
+	bottom: 100%;
+	z-index: 5;
+	padding-bottom: 8px;
 }
 
 .statusList {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 190px;
-  padding: 6px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  background: rgba(28, 28, 28, 0.98);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  animation: status-menu-in 140ms ease;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 190px;
+	padding: 6px;
+	box-sizing: border-box;
+	border-radius: 14px;
+	background: rgba(28, 28, 28, 0.98);
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+	animation: status-menu-in 140ms ease;
 }
 
 .statusOption {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 9px 10px;
-  box-sizing: border-box;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 0.86rem;
-  text-align: left;
-  cursor: pointer;
-  transition: background 120ms ease;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 9px 10px;
+	box-sizing: border-box;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 0.86rem;
+	text-align: left;
+	cursor: pointer;
+	transition: background 120ms ease;
 }
 
 .statusOption:hover,
 .statusOption:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.35);
+	outline: none;
+	background: rgba(83, 62, 82, 0.35);
 }
 
 .statusLabel {
-  flex: 1;
+	flex: 1;
 }
 
 .statusOption svg {
-  flex: 0 0 auto;
-  color: var(--text-h);
+	flex: 0 0 auto;
+	color: var(--text-h);
 }
 
 @keyframes status-menu-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
 }
 
 @media (max-width: 980px) {
-  .workspaceRail {
-    position: sticky;
-    width: 100%;
-    height: 84px;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
+	.workspaceRail {
+		position: sticky;
+		width: 100%;
+		height: 84px;
+		flex-direction: row;
+		justify-content: space-between;
+		padding: 12px 16px;
+		border-right: 0;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
 
-  .workspaceRailTop {
-    flex-direction: row;
-    align-items: center;
-    width: auto;
-  }
+	.workspaceRailTop {
+		flex-direction: row;
+		align-items: center;
+		width: auto;
+	}
 
-  .workspaceRailBottom {
-    flex-direction: row;
-    align-items: center;
-    width: auto;
-  }
+	.workspaceRailBottom {
+		flex-direction: row;
+		align-items: center;
+		width: auto;
+	}
 
-  .railDivider {
-    width: 1px;
-    height: 28px;
-    margin: 0 2px;
-  }
+	.railDivider {
+		width: 1px;
+		height: 28px;
+		margin: 0 2px;
+	}
 
-  .railProfile {
-    margin-left: auto;
-  }
+	.railProfile {
+		margin-left: auto;
+	}
 
-  .profileCard {
-    left: auto;
-    right: 0;
-  }
+	.profileCard {
+		left: auto;
+		right: 0;
+	}
 
-  .statusMenu {
-    left: auto;
-    right: 0;
-  }
+	.statusMenu {
+		left: auto;
+		right: 0;
+	}
 }
 
 @media (max-width: 640px) {
-  .workspaceRail {
-    overflow-x: auto;
-    justify-content: flex-start;
-    gap: 14px;
-  }
+	.workspaceRail {
+		overflow-x: auto;
+		justify-content: flex-start;
+		gap: 14px;
+	}
 
-  .workspaceRailTop {
-    gap: 8px;
-  }
+	.workspaceRailTop {
+		gap: 8px;
+	}
 
-  .railProfile {
-    margin-left: auto;
-    flex: 0 0 auto;
-  }
+	.railProfile {
+		margin-left: auto;
+		flex: 0 0 auto;
+	}
 }

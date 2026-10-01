@@ -1,7 +1,7 @@
-import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
-import crowpng from "./assets/crowsideprofile.png";
-import styles from "./Auth.module.css";
+import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import crowpng from './assets/crowsideprofile.png';
+import styles from './Auth.module.css';
 
 type FormData = {
 	email: string;
@@ -11,46 +11,44 @@ type FormData = {
 };
 
 const initial: FormData = {
-	email: "",
-	username: "",
-	password: "",
-	confirmPassword: "",
+	email: '',
+	username: '',
+	password: '',
+	confirmPassword: '',
 };
 
-const isValidEmail = (value: string) =>
-	/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(value);
+const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(value);
 
 export default function Signup() {
 	const [form, setForm] = useState<FormData>(initial);
 	const [error, setError] = useState<string | null>(null);
 
-	const update =
-		(field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) =>
-			setForm((prev) => ({ ...prev, [field]: e.target.value }));
+	const update = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) =>
+		setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
 		setError(null);
 
 		if (!form.email || !form.username || !form.password) {
-			setError("All fields are required");
+			setError('All fields are required');
 			return;
 		}
 		if (!isValidEmail(form.email)) {
-			setError("Please enter a valid email address");
+			setError('Please enter a valid email address');
 			return;
 		}
 		if (form.password !== form.confirmPassword) {
-			setError("Passwords do not match");
+			setError('Passwords do not match');
 			return;
 		}
 		if (form.password.length < 6) {
-			setError("Password must be at least 6 characters");
+			setError('Password must be at least 6 characters');
 			return;
 		}
 
 		// TODO: POST to /api/auth/signup once backend is ready
-		console.log("Signup payload:", {
+		console.log('Signup payload:', {
 			email: form.email,
 			username: form.username,
 			password: form.password,
@@ -58,19 +56,19 @@ export default function Signup() {
 	};
 
 	return (
-		<div className={styles.authPage} style={{ position: "relative" }}>
+		<div className={styles.authPage} style={{ position: 'relative' }}>
 			<img
 				src={crowpng}
 				alt="Crow"
 				style={{
-					width: "100px",
-					height: "100px",
-					position: "absolute",
+					width: '100px',
+					height: '100px',
+					position: 'absolute',
 					top: 50,
 					right: 50,
-					pointerEvents: "none",
-					background: "transparent",
-					filter: "drop-shadow(0 0 12px var(--accent-border))",
+					pointerEvents: 'none',
+					background: 'transparent',
+					filter: 'drop-shadow(0 0 12px var(--accent-border))',
 				}}
 			/>
 			<form className={styles.authForm} onSubmit={handleSubmit}>
@@ -78,32 +76,17 @@ export default function Signup() {
 
 				<label>
 					Email
-					<input
-						type="email"
-						value={form.email}
-						onChange={update("email")}
-						placeholder="you@example.com"
-					/>
+					<input type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" />
 				</label>
 
 				<label>
 					Username
-					<input
-						type="text"
-						value={form.username}
-						onChange={update("username")}
-						placeholder="username"
-					/>
+					<input type="text" value={form.username} onChange={update('username')} placeholder="username" />
 				</label>
 
 				<label>
 					Password
-					<input
-						type="password"
-						value={form.password}
-						onChange={update("password")}
-						placeholder="••••••"
-					/>
+					<input type="password" value={form.password} onChange={update('password')} placeholder="••••••" />
 				</label>
 
 				<label>
@@ -111,7 +94,7 @@ export default function Signup() {
 					<input
 						type="password"
 						value={form.confirmPassword}
-						onChange={update("confirmPassword")}
+						onChange={update('confirmPassword')}
 						placeholder="••••••"
 					/>
 				</label>

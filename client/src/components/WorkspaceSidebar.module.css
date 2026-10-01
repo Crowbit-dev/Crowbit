@@ -1,329 +1,329 @@
 .workspaceSidebar {
-  min-width: 0;
-  min-height: 0;
-  padding: 24px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  scrollbar-gutter: stable;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(28, 28, 28, 0.54);
-  backdrop-filter: blur(8px);
+	min-width: 0;
+	min-height: 0;
+	padding: 24px 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	overflow-y: auto;
+	overscroll-behavior-y: contain;
+	scrollbar-gutter: stable;
+	border-right: 1px solid rgba(255, 255, 255, 0.05);
+	background: rgba(28, 28, 28, 0.54);
+	backdrop-filter: blur(8px);
 }
 
 .workspaceSidebar h2 {
-  margin: 0;
-  font-size: 1.35rem;
+	margin: 0;
+	font-size: 1.35rem;
 }
 
 .communityEdge {
-  border-right: 1px solid color-mix(in srgb, var(--community-color) 35%, transparent);
+	border-right: 1px solid color-mix(in srgb, var(--community-color) 35%, transparent);
 }
 
 .workspaceSidebar span {
-  cursor: default;
+	cursor: default;
 }
 
 .workspaceSidebar button span {
-  cursor: inherit;
+	cursor: inherit;
 }
 
 .sidebarHeadingBlock {
-  position: relative;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow);
-  background: linear-gradient(180deg, rgba(83, 62, 82, 0.2), rgba(49, 49, 49, 0.82));
-  border-radius: 18px;
+	position: relative;
+	padding: 18px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: var(--shadow);
+	background: linear-gradient(180deg, rgba(83, 62, 82, 0.2), rgba(49, 49, 49, 0.82));
+	border-radius: 18px;
 }
 
 .sidebarHeadingDismiss {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--offwhite);
-  cursor: pointer;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: grid;
+	place-items: center;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--offwhite);
+	cursor: pointer;
 }
 
 .sidebarHeadingDismiss:hover,
 .sidebarHeadingDismiss:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.4);
-  color: var(--text-h);
+	outline: none;
+	background: rgba(83, 62, 82, 0.4);
+	color: var(--text-h);
 }
 
 .sidebarKicker {
-  color: var(--offwhite);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+	color: var(--offwhite);
+	font-size: 0.74rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
 }
 
 .sidebarCopy {
-  color: var(--offwhite);
-  line-height: 1.55;
+	color: var(--offwhite);
+	line-height: 1.55;
 }
 
 .sidebarSearchCard {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: flex-start;
-  padding: 12px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: var(--shadow);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
-  cursor: text;
-  transition: border-color 120ms ease;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	justify-content: flex-start;
+	padding: 12px 14px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: var(--shadow);
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--text);
+	cursor: text;
+	transition: border-color 120ms ease;
 }
 
 .sidebarSearchCard:focus-within {
-  border-color: var(--accent-border);
+	border-color: var(--accent-border);
 }
 
 .sidebarSearchCard input {
-  flex: 1;
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 0.86rem;
+	flex: 1;
+	min-width: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 0.86rem;
 }
 
 .sidebarSearchCard input:focus {
-  outline: none;
+	outline: none;
 }
 
 .sidebarSearchCard input::placeholder {
-  color: var(--offwhite);
-  opacity: 1;
+	color: var(--offwhite);
+	opacity: 1;
 }
 
 .sidebarClear {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--offwhite);
-  cursor: pointer;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--offwhite);
+	cursor: pointer;
 }
 
 .sidebarClear:hover,
 .sidebarClear:focus-visible {
-  outline: none;
-  background: rgba(83, 62, 82, 0.4);
-  color: var(--text-h);
+	outline: none;
+	background: rgba(83, 62, 82, 0.4);
+	color: var(--text-h);
 }
 
 .sidebarEmpty {
-  margin: 0;
-  padding: 4px 2px;
-  color: var(--offwhite);
-  font-size: 0.84rem;
+	margin: 0;
+	padding: 4px 2px;
+	color: var(--offwhite);
+	font-size: 0.84rem;
 }
 
 .sidebarSection {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
 .sidebarSectionHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-  color: var(--offwhite);
-  font-size: 0.86rem;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	justify-content: space-between;
+	color: var(--offwhite);
+	font-size: 0.86rem;
 }
 
 .sidebarSectionAction {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--offwhite);
-  font: inherit;
-  font-size: 0.86rem;
-  cursor: pointer;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--offwhite);
+	font: inherit;
+	font-size: 0.86rem;
+	cursor: pointer;
 }
 
 .sidebarSectionAction:hover,
 .sidebarSectionAction:focus-visible {
-  outline: none;
-  color: var(--text-h);
+	outline: none;
+	color: var(--text-h);
 }
 
 .sidebarList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .sidebarItem {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 13px;
-  border: 0;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    transform 120ms ease,
-    background 120ms ease,
-    border-color 120ms ease;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 12px 13px;
+	border: 0;
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.03);
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition:
+		transform 120ms ease,
+		background 120ms ease,
+		border-color 120ms ease;
 }
 
 .sidebarItem:hover,
 .sidebarItem:focus-visible {
-  outline: none;
-  transform: translateY(-1px);
-  background: color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent);
+	outline: none;
+	transform: translateY(-1px);
+	background: color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent);
 }
 
 .sidebarItem.active {
-  background: color-mix(in srgb, var(--community-color, var(--accent)) 40%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
+	background: color-mix(in srgb, var(--community-color, var(--accent)) 40%, transparent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
 }
 
 .sidebarItem.compact {
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 12px;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: 12px;
 }
 
 .sidebarItemCopy {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
 }
 
 .sidebarItemCopy strong,
 .sidebarItemCopy span {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .sidebarItemCopy span {
-  font-size: 0.85rem;
-  color: var(--offwhite);
+	font-size: 0.85rem;
+	color: var(--offwhite);
 }
 
 .sidebarAvatar {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #675566);
-  color: white;
-  font-weight: 800;
-  user-select: none;
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--accent), #675566);
+	color: white;
+	font-weight: 800;
+	user-select: none;
 }
 
 .sidebarPresence {
-  position: relative;
-  flex: 0 0 auto;
+	position: relative;
+	flex: 0 0 auto;
 }
 
 .sidebarItemIcon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--offwhite);
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--offwhite);
 }
 
 .sidebarSearchCard svg,
 .sidebarItemIcon svg {
-  flex: 0 0 auto;
-  color: var(--offwhite);
+	flex: 0 0 auto;
+	color: var(--offwhite);
 }
 
 .sidebarChipList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
 }
 
 .sidebarChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: inherit;
-  font-size: 0.84rem;
-  cursor: pointer;
-  user-select: none;
-  transition:
-    transform 120ms ease,
-    background 120ms ease,
-    color 120ms ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 12px;
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.04);
+	color: inherit;
+	font-size: 0.84rem;
+	cursor: pointer;
+	user-select: none;
+	transition:
+		transform 120ms ease,
+		background 120ms ease,
+		color 120ms ease;
 }
 
 .sidebarChip:hover,
 .sidebarChip:focus-visible {
-  outline: none;
-  transform: translateY(-1px);
-  background: rgba(83, 62, 82, 0.34);
-  color: var(--text-h);
+	outline: none;
+	transform: translateY(-1px);
+	background: rgba(83, 62, 82, 0.34);
+	color: var(--text-h);
 }
 
 .sidebarChip:active {
-  transform: translateY(0);
-  background: rgba(83, 62, 82, 0.5);
+	transform: translateY(0);
+	background: rgba(83, 62, 82, 0.5);
 }
 
 .sidebarChip.active {
-  background: rgba(83, 62, 82, 0.45);
-  color: var(--text-h);
+	background: rgba(83, 62, 82, 0.45);
+	color: var(--text-h);
 }
 
 @media (max-width: 980px) {
-  .workspaceSidebar {
-    order: 2;
-    overflow: visible;
-    border-right: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-  }
+	.workspaceSidebar {
+		order: 2;
+		overflow: visible;
+		border-right: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.05);
+	}
 }
 
 @media (max-width: 640px) {
-  .workspaceSidebar {
-    padding: 16px;
-  }
+	.workspaceSidebar {
+		padding: 16px;
+	}
 }
