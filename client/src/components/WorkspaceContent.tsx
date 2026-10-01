@@ -22,6 +22,7 @@ type WorkspaceContentProps = {
   feedScope: string
   notifFilter: 'all' | NotificationItem['kind']
   searchFilter: SearchFilter
+  appliedSearchQuery: string
   onOpenChannel: (communityName: string, channelId: string) => void
   onOpenDm: (dmId: string) => void
   onOpenThread: (post: Post) => void
@@ -52,6 +53,7 @@ function WorkspaceContent({
   feedScope,
   notifFilter,
   searchFilter,
+  appliedSearchQuery,
   onOpenChannel,
   onOpenDm,
   onOpenThread,
@@ -290,7 +292,7 @@ function WorkspaceContent({
   }
 
   if (mode === 'search') {
-    const q = searchQuery.trim().toLowerCase()
+    const q = appliedSearchQuery.trim().toLowerCase()
     const matchedPosts = searchFilter === 'user' || searchFilter === 'community' ? [] : matchPosts(posts, q)
     const matchedUsers = searchFilter === 'post' || searchFilter === 'community' ? [] : matchUsers(communities, directMessages, q)
     const matchedCommunities = searchFilter === 'post' || searchFilter === 'user' ? [] : matchCommunities(communities, q)
@@ -309,12 +311,17 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
-            <h2>{q ? 'Results' : 'Recent results'}{searchFilter !== 'all' && ` · ${searchFilterLabels[searchFilter]}`}</h2>
-            <span>{totalResults} items</span>
+            <h2>{q ? 'Results' : 'Search'}{searchFilter !== 'all' && ` · ${searchFilterLabels[searchFilter]}`}</h2>
+            {q && <span>{totalResults} items</span>}
           </div>
-          {totalResults === 0 ? (
+          {!q ? (
             <div className={styles.emptyState}>
-              <strong>No results for “{searchQuery.trim()}”</strong>
+              <strong>Search the network</strong>
+              <p>Type a keyword and press Enter to search posts, users, and communities.</p>
+            </div>
+          ) : totalResults === 0 ? (
+            <div className={styles.emptyState}>
+              <strong>No results for “{appliedSearchQuery.trim()}”</strong>
               <p>Try a different keyword, or browse spaces and friends instead.</p>
               <div>
                 <button type="button" className={styles.contentChip} onClick={() => onSearchQuery('')}>

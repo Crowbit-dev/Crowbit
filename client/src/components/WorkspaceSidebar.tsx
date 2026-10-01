@@ -24,6 +24,7 @@ type WorkspaceSidebarProps = {
   recentSearches: string[]
   onCommitSearch: (query: string) => void
   onClearRecentSearches: () => void
+  appliedSearchQuery: string
   onSelectCommunity: (communityName: string) => void
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
@@ -89,6 +90,7 @@ function WorkspaceSidebar({
   recentSearches,
   onCommitSearch,
   onClearRecentSearches,
+  appliedSearchQuery,
   onSelectCommunity,
   onSelectDm,
   searchQuery,
@@ -256,11 +258,13 @@ function WorkspaceSidebar({
       { id: 'user', icon: <User size={16} aria-hidden="true" /> },
       { id: 'community', icon: <Users size={16} aria-hidden="true" /> },
     ] as const
+    const appliedQuery = appliedSearchQuery.trim().toLowerCase()
     const countFor = (id: SearchFilter) => {
-      if (id === 'post') return matchPosts(posts, query).length
-      if (id === 'user') return matchUsers(communities, directMessages, query).length
-      if (id === 'community') return matchCommunities(communities, query).length
-      return matchPosts(posts, query).length + matchUsers(communities, directMessages, query).length + matchCommunities(communities, query).length
+      if (!appliedQuery) return 0
+      if (id === 'post') return matchPosts(posts, appliedQuery).length
+      if (id === 'user') return matchUsers(communities, directMessages, appliedQuery).length
+      if (id === 'community') return matchCommunities(communities, appliedQuery).length
+      return matchPosts(posts, appliedQuery).length + matchUsers(communities, directMessages, appliedQuery).length + matchCommunities(communities, appliedQuery).length
     }
 
     return (
@@ -305,7 +309,7 @@ function WorkspaceSidebar({
                   key={entry}
                   type="button"
                   className={`${styles.sidebarItem} ${styles.compact}`}
-                  onClick={() => onSearchQuery(entry)}
+                  onClick={() => onCommitSearch(entry)}
                 >
                   <span className={styles.sidebarItemIcon}><History size={16} aria-hidden="true" /></span>
                   <span className={styles.sidebarItemCopy}>

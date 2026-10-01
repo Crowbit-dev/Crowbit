@@ -95,6 +95,7 @@ function App() {
   const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all')
   const [searchFilter, setSearchFilter] = useState<SearchFilter>('all')
   const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches)
+  const [appliedSearch, setAppliedSearch] = useState('')
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
   const [searchQueries, setSearchQueries] = useState<Record<WorkspaceMode, string>>({
@@ -157,6 +158,7 @@ function App() {
     const trimmed = query.trim().slice(0, 80)
     if (!trimmed) return
     setSearchQueries((prev) => ({ ...prev, search: trimmed }))
+    setAppliedSearch(trimmed)
     setRecentSearches((prev) => [trimmed, ...prev.filter((entry) => entry.toLowerCase() !== trimmed.toLowerCase())].slice(0, MAX_RECENT_SEARCHES))
   }
 
@@ -323,12 +325,16 @@ function App() {
           onSelectNotifFilter={setNotifFilter}
           onSelectDm={selectDm}
           searchQuery={searchQueries[mode]}
-          onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
+          onSearchQuery={(query) => {
+            setSearchQueries((prev) => ({ ...prev, [mode]: query }))
+            if (mode === 'search' && query === '') setAppliedSearch('')
+          }}
           searchFilter={searchFilter}
           onSelectSearchFilter={setSearchFilter}
           recentSearches={recentSearches}
           onCommitSearch={commitSearch}
           onClearRecentSearches={clearRecentSearches}
+          appliedSearchQuery={appliedSearch}
         />
 
         <WorkspaceContent
@@ -347,8 +353,12 @@ function App() {
           threadShift={activeThread ? clampedThreadWidth : 0}
           openMenu={openMenu}
           searchQuery={searchQueries[mode]}
-          onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
+          onSearchQuery={(query) => {
+            setSearchQueries((prev) => ({ ...prev, [mode]: query }))
+            if (mode === 'search' && query === '') setAppliedSearch('')
+          }}
           searchFilter={searchFilter}
+          appliedSearchQuery={appliedSearch}
           onOpenDm={openDm}
         />
 
