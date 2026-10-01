@@ -6,7 +6,7 @@ import type { Community, CommunityChannel, DirectMessage, MessageEntry, Notifica
 export const communities: Community[] = [
   {
     name: 'Design',
-    color: '#533e52',
+    color: '#dc143c',
     joined: true,
     channels: [
       { id: 'general', name: 'general', topic: 'Share work, critique, and weekly goals', unread: 6 },
@@ -22,7 +22,7 @@ export const communities: Community[] = [
   },
   {
     name: 'Dev',
-    color: '#423341',
+    color: '#2563eb',
     joined: true,
     channels: [
       { id: 'backend', name: 'backend', topic: 'APIs, auth, and service architecture', unread: 4 },

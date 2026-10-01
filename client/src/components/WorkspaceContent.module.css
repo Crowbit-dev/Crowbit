@@ -1013,6 +1013,33 @@
   gap: 14px;
 }
 
+.resultCommunityCard {
+  width: min(100%, 760px);
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--community-color) 40%, transparent);
+  box-shadow: var(--shadow-card);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--community-color) 30%, rgba(49, 49, 49, 0.82)),
+      rgba(49, 49, 49, 0.82)
+    );
+  border-radius: 14px;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.resultCommunityCard:hover,
+.resultCommunityCard:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--community-color) 65%, transparent);
+  transform: translateY(-1px);
+}
+
 .resultCommunityCopy {
   flex: 1;
   min-width: 0;

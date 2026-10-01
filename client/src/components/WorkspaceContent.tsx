@@ -6,6 +6,7 @@ import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
 import ConversationView from './ConversationView'
+import { gradientCommunityColor } from '../lib/communityColor'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import { searchFilterLabels } from '../lib/searchFilterLabels'
 import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching'
@@ -395,7 +396,8 @@ function WorkspaceContent({
                 return (
                   <article
                     key={community.name}
-                    className={`${styles.postCard} ${styles.resultPostCard}`}
+                    className={styles.resultCommunityCard}
+                    style={{ '--community-color': gradientCommunityColor(community.color) } as CSSProperties}
                     onClick={openResult}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -408,7 +410,6 @@ function WorkspaceContent({
                     aria-label={`${community.name} community — open`}
                   >
                     <div className={styles.resultCommunityRow}>
-                      <span className={shared.sidebarDot} style={{ background: community.color }} aria-hidden="true" />
                       <div className={styles.resultCommunityCopy}>
                         <strong>{community.name}</strong>
                         <p>{community.members.length} members · {community.channels.length} channels</p>
