@@ -93,7 +93,7 @@ function App() {
   const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels))
   const [activeDmId, setActiveDmId] = useState(lastVisited.dm)
   const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all')
-  const [searchFilter, setSearchFilter] = useState<SearchFilter>('all')
+  const [searchFilter, setSearchFilter] = useState<SearchFilter>('post')
   const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches)
   const [appliedSearch, setAppliedSearch] = useState('')
   const [localPosts, setLocalPosts] = useState(posts)
@@ -163,6 +163,11 @@ function App() {
   }
 
   const clearRecentSearches = () => setRecentSearches([])
+
+  const resetSearch = () => {
+    setSearchQueries((prev) => ({ ...prev, search: '' }))
+    setAppliedSearch('')
+  }
 
   const openChannel = (communityName: string, channelId: string) => {
     selectChannel(communityName, channelId)
@@ -314,7 +319,6 @@ function App() {
           mode={mode}
           communities={communities}
           directMessages={directMessages}
-          posts={localPosts}
           activeCommunityName={activeCommunityName}
           activeDmId={activeDmId}
           feedScope={feedScope}
@@ -325,16 +329,12 @@ function App() {
           onSelectNotifFilter={setNotifFilter}
           onSelectDm={selectDm}
           searchQuery={searchQueries[mode]}
-          onSearchQuery={(query) => {
-            setSearchQueries((prev) => ({ ...prev, [mode]: query }))
-            if (mode === 'search' && query === '') setAppliedSearch('')
-          }}
+          onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
           searchFilter={searchFilter}
           onSelectSearchFilter={setSearchFilter}
           recentSearches={recentSearches}
           onCommitSearch={commitSearch}
           onClearRecentSearches={clearRecentSearches}
-          appliedSearchQuery={appliedSearch}
         />
 
         <WorkspaceContent
@@ -353,10 +353,7 @@ function App() {
           threadShift={activeThread ? clampedThreadWidth : 0}
           openMenu={openMenu}
           searchQuery={searchQueries[mode]}
-          onSearchQuery={(query) => {
-            setSearchQueries((prev) => ({ ...prev, [mode]: query }))
-            if (mode === 'search' && query === '') setAppliedSearch('')
-          }}
+          onResetSearch={resetSearch}
           searchFilter={searchFilter}
           appliedSearchQuery={appliedSearch}
           onOpenDm={openDm}

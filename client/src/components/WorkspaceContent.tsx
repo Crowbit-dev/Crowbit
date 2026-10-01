@@ -30,7 +30,7 @@ type WorkspaceContentProps = {
   threadShift: number
   openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void
   searchQuery: string
-  onSearchQuery: (query: string) => void
+  onResetSearch: () => void
 }
 
 // TEMPORARY: formats mock counts until the backend provides real numbers.
@@ -61,7 +61,7 @@ function WorkspaceContent({
   threadShift,
   openMenu,
   searchQuery,
-  onSearchQuery,
+  onResetSearch,
 }: WorkspaceContentProps) {
   const activeCommunity = useMemo(
     () => communities.find((community) => community.name === activeCommunityName) ?? communities[0],
@@ -311,7 +311,7 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
-            <h2>{q ? 'Results' : 'Search'}{searchFilter !== 'all' && ` · ${searchFilterLabels[searchFilter]}`}</h2>
+            <h2>{q ? 'Results' : 'Search'}{` · ${searchFilterLabels[searchFilter]}`}</h2>
             {q && <span>{totalResults} items</span>}
           </div>
           {!q ? (
@@ -324,7 +324,7 @@ function WorkspaceContent({
               <strong>No results for “{appliedSearchQuery.trim()}”</strong>
               <p>Try a different keyword, or browse spaces and friends instead.</p>
               <div>
-                <button type="button" className={styles.contentChip} onClick={() => onSearchQuery('')}>
+                <button type="button" className={styles.contentChip} onClick={onResetSearch}>
                   Clear search
                 </button>
               </div>
@@ -346,7 +346,6 @@ function WorkspaceContent({
                     <strong>{community.name}</strong>
                     <p>{community.channels.length} channels · {community.members.length} members</p>
                   </div>
-                  <span>Community</span>
                 </article>
               ))}
               {matchedUsers.map((user) => (

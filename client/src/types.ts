@@ -81,7 +81,7 @@ export type ConversationMutuals = {
   friends: string[]
 }
 
-export type SearchFilter = 'all' | 'post' | 'user' | 'community'
+export type SearchFilter = 'post' | 'user' | 'community'
 
 export type SearchUser = {
   name: string

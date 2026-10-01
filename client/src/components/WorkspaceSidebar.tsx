@@ -1,9 +1,8 @@
 import { AtSign, FileText, Hash, Heart, History, House, LayoutGrid, MessageCircle, Reply, Search, Settings, User, UserPlus, Users, X } from 'lucide-react'
 import { useState } from 'react'
-import type { Community, DirectMessage, NotificationKind, Post, SearchFilter, WorkspaceMode } from '../types'
+import type { Community, DirectMessage, NotificationKind, SearchFilter, WorkspaceMode } from '../types'
 import { notifications } from '../appData'
 import { searchFilterLabels } from '../lib/searchFilterLabels'
-import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
@@ -12,7 +11,6 @@ type WorkspaceSidebarProps = {
   mode: WorkspaceMode
   communities: Community[]
   directMessages: DirectMessage[]
-  posts: Post[]
   activeCommunityName: string
   activeDmId: string
   feedScope: string
@@ -24,7 +22,6 @@ type WorkspaceSidebarProps = {
   recentSearches: string[]
   onCommitSearch: (query: string) => void
   onClearRecentSearches: () => void
-  appliedSearchQuery: string
   onSelectCommunity: (communityName: string) => void
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
@@ -78,7 +75,6 @@ function WorkspaceSidebar({
   mode,
   communities,
   directMessages,
-  posts,
   activeCommunityName,
   activeDmId,
   feedScope,
@@ -90,7 +86,6 @@ function WorkspaceSidebar({
   recentSearches,
   onCommitSearch,
   onClearRecentSearches,
-  appliedSearchQuery,
   onSelectCommunity,
   onSelectDm,
   searchQuery,
@@ -253,19 +248,10 @@ function WorkspaceSidebar({
 
   if (mode === 'search') {
     const filters = [
-      { id: 'all', icon: <LayoutGrid size={16} aria-hidden="true" /> },
       { id: 'post', icon: <FileText size={16} aria-hidden="true" /> },
       { id: 'user', icon: <User size={16} aria-hidden="true" /> },
       { id: 'community', icon: <Users size={16} aria-hidden="true" /> },
     ] as const
-    const appliedQuery = appliedSearchQuery.trim().toLowerCase()
-    const countFor = (id: SearchFilter) => {
-      if (!appliedQuery) return 0
-      if (id === 'post') return matchPosts(posts, appliedQuery).length
-      if (id === 'user') return matchUsers(communities, directMessages, appliedQuery).length
-      if (id === 'community') return matchCommunities(communities, appliedQuery).length
-      return matchPosts(posts, appliedQuery).length + matchUsers(communities, directMessages, appliedQuery).length + matchCommunities(communities, appliedQuery).length
-    }
 
     return (
       <aside className={styles.workspaceSidebar}>
@@ -289,7 +275,6 @@ function WorkspaceSidebar({
                 <span className={styles.sidebarItemCopy}>
                   <strong>{searchFilterLabels[filter.id]}</strong>
                 </span>
-                <span className={shared.sidebarUnreadCount}>{countFor(filter.id)}</span>
               </button>
             ))}
           </div>
