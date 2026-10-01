@@ -298,19 +298,6 @@ function WorkspaceContent({
 
     return (
       <main className={styles.workspaceContent}>
-        <section className={`${styles.panelStack} ${styles.searchGrid}`}>
-          {[
-            { title: 'Privacy by default', copy: 'Search results respect visibility and data ownership.' },
-            { title: 'Communities first', copy: 'Jump directly into the space that matches your query.' },
-            { title: 'People and DMs', copy: 'Find the person or conversation you need faster.' },
-          ].map((item) => (
-            <article key={item.title} className={styles.infoCard}>
-              <strong>{item.title}</strong>
-              <p>{item.copy}</p>
-            </article>
-          ))}
-        </section>
-
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
             <h2>{q ? 'Results' : 'Recent results'}</h2>
