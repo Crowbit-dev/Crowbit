@@ -132,17 +132,17 @@ function WorkspaceContent({
               <Video size={17} aria-hidden="true" />
             </button>
             {/* TEMPORARY: decorative until pins land. */}
-            <button type="button" className={styles.dmBarAction} aria-label="Pinned messages (coming soon)">
+              <button type="button" className={styles.dmBarAction} aria-label="Pinned messages">
               <Pin size={17} aria-hidden="true" />
             </button>
             {/* TEMPORARY: decorative until group DMs land. */}
-            <button type="button" className={styles.dmBarAction} aria-label="Create group (coming soon)">
+            <button type="button" className={styles.dmBarAction} aria-label="Create group">
               <UserPlus size={17} aria-hidden="true" />
             </button>
             {/* TEMPORARY: decorative until message search lands. */}
             <label className={styles.dmBarSearch}>
               <Search size={15} aria-hidden="true" />
-              <input type="search" placeholder="Search" aria-label="Search conversation (coming soon)" />
+              <input type="search" placeholder="Search" aria-label="Search conversation" />
             </label>
           </div>
         </header>
@@ -509,13 +509,13 @@ function WorkspaceContent({
             <span className={styles.communityBarTopic}>{activeChannel.topic}</span>
             <div className={styles.communityBarActions}>
               {/* TEMPORARY: decorative until channel pins land. */}
-              <button type="button" className={styles.dmBarAction} aria-label="Pinned messages (coming soon)">
+            <button type="button" className={styles.dmBarAction} aria-label="Pinned messages">
                 <Pin size={17} aria-hidden="true" />
               </button>
               {/* TEMPORARY: decorative until channel search lands. */}
               <label className={styles.dmBarSearch}>
                 <Search size={15} aria-hidden="true" />
-                <input type="search" placeholder="Search" aria-label="Search channel (coming soon)" />
+                <input type="search" placeholder="Search" aria-label="Search channel" />
               </label>
             </div>
           </div>

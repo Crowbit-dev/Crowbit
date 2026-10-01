@@ -1,4 +1,4 @@
-import { AlignLeft, Check, ChevronDown, Paperclip, X } from 'lucide-react'
+import { AlignLeft, Check, ChevronDown, Globe, Paperclip, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import type { Community, Post } from '../types'
 import styles from './PostModal.module.css'
@@ -113,7 +113,11 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
             <div className={styles.avatar}>N</div>
             <div className={styles.authorCopy}>
               <strong>New post</strong>
-              <span>Visible to the whole network</span>
+              {/* TEMPORARY: future post visibility button until visibility controls land. */}
+              <button type="button" className={styles.visibilityButton} aria-label="Post visibility">
+                <Globe size={13} aria-hidden="true" />
+                Visible to the whole network
+              </button>
             </div>
           </div>
           <button type="button" className={styles.close} onClick={onClose} aria-label="Close composer" title="Close">
