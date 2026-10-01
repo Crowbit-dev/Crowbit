@@ -624,7 +624,7 @@
 
 .feedCommunityRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
   padding: 14px 18px 16px;
 }
@@ -635,7 +635,6 @@
   flex: 0 0 auto;
   width: 44px;
   height: 44px;
-  margin-top: -36px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--community-color), #313131);
   color: white;
