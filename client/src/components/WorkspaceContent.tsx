@@ -344,7 +344,7 @@ function WorkspaceContent({
                 <article key={community.name} className={styles.resultRow}>
                   <div>
                     <strong>{community.name}</strong>
-                    <p>{community.channels.length} channels · {community.members.length} members</p>
+                    <p>{community.members.length} members · {community.channels.length} channels</p>
                   </div>
                 </article>
               ))}
