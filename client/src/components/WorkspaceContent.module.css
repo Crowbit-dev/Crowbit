@@ -923,10 +923,22 @@
   font-size: 0.85rem;
 }
 
+.postAuthorRow strong {
+  cursor: pointer;
+}
+
+.postAuthorRow strong:hover {
+  text-decoration: underline;
+}
+
 .postHandle,
 .postTime,
 .postDivider {
   color: var(--offwhite);
+}
+
+.postHandle {
+  cursor: pointer;
 }
 
 .postDivider {
@@ -939,6 +951,11 @@
   color: color-mix(in srgb, var(--community-color) 55%, white);
   font-size: 0.74rem;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.communityTag:hover {
+  text-decoration: underline;
 }
 
 .postImage {
