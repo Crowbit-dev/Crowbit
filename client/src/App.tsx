@@ -7,7 +7,7 @@ import WorkspaceContent from './components/WorkspaceContent'
 import WorkspaceRail from './components/WorkspaceRail'
 import WorkspaceSidebar from './components/WorkspaceSidebar'
 import { communities, directMessages, notifications, posts } from './appData'
-import type { NotificationKind, Post, WorkspaceMode } from './types'
+import type { NotificationKind, Post, SearchFilter, WorkspaceMode } from './types'
 
 type LastVisited = {
   community: string
@@ -17,6 +17,8 @@ type LastVisited = {
 }
 
 const LAST_VISITED_KEY = 'crowbit-last-visited'
+const RECENT_SEARCHES_KEY = 'crowbit-recent-searches'
+const MAX_RECENT_SEARCHES = 6
 
 function isFeedScope(value: unknown): value is string {
   return value === 'all' ||
@@ -29,6 +31,18 @@ function channelFor(communityName: string, channels: Record<string, string>): st
   const stored = channels[community.name]
   if (stored && community.channels.some((channel) => channel.id === stored)) return stored
   return community.channels[0]?.id ?? 'general'
+}
+
+function loadRecentSearches(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_SEARCHES_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0).map((entry) => entry.trim().slice(0, 80)).slice(0, MAX_RECENT_SEARCHES)
+  } catch {
+    return []
+  }
 }
 
 function loadLastVisited(): LastVisited {
@@ -79,6 +93,8 @@ function App() {
   const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels))
   const [activeDmId, setActiveDmId] = useState(lastVisited.dm)
   const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all')
+  const [searchFilter, setSearchFilter] = useState<SearchFilter>('all')
+  const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches)
   const [localPosts, setLocalPosts] = useState(posts)
   const [composerOpen, setComposerOpen] = useState(false)
   const [searchQueries, setSearchQueries] = useState<Record<WorkspaceMode, string>>({
@@ -132,6 +148,20 @@ function App() {
     setLastVisited((prev) => ({ ...prev, dm: dmId }))
   }
 
+  const openDm = (dmId: string) => {
+    selectDm(dmId)
+    setMode('dms')
+  }
+
+  const commitSearch = (query: string) => {
+    const trimmed = query.trim().slice(0, 80)
+    if (!trimmed) return
+    setSearchQueries((prev) => ({ ...prev, search: trimmed }))
+    setRecentSearches((prev) => [trimmed, ...prev.filter((entry) => entry.toLowerCase() !== trimmed.toLowerCase())].slice(0, MAX_RECENT_SEARCHES))
+  }
+
+  const clearRecentSearches = () => setRecentSearches([])
+
   const openChannel = (communityName: string, channelId: string) => {
     selectChannel(communityName, channelId)
     setMode('communities')
@@ -179,6 +209,14 @@ function App() {
       // Storage unavailable — tracking still applies for this session.
     }
   }, [lastVisited])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recentSearches))
+    } catch {
+      // Storage unavailable — recents still apply for this session.
+    }
+  }, [recentSearches])
 
   const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle = false) => {
     setMenu((prev) => (toggle && prev && invoker !== null && prev.invoker === invoker
@@ -274,6 +312,7 @@ function App() {
           mode={mode}
           communities={communities}
           directMessages={directMessages}
+          posts={localPosts}
           activeCommunityName={activeCommunityName}
           activeDmId={activeDmId}
           feedScope={feedScope}
@@ -285,6 +324,11 @@ function App() {
           onSelectDm={selectDm}
           searchQuery={searchQueries[mode]}
           onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
+          searchFilter={searchFilter}
+          onSelectSearchFilter={setSearchFilter}
+          recentSearches={recentSearches}
+          onCommitSearch={commitSearch}
+          onClearRecentSearches={clearRecentSearches}
         />
 
         <WorkspaceContent
@@ -304,6 +348,8 @@ function App() {
           openMenu={openMenu}
           searchQuery={searchQueries[mode]}
           onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
+          searchFilter={searchFilter}
+          onOpenDm={openDm}
         />
 
         {activeThread && (

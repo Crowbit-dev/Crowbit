@@ -80,3 +80,13 @@ export type ConversationMutuals = {
   communities: { name: string; background?: string }[]
   friends: string[]
 }
+
+export type SearchFilter = 'all' | 'post' | 'user' | 'community'
+
+export type SearchUser = {
+  name: string
+  detail: string
+  status: 'online' | 'away' | 'offline'
+  dmId?: string
+  community: string
+}

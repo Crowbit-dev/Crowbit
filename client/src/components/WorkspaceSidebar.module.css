@@ -145,6 +145,22 @@
   font-size: 0.86rem;
 }
 
+.sidebarSectionAction {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--offwhite);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.sidebarSectionAction:hover,
+.sidebarSectionAction:focus-visible {
+  outline: none;
+  color: var(--text-h);
+}
+
 .sidebarList {
   display: flex;
   flex-direction: column;

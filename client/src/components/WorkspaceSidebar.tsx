@@ -1,7 +1,9 @@
-import { AtSign, Hash, Heart, House, LayoutGrid, MessageCircle, Reply, Search, Settings, UserPlus, Users, X } from 'lucide-react'
+import { AtSign, FileText, Hash, Heart, History, House, LayoutGrid, MessageCircle, Reply, Search, Settings, User, UserPlus, Users, X } from 'lucide-react'
 import { useState } from 'react'
-import type { Community, DirectMessage, NotificationKind, WorkspaceMode } from '../types'
+import type { Community, DirectMessage, NotificationKind, Post, SearchFilter, WorkspaceMode } from '../types'
 import { notifications } from '../appData'
+import { searchFilterLabels } from '../lib/searchFilterLabels'
+import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceSidebar.module.css'
@@ -10,12 +12,18 @@ type WorkspaceSidebarProps = {
   mode: WorkspaceMode
   communities: Community[]
   directMessages: DirectMessage[]
+  posts: Post[]
   activeCommunityName: string
   activeDmId: string
   feedScope: string
   onSelectFeedScope: (scope: string) => void
   notifFilter: 'all' | NotificationKind
   onSelectNotifFilter: (filter: 'all' | NotificationKind) => void
+  searchFilter: SearchFilter
+  onSelectSearchFilter: (filter: SearchFilter) => void
+  recentSearches: string[]
+  onCommitSearch: (query: string) => void
+  onClearRecentSearches: () => void
   onSelectCommunity: (communityName: string) => void
   onSelectChannel: (communityName: string, channelId: string) => void
   onSelectDm: (dmId: string) => void
@@ -23,13 +31,16 @@ type WorkspaceSidebarProps = {
   onSearchQuery: (query: string) => void
 }
 
-function SidebarSearch({ value, onChange, placeholder }: { value: string; onChange: (query: string) => void; placeholder: string }) {
+function SidebarSearch({ value, onChange, onCommit, placeholder }: { value: string; onChange: (query: string) => void; onCommit?: (query: string) => void; placeholder: string }) {
   return (
     <label className={styles.sidebarSearchCard}>
       <Search aria-hidden="true" />
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') onCommit?.(value)
+        }}
         placeholder={placeholder}
         aria-label={placeholder}
         maxLength={80}
@@ -66,12 +77,18 @@ function WorkspaceSidebar({
   mode,
   communities,
   directMessages,
+  posts,
   activeCommunityName,
   activeDmId,
   feedScope,
   onSelectFeedScope,
   notifFilter,
   onSelectNotifFilter,
+  searchFilter,
+  onSelectSearchFilter,
+  recentSearches,
+  onCommitSearch,
+  onClearRecentSearches,
   onSelectCommunity,
   onSelectDm,
   searchQuery,
@@ -233,22 +250,72 @@ function WorkspaceSidebar({
   }
 
   if (mode === 'search') {
+    const filters = [
+      { id: 'all', icon: <LayoutGrid size={16} aria-hidden="true" /> },
+      { id: 'post', icon: <FileText size={16} aria-hidden="true" /> },
+      { id: 'user', icon: <User size={16} aria-hidden="true" /> },
+      { id: 'community', icon: <Users size={16} aria-hidden="true" /> },
+    ] as const
+    const countFor = (id: SearchFilter) => {
+      if (id === 'post') return matchPosts(posts, query).length
+      if (id === 'user') return matchUsers(communities, directMessages, query).length
+      if (id === 'community') return matchCommunities(communities, query).length
+      return matchPosts(posts, query).length + matchUsers(communities, directMessages, query).length + matchCommunities(communities, query).length
+    }
+
     return (
       <aside className={styles.workspaceSidebar}>
-        <SidebarHeading key="search" id="search" kicker="Search" title="Find anything" copy="Search posts, people, and communities from one place." />
+        <SidebarHeading key="search" id="search" kicker="Search" title="Find anything" copy="Search posts, users, and communities from one place." />
 
-        <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search the network" />
+        <SidebarSearch value={searchQuery} onChange={onSearchQuery} onCommit={onCommitSearch} placeholder="Search the network" />
 
         <div className={styles.sidebarSection}>
           <div className={styles.sidebarSectionHead}>
             <span>Filters</span>
           </div>
-          <div className={styles.sidebarChipList}>
-            <button type="button" className={`${styles.sidebarChip} ${styles.active}`}>Posts</button>
-            <button type="button" className={styles.sidebarChip}>People</button>
-            <button type="button" className={styles.sidebarChip}>Communities</button>
+          <div className={styles.sidebarList}>
+            {filters.map((filter) => (
+              <button
+                key={filter.id}
+                type="button"
+                className={`${styles.sidebarItem} ${searchFilter === filter.id ? styles.active : ''}`}
+                onClick={() => onSelectSearchFilter(filter.id)}
+              >
+                <span className={styles.sidebarItemIcon}>{filter.icon}</span>
+                <span className={styles.sidebarItemCopy}>
+                  <strong>{searchFilterLabels[filter.id]}</strong>
+                </span>
+                <span className={shared.sidebarUnreadCount}>{countFor(filter.id)}</span>
+              </button>
+            ))}
           </div>
         </div>
+
+        {recentSearches.length > 0 && (
+          <div className={styles.sidebarSection}>
+            <div className={styles.sidebarSectionHead}>
+              <span>Recent</span>
+              <button type="button" className={styles.sidebarSectionAction} onClick={onClearRecentSearches}>
+                Clear
+              </button>
+            </div>
+            <div className={styles.sidebarList}>
+              {recentSearches.map((entry) => (
+                <button
+                  key={entry}
+                  type="button"
+                  className={`${styles.sidebarItem} ${styles.compact}`}
+                  onClick={() => onSearchQuery(entry)}
+                >
+                  <span className={styles.sidebarItemIcon}><History size={16} aria-hidden="true" /></span>
+                  <span className={styles.sidebarItemCopy}>
+                    <strong>{entry}</strong>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </aside>
     )
   }

@@ -1,12 +1,14 @@
 import { ArrowBigUp, AtSign, Ban, CheckCheck, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
-import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, WorkspaceMode } from '../types'
+import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, SearchFilter, SearchUser, WorkspaceMode } from '../types'
 import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
 import ConversationView from './ConversationView'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
+import { searchFilterLabels } from '../lib/searchFilterLabels'
+import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching'
 import styles from './WorkspaceContent.module.css'
 
 type WorkspaceContentProps = {
@@ -19,7 +21,9 @@ type WorkspaceContentProps = {
   activeDmId: string
   feedScope: string
   notifFilter: 'all' | NotificationItem['kind']
+  searchFilter: SearchFilter
   onOpenChannel: (communityName: string, channelId: string) => void
+  onOpenDm: (dmId: string) => void
   onOpenThread: (post: Post) => void
   onDeletePost: (post: Post) => void
   threadShift: number
@@ -47,7 +51,9 @@ function WorkspaceContent({
   activeDmId,
   feedScope,
   notifFilter,
+  searchFilter,
   onOpenChannel,
+  onOpenDm,
   onOpenThread,
   onDeletePost,
   threadShift,
@@ -285,25 +291,28 @@ function WorkspaceContent({
 
   if (mode === 'search') {
     const q = searchQuery.trim().toLowerCase()
-    const matchedPosts = q
-      ? posts.filter((post) => `${post.title} ${post.body} ${post.author} ${post.handle} ${post.community}`.toLowerCase().includes(q))
-      : posts.slice(0, 2)
-    const matchedCommunities = q
-      ? communities.filter((community) =>
-          `${community.name} ${community.channels.map((channel) => `${channel.name} ${channel.topic}`).join(' ')} ${community.members.map((member) => `${member.name} ${member.role}`).join(' ')}`
-            .toLowerCase()
-            .includes(q),
-        )
-      : communities.slice(0, 2)
+    const matchedPosts = searchFilter === 'user' || searchFilter === 'community' ? [] : matchPosts(posts, q)
+    const matchedUsers = searchFilter === 'post' || searchFilter === 'community' ? [] : matchUsers(communities, directMessages, q)
+    const matchedCommunities = searchFilter === 'post' || searchFilter === 'user' ? [] : matchCommunities(communities, q)
+    const totalResults = matchedPosts.length + matchedUsers.length + matchedCommunities.length
+    const statusLabel = (status: SearchUser['status']) => status === 'online' ? 'Online' : status === 'away' ? 'Idle' : 'Offline'
+    const openUser = (user: SearchUser) => {
+      if (user.dmId) {
+        onOpenDm(user.dmId)
+        return
+      }
+      const community = communities.find((entry) => entry.name === user.community)
+      if (community) onOpenChannel(community.name, community.channels[0]?.id ?? 'general')
+    }
 
     return (
       <main className={styles.workspaceContent}>
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
-            <h2>{q ? 'Results' : 'Recent results'}</h2>
-            <span>{matchedPosts.length + matchedCommunities.length} items</span>
+            <h2>{q ? 'Results' : 'Recent results'}{searchFilter !== 'all' && ` · ${searchFilterLabels[searchFilter]}`}</h2>
+            <span>{totalResults} items</span>
           </div>
-          {matchedPosts.length === 0 && matchedCommunities.length === 0 ? (
+          {totalResults === 0 ? (
             <div className={styles.emptyState}>
               <strong>No results for “{searchQuery.trim()}”</strong>
               <p>Try a different keyword, or browse spaces and friends instead.</p>
@@ -332,6 +341,25 @@ function WorkspaceContent({
                   </div>
                   <span>Community</span>
                 </article>
+              ))}
+              {matchedUsers.map((user) => (
+                <button
+                  key={user.name}
+                  type="button"
+                  className={styles.notifRow}
+                  onClick={() => openUser(user)}
+                  aria-label={`${user.name} — ${user.detail}`}
+                >
+                  <span className={styles.notifAvatar}>{user.name[0]}</span>
+                  <span className={styles.notifCopy}>
+                    <span className={styles.notifText}>
+                      <strong>{user.name}</strong>
+                    </span>
+                    <span className={styles.notifMeta}>
+                      {user.detail} · {statusLabel(user.status)}
+                    </span>
+                  </span>
+                </button>
               ))}
             </div>
           )}
