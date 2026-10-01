@@ -595,7 +595,7 @@
 }
 
 .feedCommunityHeader {
-  width: 95%;
+  width: 100%;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: var(--shadow-card);
@@ -605,7 +605,7 @@
 
 .feedCommunityBanner {
   position: relative;
-  height: 72px;
+  height: 128px;
   overflow: hidden;
   background:
     linear-gradient(

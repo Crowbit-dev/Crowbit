@@ -47,10 +47,10 @@ function hashSeed(value: string): number {
 }
 
 function TriangulatedMosaic({ seed }: { seed: string }) {
-  const width = 760
-  const height = 72
-  const cols = 12
-  const rows = 4
+  const width = 1080
+  const height = 128
+  const cols = 22
+  const rows = 8
   const base = hashSeed(seed)
   const random = (n: number) => {
     const x = Math.sin(base + n * 0.61803398875) * 10000
