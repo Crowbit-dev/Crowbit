@@ -30,7 +30,7 @@ const AVATAR_TONES = [
 
 type AvatarGroupItem = string | { name: string; background?: string }
 
-function AvatarGroup({ items, max = 3 }: { items: AvatarGroupItem[]; max?: number }) {
+export function AvatarGroup({ items, max = 3 }: { items: AvatarGroupItem[]; max?: number }) {
   const normalized = items.map((item) => (typeof item === 'string' ? { name: item } : item))
   const visible = normalized.slice(0, max)
   const extra = normalized.length - visible.length

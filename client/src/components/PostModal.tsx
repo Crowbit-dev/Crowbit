@@ -1,6 +1,7 @@
 import { AlignLeft, Check, ChevronDown, Globe, Paperclip, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import type { Community, Post } from '../types'
+import { AvatarGroup } from './ConversationView'
 import styles from './PostModal.module.css'
 
 const MAIN_LIMIT = 280
@@ -140,7 +141,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
             aria-label="Community to post to"
           >
             {postingToProfile ? (
-              <span className={styles.pickerAvatar}>N</span>
+              <AvatarGroup items={[{ name: 'N', background: 'linear-gradient(135deg, var(--accent), #6f5b6d)' }]} />
             ) : (
               <span className={styles.pickerDot} style={{ background: selectedCommunity.color }} />
             )}
@@ -159,7 +160,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
                   setPickerOpen(false)
                 }}
               >
-                <span className={styles.pickerAvatar}>N</span>
+                <AvatarGroup items={[{ name: 'N', background: 'linear-gradient(135deg, var(--accent), #6f5b6d)' }]} />
                 <span className={styles.pickerCopy}>
                   <strong>Profile</strong>
                   <span>Just you, no community</span>
