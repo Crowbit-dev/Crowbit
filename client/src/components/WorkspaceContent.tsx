@@ -25,6 +25,7 @@ type WorkspaceContentProps = {
   appliedSearchQuery: string
   onOpenChannel: (communityName: string, channelId: string) => void
   onOpenDm: (dmId: string) => void
+  onToggleJoin: (communityName: string) => void
   onOpenThread: (post: Post) => void
   onDeletePost: (post: Post) => void
   threadShift: number
@@ -56,6 +57,7 @@ function WorkspaceContent({
   appliedSearchQuery,
   onOpenChannel,
   onOpenDm,
+  onToggleJoin,
   onOpenThread,
   onDeletePost,
   threadShift,
@@ -311,7 +313,7 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
-            <h2>{q ? `Results for \"${searchQuery}\"` : 'Search'}<span className={styles.resultFilterCrumb}> · {searchFilterLabels[searchFilter]}</span></h2>
+            <h2>{q ? `Results for "${appliedSearchQuery.trim()}"` : 'Search'}<span className={styles.resultFilterCrumb}> · {searchFilterLabels[searchFilter]}</span></h2>
             {q && <span>{totalResults} items</span>}
           </div>
           {!q ? (
@@ -331,24 +333,104 @@ function WorkspaceContent({
             </div>
           ) : (
             <div className={styles.resultList}>
-              {matchedPosts.map((post) => (
-                <article key={post.title} className={styles.resultRow}>
-                  <div>
-                    <strong>{post.title}</strong>
-                    <p>{post.community ? `${post.community} · ` : ''}{post.author}</p>
-                  </div>
-                  <span>{formatCount(post.stats.comments)} comments</span>
-                </article>
-              ))}
-              {matchedCommunities.map((community) => (
-                <article key={community.name} className={styles.resultRow}>
-                  <div>
-                    <strong>{community.name}</strong>
-                    <p>{community.members.length} members · {community.channels.length} channels</p>
-                  </div>
-                </article>
-              ))}
-              {matchedUsers.map((user) => (
+              {matchedPosts.map((post) => {
+                const openResult = () => onOpenThread(post)
+                return (
+                  <article
+                    key={post.title}
+                    className={`${styles.postCard} ${styles.resultPostCard}`}
+                    onClick={openResult}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        openResult()
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${post.title} by ${post.author} — open thread`}
+                  >
+                    <div className={styles.postHeader}>
+                      <div className={styles.avatar}>{post.author[0]}</div>
+                      <div className={styles.postMeta}>
+                        <div className={styles.postAuthorRow}>
+                          <strong>{post.author}</strong>
+                          <span className={styles.postHandle}>{post.handle}</span>
+                          <span className={styles.postDivider}>•</span>
+                          <span className={styles.postTime}>{post.time}</span>
+                        </div>
+                        {post.community && (
+                          <div
+                            className={styles.communityTag}
+                            style={{ '--community-color': communities.find((community) => community.name === post.community)?.color } as CSSProperties}
+                          >
+                            <span>{post.community}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <h3>{post.title}</h3>
+                    {post.body && <p className={styles.postBody}>{post.body}</p>}
+
+                    <div className={styles.postStats}>
+                      <span className={styles.postStat}>
+                        <ArrowBigUp size={16} aria-hidden="true" />
+                        <span>{formatCount(post.stats.upvotes)}</span>
+                      </span>
+                      <span className={styles.postStat}>
+                        <MessageCircle size={16} aria-hidden="true" />
+                        <span>{formatCount(post.stats.comments)}</span>
+                      </span>
+                      <span className={styles.postStat}>
+                        <Share2 size={16} aria-hidden="true" />
+                        <span>{formatCount(post.stats.shares)}</span>
+                      </span>
+                    </div>
+                  </article>
+                )
+              })}
+              {matchedCommunities.map((community) => {
+                const openResult = () => onOpenChannel(community.name, community.channels[0]?.id ?? 'general')
+                return (
+                  <article
+                    key={community.name}
+                    className={`${styles.postCard} ${styles.resultPostCard}`}
+                    onClick={openResult}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        openResult()
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${community.name} community — open`}
+                  >
+                    <div className={styles.resultCommunityRow}>
+                      <span className={shared.sidebarDot} style={{ background: community.color }} aria-hidden="true" />
+                      <div className={styles.resultCommunityCopy}>
+                        <strong>{community.name}</strong>
+                        <p>{community.members.length} members · {community.channels.length} channels</p>
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.contentChip}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onToggleJoin(community.name)
+                        }}
+                        aria-label={community.joined ? `Leave ${community.name}` : `Join ${community.name}`}
+                      >
+                        {community.joined ? 'Joined' : 'Join'}
+                      </button>
+                    </div>
+                  </article>
+                )
+              })}
+              {matchedUsers.length > 0 && (
+                <div className={styles.userDividerList}>
+                  {matchedUsers.map((user) => (
                 <button
                   key={user.name}
                   type="button"
@@ -356,17 +438,21 @@ function WorkspaceContent({
                   onClick={() => openUser(user)}
                   aria-label={`${user.name} — ${user.detail}`}
                 >
-                  <span className={styles.notifAvatar}>{user.name[0]}</span>
-                  <span className={styles.notifCopy}>
-                    <span className={styles.notifText}>
-                      <strong>{user.name}</strong>
-                    </span>
-                    <span className={styles.notifMeta}>
-                      {user.detail} · {statusLabel(user.status)}
+                  <span className={styles.userRowBox}>
+                    <span className={styles.notifAvatar}>{user.name[0]}</span>
+                    <span className={styles.notifCopy}>
+                      <span className={styles.notifText}>
+                        <strong>{user.name}</strong>
+                      </span>
+                      <span className={styles.notifMeta}>
+                        {user.detail} · {statusLabel(user.status)}
+                      </span>
                     </span>
                   </span>
                 </button>
-              ))}
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </section>

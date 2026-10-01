@@ -299,7 +299,7 @@
 .searchGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
 .contentChip {
@@ -366,6 +366,10 @@
   margin: 0;
 }
 
+.resultsCard .sectionHeadingRow {
+  margin-bottom: 16px;
+}
+
 .resultFilterCrumb {
   color: var(--offwhite);
 }
@@ -374,27 +378,16 @@
   flex-direction: column;
 }
 
-.resultRow {
+.userDividerList {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.resultRow:first-child {
-  border-top: 0;
 }
 
 .userRow {
   display: flex;
-  align-items: center;
-  gap: 12px;
   width: 100%;
   box-sizing: border-box;
-  padding: 14px 0;
+  padding: 6px 0;
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
   background: transparent;
@@ -402,20 +395,33 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background 120ms ease;
 }
 
 .userRow:first-child {
   border-top: 0;
 }
 
-.userRow:hover,
-.userRow:focus-visible {
-  outline: none;
+.userRowBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: background 120ms ease;
+}
+
+.userRow:hover .userRowBox,
+.userRow:focus-visible .userRowBox {
   background: rgba(83, 62, 82, 0.18);
 }
 
-.resultRow p,
+.userRow:focus-visible {
+  outline: none;
+}
+
 .settingsCard p {
   color: var(--offwhite);
 }
@@ -979,6 +985,48 @@
   outline: none;
   transform: translateY(-1px);
   background: rgba(83, 62, 82, 0.28);
+}
+
+.resultPostCard {
+  cursor: pointer;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.resultPostCard:hover,
+.resultPostCard:focus-visible {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.postStat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  color: var(--offwhite);
+}
+
+.resultCommunityRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.resultCommunityCopy {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultCommunityCopy strong {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.resultCommunityCopy p {
+  margin: 2px 0 0;
+  color: var(--offwhite);
+  font-size: 0.85rem;
 }
 
 @media (max-width: 1280px) {

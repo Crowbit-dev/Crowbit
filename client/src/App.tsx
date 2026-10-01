@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import ContextMenu, { type ContextMenuItem, type ContextMenuState } from './components/ContextMenu'
 import PostModal from './components/PostModal'
@@ -93,6 +93,11 @@ function App() {
   const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels))
   const [activeDmId, setActiveDmId] = useState(lastVisited.dm)
   const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all')
+  const [joinedNames, setJoinedNames] = useState<string[]>(() => communities.filter((community) => community.joined).map((community) => community.name))
+  const visibleCommunities = useMemo(() => communities.map((community) => ({ ...community, joined: joinedNames.includes(community.name) })), [joinedNames])
+  const toggleJoin = (communityName: string) => {
+    setJoinedNames((prev) => prev.includes(communityName) ? prev.filter((name) => name !== communityName) : [...prev, communityName])
+  }
   const [searchFilter, setSearchFilter] = useState<SearchFilter>('post')
   const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches)
   const [appliedSearch, setAppliedSearch] = useState('')
@@ -317,7 +322,7 @@ function App() {
       <div className={`workspace-frame${mode === 'communities' ? ' narrow-sidebar' : ''}`}>
         <WorkspaceSidebar
           mode={mode}
-          communities={communities}
+          communities={visibleCommunities}
           directMessages={directMessages}
           activeCommunityName={activeCommunityName}
           activeDmId={activeDmId}
@@ -339,7 +344,7 @@ function App() {
 
         <WorkspaceContent
           mode={mode}
-          communities={communities}
+          communities={visibleCommunities}
           posts={localPosts}
           directMessages={directMessages}
           activeCommunityName={activeCommunityName}
@@ -357,6 +362,7 @@ function App() {
           searchFilter={searchFilter}
           appliedSearchQuery={appliedSearch}
           onOpenDm={openDm}
+          onToggleJoin={toggleJoin}
         />
 
         {activeThread && (
@@ -377,7 +383,7 @@ function App() {
       </div>
       {composerOpen && (
         <PostModal
-          communities={communities}
+          communities={visibleCommunities}
           defaultCommunity={composerDefault}
           onClose={() => setComposerOpen(false)}
           onPost={handlePost}
