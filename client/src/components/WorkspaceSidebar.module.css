@@ -18,6 +18,14 @@
   font-size: 1.35rem;
 }
 
+.workspaceSidebar span {
+  cursor: default;
+}
+
+.workspaceSidebar button span {
+  cursor: inherit;
+}
+
 .sidebarHeadingBlock {
   position: relative;
   padding: 18px;
