@@ -199,15 +199,15 @@ function WorkspaceContent({
 
         <section className={`${styles.panelStack} ${styles.notifList}`}>
           {notifications.length === 0 ? (
-            <article className={styles.infoCard}>
+            <div className={styles.notifEmpty}>
               <strong>You&apos;re all caught up</strong>
               <p>New mentions and replies will land here.</p>
-            </article>
+            </div>
           ) : visibleItems.length === 0 ? (
-            <article className={styles.infoCard}>
+            <div className={styles.notifEmpty}>
               <strong>Nothing here</strong>
               <p>No activity matches this filter yet — try another one.</p>
-            </article>
+            </div>
           ) : (
             visibleItems.map((item) => {
               const color = communities.find((community) => community.name === item.community)?.color ?? '#533e52'
