@@ -124,6 +124,7 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
         ) : (
           comments.map((comment, index) => (
             <article key={`${comment.author}-${comment.time}-${index}`} className={styles.comment}>
+              {/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
               <div className={styles.commentAvatar}>{comment.author[0]}</div>
               <div className={styles.commentCopy}>
                 <div className={styles.commentTopline}>

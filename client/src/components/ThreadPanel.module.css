@@ -178,6 +178,7 @@
   font-size: 0.85rem;
   font-weight: 800;
   user-select: none;
+  cursor: pointer;
 }
 
 .commentCopy {
@@ -194,6 +195,11 @@
 .commentTopline strong {
   color: var(--text-h);
   font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.commentTopline strong:hover {
+  text-decoration: underline;
 }
 
 .commentTopline span {
