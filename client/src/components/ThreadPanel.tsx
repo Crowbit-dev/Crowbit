@@ -1,13 +1,17 @@
-import { SendHorizontal, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { Copy, Link2, Pencil, Reply, SendHorizontal, Trash2, X } from 'lucide-react'
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { mockComments } from '../appData'
+import { copyText } from '../lib/clipboard'
 import { formatCount } from '../lib/formatCount'
 import type { Post, ThreadComment } from '../types'
+import type { ContextMenuItem } from './ContextMenu'
 import styles from './ThreadPanel.module.css'
 
-function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: Post; onClose: () => void; width: number; maxWidth: number; onResizeWidth: (width: number) => void }) {
+function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }: { post: Post; onClose: () => void; width: number; maxWidth: number; onResizeWidth: (width: number) => void; openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void }) {
   const [comments, setComments] = useState<ThreadComment[]>(() => mockComments[post.title] ?? [])
   const [draft, setDraft] = useState('')
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [editDraft, setEditDraft] = useState('')
   const [dragging, setDragging] = useState(false)
   const dragState = useRef<{ startX: number; startWidth: number } | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -56,6 +60,57 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
     setComments((prev) => [...prev, { author: 'You', time: 'Now', body }]) // change author to current user when backend is ready
     setDraft('')
     inputRef.current?.focus()
+  }
+
+  const replyToComment = (comment: ThreadComment) => {
+    setDraft(`@${comment.author} `)
+    inputRef.current?.focus()
+  }
+
+  const startEdit = (index: number) => {
+    setEditingIndex(index)
+    setEditDraft(comments[index]?.body ?? '')
+  }
+
+  const saveEdit = () => {
+    const body = editDraft.trim()
+    if (editingIndex === null || !body) return
+    setComments((prev) => prev.map((entry, index) => (index === editingIndex ? { ...entry, body, edited: true } : entry)))
+    setEditingIndex(null)
+    setEditDraft('')
+  }
+
+  const cancelEdit = () => {
+    setEditingIndex(null)
+    setEditDraft('')
+  }
+
+  const openCommentMenu = (e: ReactMouseEvent<HTMLElement>, comment: ThreadComment, index: number) => {
+    e.preventDefault()
+    const selection = window.getSelection()?.toString().trim() ?? ''
+    const items: ContextMenuItem[] = [
+      ...(selection ? [{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy', hint: 'Ctrl + C', onSelect: () => void copyText(selection) }] : []),
+      { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(comment.body) },
+      { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Comment Link', onSelect: () => void copyText(`https://crowbit.net/c/${post.title}/${index}`) },
+      { type: 'separator' },
+      { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyToComment(comment) },
+      ...(comment.author === 'You'
+        ? [{ icon: <Pencil size={16} aria-hidden="true" />, label: 'Edit Comment', onSelect: () => startEdit(index) }]
+        : []),
+    ]
+    if (comment.author === 'You') {
+      items.push({ type: 'separator' })
+      items.push({
+        icon: <Trash2 size={16} aria-hidden="true" />,
+        label: 'Delete Comment',
+        danger: true,
+        onSelect: () => {
+          if (editingIndex === index) cancelEdit()
+          setComments((prev) => prev.filter((_, entryIndex) => entryIndex !== index))
+        },
+      })
+    }
+    openMenu(e.clientX, e.clientY, items, e.currentTarget)
   }
 
   const clampWidth = (value: number) => Math.round(Math.min(maxWidth, Math.max(280, value)))
@@ -123,7 +178,11 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
           </div>
         ) : (
           comments.map((comment, index) => (
-            <article key={`${comment.author}-${comment.time}-${index}`} className={styles.comment}>
+            <article
+              key={`${comment.author}-${comment.time}-${index}`}
+              className={styles.comment}
+              onContextMenu={(e) => openCommentMenu(e, comment, index)}
+            >
               {/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
               <div className={styles.commentAvatar}>{comment.author[0]}</div>
               <div className={styles.commentCopy}>
@@ -131,7 +190,32 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
                   <strong>{comment.author}</strong>
                   <span>{comment.time}</span>
                 </div>
-                <p>{comment.body}</p>
+                {editingIndex === index ? (
+                  <div className={styles.commentEditor}>
+                    <textarea
+                      ref={(el) => {
+                        el?.focus()
+                        el?.setSelectionRange(el.value.length, el.value.length)
+                      }}
+                      rows={2}
+                      value={editDraft}
+                      onChange={(e) => setEditDraft(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault()
+                          saveEdit()
+                        } else if (e.key === 'Escape') {
+                          e.stopPropagation()
+                          cancelEdit()
+                        }
+                      }}
+                      aria-label="Edit comment"
+                    />
+                    <span>Enter to save · Esc to cancel</span>
+                  </div>
+                ) : (
+                  <p>{comment.body}{comment.edited && <span className={styles.editedMark}> (edited)</span>}</p>
+                )}
               </div>
             </article>
           ))

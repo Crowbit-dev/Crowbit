@@ -377,6 +377,7 @@ function App() {
               width={clampedThreadWidth}
               maxWidth={threadMaxWidth}
               onResizeWidth={handleThreadWidth}
+              openMenu={openMenu}
             />
           </div>
         )}

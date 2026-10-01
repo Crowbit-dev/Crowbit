@@ -295,7 +295,10 @@ function ConversationView({
                   {editingId === message.id ? (
                     <div className={styles.messageEditor}>
                       <textarea
-                        autoFocus
+                        ref={(el) => {
+                          el?.focus()
+                          el?.setSelectionRange(el.value.length, el.value.length)
+                        }}
                         rows={2}
                         value={editDraft}
                         onChange={(e) => setEditDraft(e.target.value)}

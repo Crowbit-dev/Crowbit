@@ -74,6 +74,7 @@ export type ThreadComment = {
   author: string
   time: string
   body: string
+  edited?: boolean
 }
 
 export type ConversationMutuals = {
