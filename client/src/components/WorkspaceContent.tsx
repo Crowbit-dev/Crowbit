@@ -6,6 +6,7 @@ import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
 import ConversationView from './ConversationView'
+import { formatCount } from '../lib/formatCount'
 import { gradientCommunityColor } from '../lib/communityColor'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import { searchFilterLabels } from '../lib/searchFilterLabels'
@@ -34,15 +35,6 @@ type WorkspaceContentProps = {
   searchQuery: string
   onResetSearch: () => void
 }
-
-// TEMPORARY: formats mock counts until the backend provides real numbers.
-const formatCount = (value: number) => {
-  if (value < 1000) return `${value}`
-  if (value < 1_000_000) return `${trimZeros(value / 1000)}k`
-  return `${trimZeros(value / 1_000_000)}m`
-}
-
-const trimZeros = (value: number) => (Number.isInteger(value) ? `${value}` : value.toFixed(1))
 
 function WorkspaceContent({
   mode,

@@ -1,6 +1,7 @@
 import { SendHorizontal, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { mockComments } from '../appData'
+import { formatCount } from '../lib/formatCount'
 import type { Post, ThreadComment } from '../types'
 import styles from './ThreadPanel.module.css'
 
@@ -101,7 +102,8 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
         <div className={styles.heading}>
           <strong className={styles.title}>{post.title}</strong>
           {post.body && <p className={styles.body}>{post.body}</p>}
-          <span className={styles.meta}>{post.author} · {post.community || 'Profile'} · {post.stats.comments + comments.length} comments</span>
+          <span className={styles.meta}>{post.author} · {post.community || 'Profile'}</span>
+          <span className={styles.stats}>{formatCount(post.stats.upvotes)} upvotes · {formatCount(post.stats.comments + comments.length)} comments · {formatCount(post.stats.shares)} shares</span>
         </div>
         <button type="button" className={styles.close} onClick={onClose} aria-label="Close thread" title="Close thread">
           <X size={18} aria-hidden="true" />

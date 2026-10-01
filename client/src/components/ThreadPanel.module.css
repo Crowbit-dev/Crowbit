@@ -88,6 +88,11 @@
   font-size: 0.8rem;
 }
 
+.stats {
+  color: var(--offwhite);
+  font-size: 0.8rem;
+}
+
 .close {
   display: grid;
   place-items: center;
