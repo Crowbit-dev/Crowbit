@@ -88,6 +88,14 @@
   font-size: 0.8rem;
 }
 
+.metaItem {
+  cursor: pointer;
+}
+
+.metaItem:hover {
+  text-decoration: underline;
+}
+
 .stats {
   color: var(--offwhite);
   font-size: 0.8rem;

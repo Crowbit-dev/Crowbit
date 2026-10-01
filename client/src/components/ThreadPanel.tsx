@@ -102,7 +102,12 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth }: { post: 
         <div className={styles.heading}>
           <strong className={styles.title}>{post.title}</strong>
           {post.body && <p className={styles.body}>{post.body}</p>}
-          <span className={styles.meta}>{post.author} · {post.community || 'Profile'}</span>
+          {/* TEMPORARY: meta items show link affordance until click-through lands. */}
+          <span className={styles.meta}>
+            <span className={styles.metaItem}>{post.handle}</span>
+            {' · '}
+            <span className={styles.metaItem}>{post.community || 'Profile'}</span>
+          </span>
           <span className={styles.stats}>{formatCount(post.stats.upvotes)} upvotes · {formatCount(post.stats.comments + comments.length)} comments · {formatCount(post.stats.shares)} shares</span>
         </div>
         <button type="button" className={styles.close} onClick={onClose} aria-label="Close thread" title="Close thread">

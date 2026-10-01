@@ -344,6 +344,7 @@ function WorkspaceContent({
                     aria-label={`${post.title} by ${post.author} — open thread`}
                   >
                     <div className={styles.postHeader}>
+                      {/* TEMPORARY: author, handle, avatar, and community tag show link affordance until click-through lands. */}
                       <div className={styles.avatar}>{post.author[0]}</div>
                       <div className={styles.postMeta}>
                         <div className={styles.postAuthorRow}>
@@ -645,6 +646,7 @@ function WorkspaceContent({
             onContextMenu={(e) => openPostMenu(e, post)}
           >
             <div className={styles.postHeader}>
+              {/* TEMPORARY: author, handle, avatar, and community tag show link affordance until click-through lands. */}
               <div className={styles.avatar}>{post.author[0]}</div>
               <div className={styles.postMeta}>
                 <div className={styles.postAuthorRow}>
