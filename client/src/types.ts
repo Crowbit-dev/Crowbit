@@ -71,10 +71,12 @@ export type MessageEntry = {
 }
 
 export type ThreadComment = {
+  id: string
   author: string
   time: string
   body: string
   edited?: boolean
+  replyTo?: { id: string; author: string; body: string }
 }
 
 export type ConversationMutuals = {

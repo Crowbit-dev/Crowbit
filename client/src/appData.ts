@@ -149,7 +149,7 @@ export const notifications: NotificationItem[] = [
   { id: 'n12', kind: 'mention', actor: 'Mira', community: 'Art', channel: 'sketches', snippet: 'Saved your palette study to the moodboard.', time: '1d' },
 ]
 
-export const mockCurrentUser = { displayName: 'Nova', username: '@nova' }
+export const currentUser = { displayName: 'Nova', username: '@nova' }
 
 export const mutualFriendsByDm: Record<string, string[]> = {
   maya: ['Jules', 'Sami', 'Theo'],
@@ -158,24 +158,24 @@ export const mutualFriendsByDm: Record<string, string[]> = {
   theo: ['Maya'],
 }
 
-export const mockComments: Record<string, ThreadComment[]> = {
+export const comments: Record<string, ThreadComment[]> = {
   'How are you building your personal brand in 2026?': [
-    { author: 'Jun', time: '1h ago', body: 'Batching content one weekend a month saved me. The rest runs on a queue.' },
-    { author: 'Nyra', time: '44m ago', body: 'That is exactly the system I keep avoiding. What do you use for scheduling?' },
-    { author: 'Mira', time: '12m ago', body: 'Portfolio first, content second. Everything else is just distribution.' },
+    { id: 'c1', author: 'Jun', time: '1h ago', body: 'Batching content one weekend a month saved me. The rest runs on a queue.' },
+    { id: 'c2', author: 'Nyra', time: '44m ago', body: 'That is exactly the system I keep avoiding. What do you use for scheduling?' },
+    { id: 'c3', author: 'Mira', time: '12m ago', body: 'Portfolio first, content second. Everything else is just distribution.' },
   ],
   'What is everyone using for fast internal tooling right now?': [
-    { author: 'Tess', time: '4h ago', body: 'We moved dashboards onto the same auth as production. One login to rule them all.' },
-    { author: 'Rowan', time: '2h ago', body: 'Seconded. The fastest tool is the one you stop maintaining.' },
+    { id: 'c4', author: 'Tess', time: '4h ago', body: 'We moved dashboards onto the same auth as production. One login to rule them all.' },
+    { id: 'c5', author: 'Rowan', time: '2h ago', body: 'Seconded. The fastest tool is the one you stop maintaining.' },
   ],
   'Founders: what do your best community rituals look like?': [
-    { author: 'Theo', time: '20h ago', body: 'Weekly demo thread. Same time, same channel, no exceptions for a year.' },
-    { author: 'Nia', time: '18h ago', body: 'Monthly AMA with a member instead of a guest. Way better attendance.' },
-    { author: 'Ava', time: '9h ago', body: 'Both of these are going straight into the notes. Keep them coming.' },
+    { id: 'c6', author: 'Theo', time: '20h ago', body: 'Weekly demo thread. Same time, same channel, no exceptions for a year.' },
+    { id: 'c7', author: 'Nia', time: '18h ago', body: 'Monthly AMA with a member instead of a guest. Way better attendance.' },
+    { id: 'c8', author: 'Ava', time: '9h ago', body: 'Both of these are going straight into the notes. Keep them coming.' },
   ],
   'What is on your security audit checklist this quarter?': [
-    { author: 'Ivy', time: '2h ago', body: 'Add secret rotation to that list. Everyone forgets it until the incident.' },
-    { author: 'Zed', time: '1h ago', body: 'Dependency pinning plus a weekly audit job. Boring and effective.' },
+    { id: 'c9', author: 'Ivy', time: '2h ago', body: 'Add secret rotation to that list. Everyone forgets it until the incident.' },
+    { id: 'c10', author: 'Zed', time: '1h ago', body: 'Dependency pinning plus a weekly audit job. Boring and effective.' },
   ],
 }
 

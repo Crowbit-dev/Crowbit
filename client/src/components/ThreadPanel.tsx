@@ -1,6 +1,6 @@
 import { Copy, Link2, Pencil, Reply, SendHorizontal, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
-import { mockComments } from '../appData'
+import { comments as seedComments } from '../appData'
 import { copyText } from '../lib/clipboard'
 import { formatCount } from '../lib/formatCount'
 import type { Post, ThreadComment } from '../types'
@@ -8,8 +8,11 @@ import type { ContextMenuItem } from './ContextMenu'
 import styles from './ThreadPanel.module.css'
 
 function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }: { post: Post; onClose: () => void; width: number; maxWidth: number; onResizeWidth: (width: number) => void; openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void }) {
-  const [comments, setComments] = useState<ThreadComment[]>(() => mockComments[post.title] ?? [])
+  const [comments, setComments] = useState<ThreadComment[]>(() => seedComments[post.title] ?? [])
   const [draft, setDraft] = useState('')
+  const [flashId, setFlashId] = useState<string | null>(null)
+  const flashTimer = useRef<number | null>(null)
+  const [replyTarget, setReplyTarget] = useState<number | null>(null)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [editDraft, setEditDraft] = useState('')
   const [dragging, setDragging] = useState(false)
@@ -57,13 +60,28 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }
   const send = () => {
     const body = draft.trim()
     if (!body) return
-    setComments((prev) => [...prev, { author: 'You', time: 'Now', body }]) // change author to current user when backend is ready
+    const target = replyTarget !== null ? comments[replyTarget] : undefined
+    const id = `comment-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    setComments((prev) => [...prev, { id, author: 'You', time: 'Now', body, ...(target ? { replyTo: { id: target.id, author: target.author, body: target.body } } : {}) }]) // change author to current user when backend is ready
     setDraft('')
+    setReplyTarget(null)
     inputRef.current?.focus()
   }
 
-  const replyToComment = (comment: ThreadComment) => {
-    setDraft(`@${comment.author} `)
+  const snippet = (body: string, length = 80) => {
+    const line = body.split('\n')[0] ?? ''
+    return line.length > length ? `${line.slice(0, length).trimEnd()}…` : line
+  }
+
+  const jumpToComment = (id: string) => {
+    document.getElementById(`comment-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setFlashId(id)
+    if (flashTimer.current !== null) window.clearTimeout(flashTimer.current)
+    flashTimer.current = window.setTimeout(() => setFlashId(null), 1200)
+  }
+
+  const replyToComment = (index: number) => {
+    setReplyTarget(index)
     inputRef.current?.focus()
   }
 
@@ -93,7 +111,7 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }
       { icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(comment.body) },
       { icon: <Link2 size={16} aria-hidden="true" />, label: 'Copy Comment Link', onSelect: () => void copyText(`https://crowbit.net/c/${post.title}/${index}`) },
       { type: 'separator' },
-      { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyToComment(comment) },
+      { icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyToComment(index) },
       ...(comment.author === 'You'
         ? [{ icon: <Pencil size={16} aria-hidden="true" />, label: 'Edit Comment', onSelect: () => startEdit(index) }]
         : []),
@@ -179,8 +197,9 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }
         ) : (
           comments.map((comment, index) => (
             <article
-              key={`${comment.author}-${comment.time}-${index}`}
-              className={styles.comment}
+              key={comment.id}
+              id={`comment-${comment.id}`}
+              className={`${styles.comment} ${flashId === comment.id ? styles.flash : ''}`}
               onContextMenu={(e) => openCommentMenu(e, comment, index)}
             >
               {/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
@@ -214,7 +233,20 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }
                     <span>Enter to save · Esc to cancel</span>
                   </div>
                 ) : (
-                  <p>{comment.body}{comment.edited && <span className={styles.editedMark}> (edited)</span>}</p>
+                  <>
+                    {comment.replyTo && (
+                      <button
+                        type="button"
+                        className={styles.commentReference}
+                        onClick={() => jumpToComment(comment.replyTo!.id)}
+                        aria-label={`Jump to ${comment.replyTo.author}'s comment`}
+                      >
+                        <strong>{comment.replyTo.author}</strong>
+                        <span>{snippet(comment.replyTo.body)}</span>
+                      </button>
+                    )}
+                    <p>{comment.body}{comment.edited && <span className={styles.editedMark}> (edited)</span>}</p>
+                  </>
                 )}
               </div>
             </article>
@@ -222,6 +254,17 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }
         )}
       </div>
 
+      {replyTarget !== null && comments[replyTarget] && (
+        <div className={styles.replyPreview}>
+          <span className={styles.replyPreviewText}>
+            Replying to <strong>{comments[replyTarget].author}</strong>
+          </span>
+          <span className={styles.replyPreviewSnippet}>{snippet(comments[replyTarget].body)}</span>
+          <button type="button" className={styles.replyPreviewClose} onClick={() => setReplyTarget(null)} aria-label="Cancel reply">
+            <X size={14} aria-hidden="true" />
+          </button>
+        </div>
+      )}
       <form
         className={styles.reply}
         onSubmit={(e) => {
@@ -240,8 +283,8 @@ function ThreadPanel({ post, onClose, width, maxWidth, onResizeWidth, openMenu }
               send()
             }
           }}
-          placeholder="Reply..."
-          aria-label={`Reply to ${post.title}`}
+          placeholder={replyTarget !== null && comments[replyTarget] ? `Reply to ${comments[replyTarget].author}...` : 'Reply...'}
+          aria-label={replyTarget !== null && comments[replyTarget] ? `Reply to ${comments[replyTarget].author}` : `Reply to ${post.title}`}
           maxLength={2000}
         />
         <button

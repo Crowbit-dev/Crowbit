@@ -2,7 +2,7 @@ import { Bell, Check, HeadphoneOff, Headphones, Layers3, LogOut, Menu, MessageCi
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { WorkspaceMode } from '../types'
-import { mockCurrentUser as currentUser } from '../appData'
+import { currentUser } from '../appData'
 import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import styles from './WorkspaceRail.module.css'
