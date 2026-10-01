@@ -311,7 +311,7 @@ function WorkspaceContent({
       <main className={styles.workspaceContent}>
         <section className={`${styles.panelStack} ${styles.resultsCard}`}>
           <div className={styles.sectionHeadingRow}>
-            <h2>{q ? 'Results' : 'Search'}{` · ${searchFilterLabels[searchFilter]}`}</h2>
+            <h2>{q ? 'Results' : 'Search'}<span className={styles.resultFilterCrumb}> · {searchFilterLabels[searchFilter]}</span></h2>
             {q && <span>{totalResults} items</span>}
           </div>
           {!q ? (
