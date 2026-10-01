@@ -229,8 +229,8 @@ function WorkspaceContent({
                       </span>
                       <span className={styles.notifFollowActions}>
                         {/* TEMPORARY: decorative until follow requests land. */}
-                        <button type="button" className={styles.contentChip} title="Coming soon">Accept</button>
-                        <button type="button" className={styles.contentChip} title="Coming soon">Decline</button>
+                        <button type="button" className={styles.contentChip}>Accept</button>
+                        <button type="button" className={styles.contentChip}>Decline</button>
                       </span>
                     </span>
                   </article>
@@ -304,7 +304,7 @@ function WorkspaceContent({
             <span>{matchedPosts.length + matchedCommunities.length} items</span>
           </div>
           {matchedPosts.length === 0 && matchedCommunities.length === 0 ? (
-            <article className={styles.infoCard}>
+            <div className={styles.emptyState}>
               <strong>No results for “{searchQuery.trim()}”</strong>
               <p>Try a different keyword, or browse spaces and friends instead.</p>
               <div>
@@ -312,7 +312,7 @@ function WorkspaceContent({
                   Clear search
                 </button>
               </div>
-            </article>
+            </div>
           ) : (
             <div className={styles.resultList}>
               {matchedPosts.map((post) => (
