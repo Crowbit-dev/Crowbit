@@ -384,6 +384,33 @@
   border-top: 0;
 }
 
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.userRow:first-child {
+  border-top: 0;
+}
+
+.userRow:hover,
+.userRow:focus-visible {
+  outline: none;
+  background: rgba(83, 62, 82, 0.18);
+}
+
 .resultRow p,
 .settingsCard p {
   color: var(--offwhite);

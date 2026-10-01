@@ -352,7 +352,7 @@ function WorkspaceContent({
                 <button
                   key={user.name}
                   type="button"
-                  className={styles.notifRow}
+                  className={styles.userRow}
                   onClick={() => openUser(user)}
                   aria-label={`${user.name} — ${user.detail}`}
                 >
