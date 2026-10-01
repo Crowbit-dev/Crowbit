@@ -1,4 +1,4 @@
-import { ArrowBigUp, AtSign, Ban, CheckCheck, ChevronDown, Copy, Ellipsis, Globe, Hash, Heart, Link2, Lock, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
+import { ArrowBigUp, AtSign, Ban, CheckCheck, ChevronDown, Copy, Ellipsis, Hash, Heart, Link2, MessageCircle, Phone, Pin, Reply, Search, Share2, Shield, Trash2, User, UserPlus, UserX, Users, Video, VolumeX } from 'lucide-react'
 import { useMemo, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react'
 import type { Community, CommunityMember, DirectMessage, NotificationItem, Post, SearchFilter, SearchUser, WorkspaceMode } from '../types'
 import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications } from '../appData'
@@ -705,13 +705,7 @@ function WorkspaceContent({
             <div className={styles.feedCommunityRow}>
               <span className={styles.feedCommunityIcon} aria-hidden="true">{scopedCommunity.name[0]}</span>
               <div className={styles.feedCommunityCopy}>
-                <div className={styles.feedCommunityTitleRow}>
-                  <h2>{scopedCommunity.name}</h2>
-                  <span className={styles.feedCommunityVisibility}>
-                    {scopedCommunity.visibility === 'private' ? <Lock size={12} aria-hidden="true" /> : <Globe size={12} aria-hidden="true" />}
-                    {scopedCommunity.visibility === 'private' ? 'Private' : 'Public'}
-                  </span>
-                </div>
+                <h2>{scopedCommunity.name}</h2>
                 <p>{scopedCommunity.members.length} members · {scopedOnline} online</p>
                 <p>{scopedCommunity.bio}</p>
               </div>
