@@ -346,7 +346,10 @@ function WorkspaceSidebar({
   }
 
   return (
-    <aside className={styles.workspaceSidebar}>
+    <aside
+      className={`${styles.workspaceSidebar} ${styles.communityEdge}`}
+      style={{ '--community-color': gradientCommunityColor(activeCommunity.color) } as CSSProperties}
+    >
       <SidebarHeading key="communities" id="communities" kicker="Communities" title="All spaces" copy="Select a community to view its channels and members." />
 
       <SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search communities" />

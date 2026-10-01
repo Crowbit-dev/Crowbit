@@ -18,6 +18,10 @@
   font-size: 1.35rem;
 }
 
+.communityEdge {
+  border-right: 1px solid color-mix(in srgb, var(--community-color) 35%, transparent);
+}
+
 .workspaceSidebar span {
   cursor: default;
 }
