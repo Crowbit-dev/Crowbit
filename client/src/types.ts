@@ -20,6 +20,7 @@ export type Community = {
   color: string
   joined: boolean
   bio: string
+  visibility: 'public' | 'private'
   channels: CommunityChannel[]
   members: CommunityMember[]
 }
