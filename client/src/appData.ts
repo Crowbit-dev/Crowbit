@@ -8,6 +8,7 @@ export const communities: Community[] = [
     name: 'Design',
     color: '#dc143c',
     joined: true,
+    bio: 'Critique, process, and polish for people who make interfaces.',
     channels: [
       { id: 'general', name: 'general', topic: 'Share work, critique, and weekly goals', unread: 6 },
       { id: 'feedback', name: 'feedback', topic: 'Design reviews, prototypes, and polish', unread: 2 },
@@ -24,6 +25,7 @@ export const communities: Community[] = [
     name: 'Dev',
     color: '#2563eb',
     joined: true,
+    bio: 'APIs, tooling, and shipping for people who build the stack.',
     channels: [
       { id: 'backend', name: 'backend', topic: 'APIs, auth, and service architecture', unread: 4 },
       { id: 'frontend', name: 'frontend', topic: 'UI work, state, and client bugs' },
@@ -39,6 +41,7 @@ export const communities: Community[] = [
     name: 'Startup',
     color: '#515151',
     joined: true,
+    bio: 'Launch notes, operator advice, and growth experiments for founders.',
     channels: [
       { id: 'launch', name: 'launch', topic: 'Announcements, launches, and milestones', unread: 3 },
       { id: 'founders', name: 'founders', topic: 'Operator advice and team decisions' },
@@ -54,6 +57,7 @@ export const communities: Community[] = [
     name: 'Tech',
     color: '#313131',
     joined: false,
+    bio: 'Reliability, security, and infrastructure notes for small teams.',
     channels: [
       { id: 'stack', name: 'stack', topic: 'Tools, frameworks, and architecture' },
       { id: 'ops', name: 'ops', topic: 'Reliability, uptime, and incident notes', unread: 2 },
@@ -69,6 +73,7 @@ export const communities: Community[] = [
     name: 'Art',
     color: '#533e52',
     joined: false,
+    bio: 'Sketches, finished pieces, and references for working artists.',
     channels: [
       { id: 'sketches', name: 'sketches', topic: 'Process shots, drafts, and concepts', unread: 1 },
       { id: 'releases', name: 'releases', topic: 'Finished pieces and launches' },

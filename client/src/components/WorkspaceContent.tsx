@@ -6,6 +6,7 @@ import { copyText } from '../lib/clipboard'
 import shared from '../styles/shared.module.css'
 import type { ContextMenuItem } from './ContextMenu'
 import ConversationView from './ConversationView'
+import { delaunay, type DelaunayPoint } from '../lib/delaunay'
 import { formatCount } from '../lib/formatCount'
 import { gradientCommunityColor } from '../lib/communityColor'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
@@ -34,6 +35,62 @@ type WorkspaceContentProps = {
   openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void
   searchQuery: string
   onResetSearch: () => void
+}
+
+function hashSeed(value: string): number {
+  let hash = 2166136261
+  for (let i = 0; i < value.length; i++) {
+    hash ^= value.charCodeAt(i)
+    hash = Math.imul(hash, 16777619)
+  }
+  return hash >>> 0
+}
+
+function TriangulatedMosaic({ seed }: { seed: string }) {
+  const width = 760
+  const height = 72
+  const cols = 12
+  const rows = 4
+  const base = hashSeed(seed)
+  const random = (n: number) => {
+    const x = Math.sin(base + n * 0.61803398875) * 10000
+    return x - Math.floor(x)
+  }
+  const points: DelaunayPoint[] = [
+    { x: 0, y: 0 },
+    { x: width, y: 0 },
+    { x: 0, y: height },
+    { x: width, y: height },
+  ]
+  for (let row = 0; row <= rows; row++) {
+    for (let col = 0; col <= cols; col++) {
+      if ((row === 0 || row === rows) && (col === 0 || col === cols)) continue
+      const edgeX = row === 0 || row === rows
+      const edgeY = col === 0 || col === cols
+      const jx = edgeX ? 0 : (random(row * 131 + col * 17 + 1) - 0.5) * (width / cols) * 0.9
+      const jy = edgeY ? 0 : (random(row * 131 + col * 17 + 2) - 0.5) * (height / rows) * 0.9
+      points.push({
+        x: Math.min(width, Math.max(0, (col / cols) * width + jx)),
+        y: Math.min(height, Math.max(0, (row / rows) * height + jy)),
+      })
+    }
+  }
+  const triangles = delaunay(points)
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      {triangles.map((triangle, index) => {
+        const dark = random(index * 2 + 0.25) > 0.5
+        return (
+          <polygon
+            key={index}
+            points={triangle.map((pointIndex) => `${points[pointIndex].x},${points[pointIndex].y}`).join(' ')}
+            fill={dark ? '#000000' : '#ffffff'}
+            opacity={Math.round(random(index * 2 + 0.75) * 22) / 100}
+          />
+        )
+      })}
+    </svg>
+  )
 }
 
 function WorkspaceContent({
@@ -626,6 +683,10 @@ function WorkspaceContent({
       : feedScope === 'home'
         ? posts.filter((post) => post.community === '' || joinedCommunityNames.has(post.community))
         : posts.filter((post) => post.community === feedScope)
+  const scopedCommunity = feedScope !== 'all' && feedScope !== 'home'
+    ? communities.find((community) => community.name === feedScope)
+    : undefined
+  const scopedOnline = scopedCommunity?.members.filter((member) => member.status !== 'offline').length ?? 0
 
   return (
     <main className={styles.workspaceContent}>
@@ -633,6 +694,28 @@ function WorkspaceContent({
         className={`${styles.panelStack} ${styles.feedStack} ${threadShift > 0 ? styles.threadShift : ''}`}
         style={threadShift > 0 ? ({ '--thread-shift': `${threadShift}px` } as CSSProperties) : undefined}
       >
+        {scopedCommunity && (
+          <header
+            className={styles.feedCommunityHeader}
+            style={{ '--community-color': gradientCommunityColor(scopedCommunity.color) } as CSSProperties}
+          >
+            <div className={styles.feedCommunityBanner} aria-hidden="true">
+              <TriangulatedMosaic seed={scopedCommunity.name} />
+            </div>
+            <div className={styles.feedCommunityRow}>
+              <span className={styles.feedCommunityIcon} aria-hidden="true">{scopedCommunity.name[0]}</span>
+              <div className={styles.feedCommunityCopy}>
+                <h2>{scopedCommunity.name}</h2>
+                <p>{scopedCommunity.members.length} members · {scopedOnline} online</p>
+                <p>{scopedCommunity.bio}</p>
+              </div>
+              {/* TEMPORARY: decorative until membership actions land. */}
+              <button type="button" className={styles.contentChip} aria-label={scopedCommunity.joined ? `Leave ${scopedCommunity.name}` : `Join ${scopedCommunity.name}`}>
+                {scopedCommunity.joined ? 'Joined' : 'Join'}
+              </button>
+            </div>
+          </header>
+        )}
         {visiblePosts.length === 0 ? (
           <div className={styles.emptyState}>
             <strong>No posts here yet</strong>
