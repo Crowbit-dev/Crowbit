@@ -198,12 +198,12 @@
 .sidebarItem:focus-visible {
   outline: none;
   transform: translateY(-1px);
-  background: rgba(83, 62, 82, 0.24);
+  background: color-mix(in srgb, var(--community-color, var(--accent)) 16%, transparent);
 }
 
 .sidebarItem.active {
-  background: rgba(83, 62, 82, 0.4);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--community-color, var(--accent)) 40%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
 }
 
 .sidebarItem.compact {

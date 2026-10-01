@@ -1,7 +1,8 @@
 import { AtSign, FileText, Hash, Heart, History, House, LayoutGrid, MessageCircle, Reply, Search, Settings, User, UserPlus, Users, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import type { Community, DirectMessage, NotificationKind, SearchFilter, WorkspaceMode } from '../types'
 import { notifications } from '../appData'
+import { gradientCommunityColor } from '../lib/communityColor'
 import { searchFilterLabels } from '../lib/searchFilterLabels'
 import { notifFilterLabels } from '../lib/notifFilterLabels'
 import shared from '../styles/shared.module.css'
@@ -142,6 +143,7 @@ function WorkspaceSidebar({
                 key={community.name}
                 type="button"
                 className={`${styles.sidebarItem} ${feedScope === community.name ? styles.active : ''}`}
+                style={{ '--community-color': gradientCommunityColor(community.color) } as CSSProperties}
                 onClick={() => onSelectFeedScope(community.name)}
               >
                 <span className={shared.sidebarDot} style={{ background: community.color }} />
@@ -360,6 +362,7 @@ function WorkspaceSidebar({
               key={community.name}
               type="button"
               className={`${styles.sidebarItem} ${styles.compact} ${activeCommunity.name === community.name ? styles.active : ''}`}
+              style={{ '--community-color': gradientCommunityColor(community.color) } as CSSProperties}
               onClick={() => onSelectCommunity(community.name)}
             >
               <span className={shared.sidebarDot} style={{ background: community.color }} />
