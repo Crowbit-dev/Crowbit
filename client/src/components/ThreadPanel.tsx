@@ -89,6 +89,7 @@ function ThreadPanel({
 		]); // change author to current user when backend is ready
 		setDraft('');
 		setReplyTarget(null);
+		stuckToBottomRef.current = true;
 		inputRef.current?.focus();
 	};
 
@@ -327,12 +328,6 @@ function ThreadPanel({
 					rows={1}
 					value={draft}
 					onChange={(e) => setDraft(e.target.value)}
-					onKeyDown={(e) => {
-						if (e.key === 'Enter' && !e.shiftKey) {
-							e.preventDefault();
-							send();
-						}
-					}}
 					placeholder={
 						replyTarget !== null && comments[replyTarget] ? `Reply to ${comments[replyTarget].author}...` : 'Reply...'
 					}
