@@ -122,10 +122,6 @@
 	overflow-wrap: break-word;
 }
 
-.chatMessage.flash {
-	animation: message-flash 1.2s ease;
-}
-
 .messageReference {
 	position: absolute;
 	top: 8px;
@@ -174,64 +170,6 @@
 	outline: none;
 }
 
-.replyPreview {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 12px;
-	border-radius: 12px;
-	background: rgba(83, 62, 82, 0.25);
-	font-size: 0.82rem;
-	color: var(--offwhite);
-}
-
-.replyPreviewText {
-	flex: 0 0 auto;
-}
-
-.replyPreviewText strong {
-	color: var(--text-h);
-}
-
-.replyPreviewSnippet {
-	flex: 1;
-	min-width: 0;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.replyPreviewClose {
-	display: grid;
-	place-items: center;
-	flex: 0 0 auto;
-	width: 22px;
-	height: 22px;
-	padding: 0;
-	border: 0;
-	border-radius: 50%;
-	background: transparent;
-	color: var(--offwhite);
-	cursor: pointer;
-}
-
-.replyPreviewClose:hover,
-.replyPreviewClose:focus-visible {
-	outline: none;
-	background: rgba(83, 62, 82, 0.4);
-	color: var(--text-h);
-}
-
-@keyframes message-flash {
-	0%,
-	100% {
-		background: transparent;
-	}
-	25% {
-		background: rgba(83, 62, 82, 0.35);
-	}
-}
-
 .chatMessageTopline {
 	display: flex;
 	align-items: center;
@@ -249,44 +187,10 @@
 	cursor: default;
 }
 
-.editedMark {
-	font-size: 0.7rem;
-	color: #7d7d7d;
-}
-
 .pinnedMark {
 	display: inline-flex;
 	color: var(--offwhite);
 	flex: 0 0 auto;
-}
-
-.messageEditor {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.messageEditor textarea {
-	width: 100%;
-	padding: 10px 12px;
-	box-sizing: border-box;
-	border-radius: 12px;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.05);
-	color: var(--text);
-	font: inherit;
-	line-height: 1.45;
-	resize: none;
-}
-
-.messageEditor textarea:focus {
-	outline: none;
-	border-color: var(--accent-border);
-}
-
-.messageEditor span {
-	color: var(--offwhite);
-	font-size: 0.76rem;
 }
 
 .messageAvatar {

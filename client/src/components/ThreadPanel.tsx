@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 
 import { comments as seedComments } from '../appData';
 import { copyText } from '../lib/clipboard';
 import { formatCount } from '../lib/formatCount';
+import shared from '../styles/shared.module.css';
 import type { Post, ThreadComment } from '../types';
 import type { ContextMenuItem } from './ContextMenu';
 import styles from './ThreadPanel.module.css';
@@ -240,7 +241,7 @@ function ThreadPanel({
 						<article
 							key={comment.id}
 							id={`comment-${comment.id}`}
-							className={`${styles.comment} ${flashId === comment.id ? styles.flash : ''}`}
+							className={`${styles.comment} ${flashId === comment.id ? shared.flash : ''}`}
 							onContextMenu={(e) => openCommentMenu(e, comment, index)}
 						>
 							{/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
@@ -251,7 +252,7 @@ function ThreadPanel({
 									<span>{comment.time}</span>
 								</div>
 								{editingIndex === index ? (
-									<div className={styles.commentEditor}>
+									<div className={shared.editor}>
 										<textarea
 											ref={(el) => {
 												el?.focus();
@@ -288,7 +289,7 @@ function ThreadPanel({
 										)}
 										<p>
 											{comment.body}
-											{comment.edited && <span className={styles.editedMark}> (edited)</span>}
+											{comment.edited && <span className={shared.editedMark}> (edited)</span>}
 										</p>
 									</>
 								)}
@@ -299,14 +300,14 @@ function ThreadPanel({
 			</div>
 
 			{replyTarget !== null && comments[replyTarget] && (
-				<div className={styles.replyPreview}>
-					<span className={styles.replyPreviewText}>
+				<div className={`${styles.replyPreview} ${shared.replyPreview}`}>
+					<span className={shared.replyPreviewText}>
 						Replying to <strong>{comments[replyTarget].author}</strong>
 					</span>
-					<span className={styles.replyPreviewSnippet}>{snippet(comments[replyTarget].body)}</span>
+					<span className={shared.replyPreviewSnippet}>{snippet(comments[replyTarget].body)}</span>
 					<button
 						type="button"
-						className={styles.replyPreviewClose}
+						className={shared.replyPreviewClose}
 						onClick={() => setReplyTarget(null)}
 						aria-label="Cancel reply"
 					>

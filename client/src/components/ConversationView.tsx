@@ -24,6 +24,7 @@ import {
 } from 'react';
 import { copyText } from '../lib/clipboard';
 import type { Community, ConversationMutuals, MessageEntry } from '../types';
+import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
 import styles from './ConversationView.module.css';
 
@@ -341,7 +342,7 @@ function ConversationView({
 					<article
 						id={`msg-${message.id}`}
 						key={message.id}
-						className={`${styles.chatMessage} ${flashId === message.id ? styles.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
+						className={`${styles.chatMessage} ${flashId === message.id ? shared.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
 						onContextMenu={(e) => openMessageMenu(e, message)}
 					>
 						<div className={styles.messageAvatar}>{message.author[0]}</div>
@@ -368,7 +369,7 @@ function ConversationView({
 								)}
 							</div>
 							{editingId === message.id ? (
-								<div className={styles.messageEditor}>
+								<div className={shared.editor}>
 									<textarea
 										ref={(el) => {
 											el?.focus();
@@ -393,7 +394,7 @@ function ConversationView({
 							) : (
 								<p>
 									{message.body}
-									{message.edited && <span className={styles.editedMark}> (edited)</span>}
+									{message.edited && <span className={shared.editedMark}> (edited)</span>}
 								</p>
 							)}
 							{message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
@@ -404,14 +405,14 @@ function ConversationView({
 
 			<form className={styles.messageComposer} onSubmit={handleSubmit}>
 				{replyTarget && (
-					<div className={styles.replyPreview}>
-						<span className={styles.replyPreviewText}>
+					<div className={shared.replyPreview}>
+						<span className={shared.replyPreviewText}>
 							Replying to <strong>{replyTarget.author}</strong>
 						</span>
-						<span className={styles.replyPreviewSnippet}>{snippet(replyTarget.body)}</span>
+						<span className={shared.replyPreviewSnippet}>{snippet(replyTarget.body)}</span>
 						<button
 							type="button"
-							className={styles.replyPreviewClose}
+							className={shared.replyPreviewClose}
 							onClick={() => setReplyTarget(null)}
 							aria-label="Cancel reply"
 							title="Cancel reply"

@@ -383,13 +383,11 @@
 	flex-direction: column;
 }
 
+.notifRow,
 .userRow {
-	display: flex;
 	width: 100%;
 	box-sizing: border-box;
-	padding: 6px 0;
 	border: 0;
-	border-top: 1px solid rgba(255, 255, 255, 0.04);
 	background: transparent;
 	color: inherit;
 	font: inherit;
@@ -397,8 +395,10 @@
 	cursor: pointer;
 }
 
-.userRow:first-child {
-	border-top: 0;
+.userRow {
+	display: flex;
+	padding: 6px 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .userRowBox {
@@ -469,20 +469,13 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 12px;
-	width: 100%;
 	padding: 12px 2px 12px 12px;
-	box-sizing: border-box;
-	border: 0;
 	border-top: 1px solid rgba(255, 255, 255, 0.04);
-	background: transparent;
-	color: inherit;
-	font: inherit;
-	text-align: left;
-	cursor: pointer;
 	transition: background 120ms ease;
 }
 
-.notifRow:first-child {
+.notifRow:first-child,
+.userRow:first-child {
 	border-top: 0;
 }
 
@@ -1086,14 +1079,6 @@
 	outline: none;
 	border-color: rgba(255, 255, 255, 0.14);
 	transform: translateY(-1px);
-}
-
-.postStat {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	padding: 8px 10px;
-	color: var(--offwhite);
 }
 
 .resultCommunityRow {

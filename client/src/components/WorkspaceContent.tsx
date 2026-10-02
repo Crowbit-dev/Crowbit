@@ -497,18 +497,36 @@ function WorkspaceContent({
 										{post.body && <p className={styles.postBody}>{post.body}</p>}
 
 										<div className={styles.postStats}>
-											<span className={styles.postStat}>
-												<ArrowBigUp size={16} aria-hidden="true" />
+											<button
+												type="button"
+												className={styles.postAction}
+												aria-label={`Upvote ${post.title}`}
+												onClick={(e) => e.stopPropagation()}
+											>
+												<ArrowBigUp aria-hidden="true" />
 												<span>{formatCount(post.stats.upvotes)}</span>
-											</span>
-											<span className={styles.postStat}>
-												<MessageCircle size={16} aria-hidden="true" />
+											</button>
+											<button
+												type="button"
+												className={styles.postAction}
+												aria-label={`View comments for ${post.title}`}
+												onClick={(e) => {
+													e.stopPropagation();
+													onOpenThread(post);
+												}}
+											>
+												<MessageCircle aria-hidden="true" />
 												<span>{formatCount(post.stats.comments)}</span>
-											</span>
-											<span className={styles.postStat}>
-												<Share2 size={16} aria-hidden="true" />
+											</button>
+											<button
+												type="button"
+												className={styles.postAction}
+												aria-label={`Share ${post.title}`}
+												onClick={(e) => e.stopPropagation()}
+											>
+												<Share2 aria-hidden="true" />
 												<span>{formatCount(post.stats.shares)}</span>
-											</span>
+											</button>
 										</div>
 									</article>
 								);
