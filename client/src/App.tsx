@@ -7,7 +7,7 @@ import WorkspaceContent from './components/WorkspaceContent';
 import WorkspaceRail from './components/WorkspaceRail';
 import WorkspaceSidebar from './components/WorkspaceSidebar';
 import { communities, directMessages, notifications, posts } from './appData';
-import type { NotificationKind, Post, SearchFilter, WorkspaceMode } from './types';
+import type { DirectMessage, NotificationKind, Post, SearchFilter, WorkspaceMode } from './types';
 
 type LastVisited = {
 	community: string;
@@ -166,9 +166,25 @@ function App() {
 		setLastVisited((prev) => ({ ...prev, dm: dmId }));
 	};
 
+	const [dmList, setDmList] = useState<DirectMessage[]>(directMessages);
+
 	const openDm = (dmId: string) => {
 		selectDm(dmId);
 		setMode('dms');
+	};
+
+	const openDmWithName = (name: string) => {
+		const trimmed = name.trim();
+		if (!trimmed) return;
+		const id = trimmed.toLowerCase();
+		const memberStatus =
+			visibleCommunities.flatMap((community) => community.members).find((member) => member.name.toLowerCase() === id)
+				?.status ?? 'online';
+		setDmList((prev) => {
+			if (prev.some((entry) => entry.id === id)) return prev;
+			return [...prev, { id, name: trimmed, status: memberStatus, customStatus: '', preview: '', time: 'now' }];
+		});
+		openDm(id);
 	};
 
 	const commitSearch = (query: string) => {
@@ -339,7 +355,7 @@ function App() {
 				<WorkspaceSidebar
 					mode={mode}
 					communities={visibleCommunities}
-					directMessages={directMessages}
+					directMessages={dmList}
 					activeCommunityName={activeCommunityName}
 					activeDmId={activeDmId}
 					feedScope={feedScope}
@@ -362,7 +378,7 @@ function App() {
 					mode={mode}
 					communities={visibleCommunities}
 					posts={localPosts}
-					directMessages={directMessages}
+					directMessages={dmList}
 					activeCommunityName={activeCommunityName}
 					activeChannelId={activeChannelId}
 					activeDmId={activeDmId}
@@ -378,6 +394,7 @@ function App() {
 					searchFilter={searchFilter}
 					appliedSearchQuery={appliedSearch}
 					onOpenDm={openDm}
+					onOpenDmWithName={openDmWithName}
 					onToggleJoin={toggleJoin}
 				/>
 

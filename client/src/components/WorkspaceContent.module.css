@@ -717,6 +717,7 @@
 	top: 0;
 	bottom: 0;
 	right: 0;
+	z-index: 6;
 	width: 1px;
 	background: color-mix(in srgb, var(--community-color, var(--accent)) 45%, transparent);
 }

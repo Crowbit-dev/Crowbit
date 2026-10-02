@@ -62,6 +62,7 @@ type WorkspaceContentProps = {
 	appliedSearchQuery: string;
 	onOpenChannel: (communityName: string, channelId: string) => void;
 	onOpenDm: (dmId: string) => void;
+	onOpenDmWithName: (name: string) => void;
 	onToggleJoin: (communityName: string) => void;
 	onOpenThread: (post: Post) => void;
 	onDeletePost: (post: Post) => void;
@@ -141,6 +142,7 @@ function WorkspaceContent({
 	appliedSearchQuery,
 	onOpenChannel,
 	onOpenDm,
+	onOpenDmWithName,
 	onToggleJoin,
 	onOpenThread,
 	onDeletePost,
@@ -192,8 +194,11 @@ function WorkspaceContent({
 				onSelect: () => void copyText(`https://crowbit.net/u/${id}`),
 			},
 			{ type: 'separator' },
-			// TEMPORARY: decorative until DMs and profiles land.
-			{ icon: <MessageCircle size={16} aria-hidden="true" />, label: 'Message', onSelect: () => {} },
+			{
+				icon: <MessageCircle size={16} aria-hidden="true" />,
+				label: 'Message',
+				onSelect: () => onOpenDmWithName(member.name),
+			},
 			{ icon: <User size={16} aria-hidden="true" />, label: 'View Profile', onSelect: () => {} },
 			{ type: 'separator' },
 			// TEMPORARY: decorative until moderation lands.
@@ -565,7 +570,8 @@ function WorkspaceContent({
 														<strong>{user.name}</strong>
 													</span>
 													<span className={styles.notifMeta}>
-														{user.detail} · {statusLabel(user.status)}
+														{user.detail ? `${user.detail} · ` : ''}
+														{statusLabel(user.status)}
 													</span>
 												</span>
 											</span>
@@ -716,6 +722,8 @@ function WorkspaceContent({
 								activeCommunity.members.map((member) => member.name),
 							)}
 							edgeScrollbar
+							moderationCommunity={activeCommunity}
+							onMessageUser={onOpenDmWithName}
 							openMenu={openMenu}
 						/>
 					</div>

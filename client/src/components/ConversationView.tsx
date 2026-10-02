@@ -1,4 +1,19 @@
-import { Copy, Link2, Paperclip, Pencil, Pin, Reply, SendHorizontal, Trash2, X } from 'lucide-react';
+import {
+	Ban,
+	Copy,
+	Link2,
+	MessageCircle,
+	Paperclip,
+	Pencil,
+	Pin,
+	Reply,
+	SendHorizontal,
+	Trash2,
+	User,
+	UserX,
+	VolumeX,
+	X,
+} from 'lucide-react';
 import {
 	useEffect,
 	useRef,
@@ -8,7 +23,7 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { copyText } from '../lib/clipboard';
-import type { ConversationMutuals, MessageEntry } from '../types';
+import type { Community, ConversationMutuals, MessageEntry } from '../types';
 import type { ContextMenuItem } from './ContextMenu';
 import styles from './ConversationView.module.css';
 
@@ -18,6 +33,8 @@ type ConversationViewProps = {
 	mutuals?: ConversationMutuals;
 	metaOpen?: boolean;
 	edgeScrollbar?: boolean;
+	moderationCommunity?: Community;
+	onMessageUser?: (name: string) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 };
 
@@ -68,6 +85,8 @@ function ConversationView({
 	mutuals,
 	metaOpen = false,
 	edgeScrollbar = false,
+	moderationCommunity,
+	onMessageUser,
 	openMenu,
 }: ConversationViewProps) {
 	const hasMutualCommunities = (mutuals?.communities.length ?? 0) > 0;
@@ -264,6 +283,27 @@ function ConversationView({
 					});
 				},
 			});
+		}
+		const member =
+			message.author === 'You'
+				? undefined
+				: moderationCommunity?.members.find((entry) => entry.name === message.author);
+		if (member) {
+			items.push({ type: 'separator' });
+			if (onMessageUser) {
+				items.push({
+					icon: <MessageCircle size={16} aria-hidden="true" />,
+					label: 'Message',
+					onSelect: () => onMessageUser(member.name),
+				});
+			}
+			// TEMPORARY: decorative until profiles land.
+			items.push({ icon: <User size={16} aria-hidden="true" />, label: 'View Profile', onSelect: () => {} });
+			items.push({ type: 'separator' });
+			// TEMPORARY: decorative until moderation lands.
+			items.push({ icon: <VolumeX size={16} aria-hidden="true" />, label: 'Mute', onSelect: () => {} });
+			items.push({ icon: <UserX size={16} aria-hidden="true" />, label: 'Kick', danger: true, onSelect: () => {} });
+			items.push({ icon: <Ban size={16} aria-hidden="true" />, label: 'Ban', danger: true, onSelect: () => {} });
 		}
 		openMenu(e.clientX, e.clientY, items, e.currentTarget);
 	};
