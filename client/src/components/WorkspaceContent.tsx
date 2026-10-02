@@ -30,6 +30,7 @@ import type {
 	CommunityMember,
 	DirectMessage,
 	MessageRequestsAudience,
+	NotificationAudience,
 	NotificationItem,
 	Post,
 	ProfileVisibility,
@@ -290,7 +291,9 @@ function WorkspaceContent({
 		const q = searchQuery.trim().toLowerCase();
 		const visibleItems = notifications.filter(
 			(item) =>
-				settingsPrefs.notifications[item.kind] &&
+				(item.kind === 'friend_request'
+					? settingsPrefs.notifications.friend_request
+					: settingsPrefs.notifications[item.kind] !== 'off') &&
 				(notifFilter === 'all' || item.kind === notifFilter) &&
 				(!q || `${item.actor} ${item.community} ${item.channel} ${item.snippet}`.toLowerCase().includes(q)),
 		);
@@ -842,17 +845,31 @@ function WorkspaceContent({
 					)}
 					{settingsCategory === 'notifications' && (
 						<div>
-							{(['mention', 'like', 'friend_request', 'reply', 'comment'] as const).map((kind) => (
+							<h3 className={settingStyles.subHead}>Push notifications</h3>
+							{(['friend_request', 'mention', 'like',  'reply', 'comment'] as const).map((kind) => (
 								<SettingRow
 									key={kind}
 									label={notifFilterLabels[kind]}
-									copy={`Show ${notifFilterLabels[kind].toLowerCase()} in your inbox.`}
 									control={
-										<SettingToggle
-											checked={settingsPrefs.notifications[kind]}
-											onChange={(next) => onUpdateSettings('notifications', { [kind]: next })}
-											label={notifFilterLabels[kind]}
-										/>
+										kind === 'friend_request' ? (
+											<SettingToggle
+												checked={settingsPrefs.notifications.friend_request}
+												onChange={(next) => onUpdateSettings('notifications', { friend_request: next })}
+												label={notifFilterLabels[kind]}
+											/>
+										) : (
+											<SettingRadioGroup
+												value={settingsPrefs.notifications[kind]}
+												onChange={(next) => onUpdateSettings('notifications', { [kind]: next as NotificationAudience })}
+												label={notifFilterLabels[kind]}
+												options={[
+													{ value: 'everyone', label: 'Everyone' },
+													{ value: 'friends', label: 'Friends' },
+													{ value: 'following', label: 'Profiles I follow' },
+													{ value: 'off', label: 'Off' },
+												]}
+											/>
+										)
 									}
 								/>
 							))}

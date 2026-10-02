@@ -96,7 +96,7 @@ export type ProfileVisibility = 'public' | 'private';
 
 export type MessageRequestsAudience = 'everyone' | 'followers' | 'none';
 
-export type NotificationKindToggles = Record<NotificationKind, boolean>;
+export type NotificationAudience = 'everyone' | 'friends' | 'following' | 'off';
 
 export type SettingsPrefs = {
 	account: { displayName: string; username: string; email: string; twoFactor: boolean };
@@ -108,7 +108,9 @@ export type SettingsPrefs = {
 		showCloseFriendsBadge: boolean;
 		messageRequests: MessageRequestsAudience;
 	};
-	notifications: NotificationKindToggles;
+	notifications: Record<Exclude<NotificationKind, 'friend_request'>, NotificationAudience> & {
+		friend_request: boolean;
+	};
 	accessibility: { reduceMotion: boolean; compactDensity: boolean };
 	voice: { noiseSuppression: boolean; echoCancellation: boolean; microphone: string; camera: string };
 };

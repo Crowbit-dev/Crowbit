@@ -10,6 +10,7 @@ import { communities, currentUser, directMessages, notifications, posts } from '
 import type {
 	DirectMessage,
 	MessageRequestsAudience,
+	NotificationAudience,
 	NotificationKind,
 	Post,
 	SearchFilter,
@@ -40,7 +41,13 @@ const DEFAULT_SETTINGS: SettingsPrefs = {
 		showCloseFriendsBadge: true,
 		messageRequests: 'everyone',
 	},
-	notifications: { mention: true, like: true, friend_request: true, reply: true, comment: true },
+	notifications: {
+		mention: 'everyone',
+		like: 'everyone',
+		friend_request: true,
+		reply: 'everyone',
+		comment: 'everyone',
+	},
 	accessibility: { reduceMotion: false, compactDensity: false },
 	voice: { noiseSuppression: true, echoCancellation: true, microphone: 'Default', camera: 'Off' },
 };
@@ -50,7 +57,10 @@ function loadSettings(): SettingsPrefs {
 		const raw = localStorage.getItem(SETTINGS_KEY);
 		if (!raw) return DEFAULT_SETTINGS;
 		const parsed = JSON.parse(raw) as Partial<SettingsPrefs>;
-		const kindToggles = (value: unknown): boolean => (typeof value === 'boolean' ? value : true);
+		const kindAudience = (value: unknown): NotificationAudience =>
+			(['everyone', 'friends', 'following', 'off'] as NotificationAudience[]).includes(value as NotificationAudience)
+				? (value as NotificationAudience)
+				: 'everyone';
 		return {
 			account: {
 				displayName: typeof parsed.account?.displayName === 'string' ? parsed.account.displayName.slice(0, 32) : '',
@@ -79,11 +89,12 @@ function loadSettings(): SettingsPrefs {
 					: 'everyone',
 			},
 			notifications: {
-				mention: kindToggles(parsed.notifications?.mention),
-				like: kindToggles(parsed.notifications?.like),
-				friend_request: kindToggles(parsed.notifications?.friend_request),
-				reply: kindToggles(parsed.notifications?.reply),
-				comment: kindToggles(parsed.notifications?.comment),
+				mention: kindAudience(parsed.notifications?.mention),
+				like: kindAudience(parsed.notifications?.like),
+				friend_request:
+					typeof parsed.notifications?.friend_request === 'boolean' ? parsed.notifications.friend_request : true,
+				reply: kindAudience(parsed.notifications?.reply),
+				comment: kindAudience(parsed.notifications?.comment),
 			},
 			accessibility: {
 				reduceMotion: parsed.accessibility?.reduceMotion ?? false,
