@@ -18,6 +18,14 @@
 	font-size: 1.35rem;
 }
 
+.settingsHeading {
+	color: var(--offwhite);
+}
+
+.settingsSidebar {
+	padding-top: 14px;
+}
+
 .communityEdge {
 	border-right: 1px solid color-mix(in srgb, var(--community-color) 35%, transparent);
 }

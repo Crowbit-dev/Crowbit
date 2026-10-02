@@ -294,9 +294,7 @@
 }
 
 .resultList,
-.channelGrid,
-.settingsGrid,
-.searchGrid {
+.channelGrid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
@@ -420,10 +418,6 @@
 
 .userRow:focus-visible {
 	outline: none;
-}
-
-.settingsCard p {
-	color: var(--offwhite);
 }
 
 .notifBar {
@@ -656,13 +650,6 @@
 	}
 }
 
-.searchGrid,
-.settingsGrid {
-	display: grid;
-	gap: 14px;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .communitiesLayout {
 	gap: 0;
 	padding: 0;
@@ -770,28 +757,6 @@
 .memberOverlayOpen .memberOverlaySlide {
 	transform: none;
 	transition: transform 280ms ease-out 40ms;
-}
-
-.settingsCard svg {
-	flex: 0 0 auto;
-	color: var(--offwhite);
-}
-
-.settingsCard {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 14px;
-	padding: 18px;
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: var(--shadow-card);
-	background: rgba(49, 49, 49, 0.82);
-	border-radius: 18px;
-}
-
-.settingsGrid .settingsCard {
-	min-height: 130px;
-	justify-content: flex-start;
 }
 
 .channelCard {
@@ -1129,13 +1094,6 @@
 	margin: 2px 0 0;
 	color: var(--offwhite);
 	font-size: 0.85rem;
-}
-
-@media (max-width: 1280px) {
-	.settingsGrid,
-	.searchGrid {
-		grid-template-columns: 1fr;
-	}
 }
 
 @media (max-width: 980px) {

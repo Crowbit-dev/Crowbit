@@ -87,6 +87,27 @@ export type ConversationMutuals = {
 
 export type SearchFilter = 'post' | 'user' | 'community';
 
+export type SettingsCategory = 'account' | 'privacy' | 'notifications' | 'accessibility' | 'voice';
+
+export type ProfileVisibility = 'public' | 'private';
+
+export type NotificationKindToggles = Record<NotificationKind, boolean>;
+
+export type SettingsPrefs = {
+	account: { displayName: string; username: string; email: string; twoFactor: boolean };
+	privacy: {
+		profileVisibility: ProfileVisibility;
+		allowDirectMessages: boolean;
+		showReadActivity: boolean;
+		readReceipts: boolean;
+		typingIndicators: boolean;
+		showCloseFriendsBadge: boolean;
+	};
+	notifications: NotificationKindToggles;
+	accessibility: { reduceMotion: boolean; compactDensity: boolean };
+	voice: { noiseSuppression: boolean; echoCancellation: boolean; microphone: string; camera: string };
+};
+
 export type SearchUser = {
 	name: string;
 	detail: string;

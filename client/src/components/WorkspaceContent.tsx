@@ -4,6 +4,7 @@ import {
 	Ban,
 	CheckCheck,
 	ChevronDown,
+	ChevronRight,
 	Copy,
 	Ellipsis,
 	Hash,
@@ -15,7 +16,6 @@ import {
 	Reply,
 	Search,
 	Share2,
-	Shield,
 	Trash2,
 	User,
 	UserPlus,
@@ -31,16 +31,21 @@ import type {
 	DirectMessage,
 	NotificationItem,
 	Post,
+	ProfileVisibility,
 	SearchFilter,
 	SearchUser,
+	SettingsCategory,
+	SettingsPrefs,
 	WorkspaceMode,
 } from '../types';
-import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications } from '../appData';
+import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications, currentUser } from '../appData';
 import { copyText } from '../lib/clipboard';
 import { postLink, profileLink } from '../lib/site';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
 import ConversationView from './ConversationView';
+import { SettingRadioGroup, SettingRow, SettingSelect, SettingEditableText, SettingToggle } from './SettingControls';
+import settingStyles from './SettingControls.module.css';
 import { delaunay, type DelaunayPoint } from '../lib/delaunay';
 import { formatCount } from '../lib/formatCount';
 import { gradientCommunityColor } from '../lib/communityColor';
@@ -65,6 +70,9 @@ type WorkspaceContentProps = {
 	onOpenDm: (dmId: string) => void;
 	onOpenDmWithName: (name: string) => void;
 	onToggleJoin: (communityName: string) => void;
+	settingsCategory: SettingsCategory;
+	settingsPrefs: SettingsPrefs;
+	onUpdateSettings: <K extends keyof SettingsPrefs>(section: K, patch: Partial<SettingsPrefs[K]>) => void;
 	onOpenThread: (post: Post) => void;
 	onDeletePost: (post: Post) => void;
 	threadShift: number;
@@ -145,6 +153,9 @@ function WorkspaceContent({
 	onOpenDm,
 	onOpenDmWithName,
 	onToggleJoin,
+	settingsCategory,
+	settingsPrefs,
+	onUpdateSettings,
 	onOpenThread,
 	onDeletePost,
 	threadShift,
@@ -278,6 +289,7 @@ function WorkspaceContent({
 		const q = searchQuery.trim().toLowerCase();
 		const visibleItems = notifications.filter(
 			(item) =>
+				settingsPrefs.notifications[item.kind] &&
 				(notifFilter === 'all' || item.kind === notifFilter) &&
 				(!q || `${item.actor} ${item.community} ${item.channel} ${item.snippet}`.toLowerCase().includes(q)),
 		);
@@ -608,28 +620,304 @@ function WorkspaceContent({
 	if (mode === 'settings') {
 		return (
 			<main className={styles.workspaceContent}>
-				<section className={`${styles.panelStack} ${styles.settingsGrid}`}>
-					<article className={styles.settingsCard}>
-						<Shield aria-hidden="true" />
+				<section className={styles.panelStack}>
+					{settingsCategory === 'account' && (
 						<div>
-							<strong>Privacy</strong>
-							<p>Control who can view your content, profile, and activity.</p>
+							<h3 className={settingStyles.subHead}>Account info</h3>
+							<SettingRow
+								label="Display name"
+								copy="Displayed on your profile and posts."
+								control={
+									<SettingEditableText
+										value={settingsPrefs.account.displayName}
+										fallback={currentUser.displayName}
+										onSave={(next) => onUpdateSettings('account', { displayName: next })}
+										label="Display name"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Username"
+								copy="Your unique handle across the network."
+								control={
+									<SettingEditableText
+										value={settingsPrefs.account.username}
+										fallback={currentUser.username.replace(/^@+/, '')}
+										prefix="@"
+										onSave={(next) => onUpdateSettings('account', { username: next.replace(/^@+/, '') })}
+										label="Username"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Email"
+								copy="Used for sign-in and notifications."
+								control={
+									<SettingEditableText
+										value={settingsPrefs.account.email}
+										fallback={currentUser.email}
+										onSave={(next) => onUpdateSettings('account', { email: next })}
+										label="Email"
+									/>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Password &amp; security</h3>
+							<SettingRow
+								label="Two-factor authentication"
+								copy="Require a code when signing in."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.account.twoFactor}
+										onChange={(next) => onUpdateSettings('account', { twoFactor: next })}
+										label="Two-factor authentication"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Active sessions"
+								copy="Review the devices signed in to your account."
+								control={
+									<>
+										{/* TEMPORARY: opens the device list once it exists. */}
+										<button type="button" className={settingStyles.plainButton} aria-label="View active sessions">
+											1 session
+											<ChevronRight size={14} aria-hidden="true" />
+										</button>
+									</>
+								}
+							/>
+							<SettingRow
+								label="Password"
+								copy="yeah, no. password123 isn't going to cut it."
+								control={
+									<>
+										{/* TEMPORARY: decorative until password change lands. */}
+										<button type="button" className={settingStyles.plainButton}>
+											Change password
+										</button>
+									</>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Danger zone</h3>
+							<SettingRow
+								label="Disable account"
+								copy="Take a break from the network and hide your profile."
+								control={
+									<>
+										{/* TEMPORARY: decorative until account disabling lands. */}
+										<button type="button" className={settingStyles.plainButton}>
+											Disable account
+										</button>
+									</>
+								}
+							/>
+							<SettingRow
+								label="Delete account"
+								copy="Permanently remove your account and data."
+								control={
+									<>
+										{/* TEMPORARY: decorative until account deletion lands. */}
+										<button type="button" className={settingStyles.dangerButton}>
+											Delete account
+										</button>
+									</>
+								}
+							/>
 						</div>
-					</article>
-					<article className={styles.settingsCard}>
-						<MessageCircle aria-hidden="true" />
+					)}
+					{settingsCategory === 'privacy' && (
 						<div>
-							<strong>Notifications</strong>
-							<p>Choose alerts for communities, friends, and direct messages.</p>
+							<h3 className={settingStyles.subHead}>Visibility</h3>
+							<SettingRow
+								label="Profile visibility"
+								copy="Who can view your profile."
+								control={
+									<SettingRadioGroup
+										value={settingsPrefs.privacy.profileVisibility}
+										onChange={(next) => onUpdateSettings('privacy', { profileVisibility: next as ProfileVisibility })}
+										label="Profile visibility"
+										options={[
+											{ value: 'public', label: 'Public' },
+											{ value: 'private', label: 'Private' },
+										]}
+									/>
+								}
+							/>
+							<SettingRow
+								label="Show read activity"
+								copy="Let others see what you have read."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.privacy.showReadActivity}
+										onChange={(next) => onUpdateSettings('privacy', { showReadActivity: next })}
+										label="Show read activity"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Close friends"
+								copy="People who see your closest updates."
+								control={
+									<>
+										{/* TEMPORARY: decorative until close friends management lands. */}
+										<button type="button" className={settingStyles.plainButton}>
+											Manage
+										</button>
+									</>
+								}
+							/>
+							<SettingRow
+								label="Show close friends badge"
+								copy="Display a badge on posts for close friends."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.privacy.showCloseFriendsBadge}
+										onChange={(next) => onUpdateSettings('privacy', { showCloseFriendsBadge: next })}
+										label="Show close friends badge"
+									/>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Messaging</h3>
+							<SettingRow
+								label="Allow direct messages"
+								copy="Let people outside your spaces message you."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.privacy.allowDirectMessages}
+										onChange={(next) => onUpdateSettings('privacy', { allowDirectMessages: next })}
+										label="Allow direct messages"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Read receipts"
+								copy="Send read confirmations in conversations."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.privacy.readReceipts}
+										onChange={(next) => onUpdateSettings('privacy', { readReceipts: next })}
+										label="Read receipts"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Typing indicators"
+								copy="Show when you are typing a message."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.privacy.typingIndicators}
+										onChange={(next) => onUpdateSettings('privacy', { typingIndicators: next })}
+										label="Typing indicators"
+									/>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Blocked users</h3>
+							<SettingRow
+								label="Block list"
+								copy="People who cannot contact you or see your activity."
+								control={
+									<>
+										{/* TEMPORARY: decorative until block list management lands. */}
+										<button type="button" className={settingStyles.plainButton}>
+											Manage
+										</button>
+									</>
+								}
+							/>
 						</div>
-					</article>
-					<article className={styles.settingsCard}>
-						<Users aria-hidden="true" />
+					)}
+					{settingsCategory === 'notifications' && (
 						<div>
-							<strong>Account</strong>
-							<p>Manage login methods, sessions, and profile details.</p>
+							{(['mention', 'like', 'follow_request', 'reply', 'comment'] as const).map((kind) => (
+								<SettingRow
+									key={kind}
+									label={notifFilterLabels[kind]}
+									copy={`Show ${notifFilterLabels[kind].toLowerCase()} in your inbox.`}
+									control={
+										<SettingToggle
+											checked={settingsPrefs.notifications[kind]}
+											onChange={(next) => onUpdateSettings('notifications', { [kind]: next })}
+											label={notifFilterLabels[kind]}
+										/>
+									}
+								/>
+							))}
 						</div>
-					</article>
+					)}
+					{settingsCategory === 'accessibility' && (
+						<div>
+							<SettingRow
+								label="Reduce motion"
+								copy="Disable animations and transitions."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.accessibility.reduceMotion}
+										onChange={(next) => onUpdateSettings('accessibility', { reduceMotion: next })}
+										label="Reduce motion"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Compact density"
+								copy="Tighter spacing in lists and cards."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.accessibility.compactDensity}
+										onChange={(next) => onUpdateSettings('accessibility', { compactDensity: next })}
+										label="Compact density"
+									/>
+								}
+							/>
+						</div>
+					)}
+					{settingsCategory === 'voice' && (
+						<div>
+							<SettingRow
+								label="Noise suppression"
+								copy="Filter background noise from your microphone."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.voice.noiseSuppression}
+										onChange={(next) => onUpdateSettings('voice', { noiseSuppression: next })}
+										label="Noise suppression"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Echo cancellation"
+								copy="Prevent echo during voice calls."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.voice.echoCancellation}
+										onChange={(next) => onUpdateSettings('voice', { echoCancellation: next })}
+										label="Echo cancellation"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Microphone"
+								control={
+									<SettingSelect
+										value={settingsPrefs.voice.microphone}
+										onChange={(next) => onUpdateSettings('voice', { microphone: next })}
+										label="Microphone"
+										options={['Default', 'Built-in Microphone', 'USB Headset']}
+									/>
+								}
+							/>
+							<SettingRow
+								label="Camera"
+								control={
+									<SettingSelect
+										value={settingsPrefs.voice.camera}
+										onChange={(next) => onUpdateSettings('voice', { camera: next })}
+										label="Camera"
+										options={['Off', 'FaceTime HD Camera', 'USB Camera']}
+									/>
+								}
+							/>
+						</div>
+					)}
 				</section>
 			</main>
 		);

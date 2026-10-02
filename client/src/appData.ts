@@ -285,7 +285,7 @@ export const notifications: NotificationItem[] = [
 	},
 ];
 
-export const currentUser = { displayName: 'Nova', username: '@nova' };
+export const currentUser = { displayName: 'Nova', username: '@nova', email: 'nova@crowbit.dev' };
 
 export const mutualFriendsByDm: Record<string, string[]> = {
 	maya: ['Jules', 'Sami', 'Theo'],

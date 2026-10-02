@@ -6,8 +6,16 @@ import ThreadPanel from './components/ThreadPanel';
 import WorkspaceContent from './components/WorkspaceContent';
 import WorkspaceRail from './components/WorkspaceRail';
 import WorkspaceSidebar from './components/WorkspaceSidebar';
-import { communities, directMessages, notifications, posts } from './appData';
-import type { DirectMessage, NotificationKind, Post, SearchFilter, WorkspaceMode } from './types';
+import { communities, currentUser, directMessages, notifications, posts } from './appData';
+import type {
+	DirectMessage,
+	NotificationKind,
+	Post,
+	SearchFilter,
+	SettingsCategory,
+	SettingsPrefs,
+	WorkspaceMode,
+} from './types';
 
 type LastVisited = {
 	community: string;
@@ -19,6 +27,75 @@ type LastVisited = {
 const LAST_VISITED_KEY = 'crowbit-last-visited';
 const RECENT_SEARCHES_KEY = 'crowbit-recent-searches';
 const MAX_RECENT_SEARCHES = 6;
+const SETTINGS_KEY = 'crowbit-settings';
+
+const DEFAULT_SETTINGS: SettingsPrefs = {
+	account: { displayName: '', username: '', email: '', twoFactor: false },
+	privacy: {
+		profileVisibility: 'public',
+		allowDirectMessages: true,
+		showReadActivity: true,
+		readReceipts: true,
+		typingIndicators: true,
+		showCloseFriendsBadge: true,
+	},
+	notifications: { mention: true, like: true, follow_request: true, reply: true, comment: true },
+	accessibility: { reduceMotion: false, compactDensity: false },
+	voice: { noiseSuppression: true, echoCancellation: true, microphone: 'Default', camera: 'Off' },
+};
+
+function loadSettings(): SettingsPrefs {
+	try {
+		const raw = localStorage.getItem(SETTINGS_KEY);
+		if (!raw) return DEFAULT_SETTINGS;
+		const parsed = JSON.parse(raw) as Partial<SettingsPrefs>;
+		const kindToggles = (value: unknown): boolean => (typeof value === 'boolean' ? value : true);
+		return {
+			account: {
+				displayName: typeof parsed.account?.displayName === 'string' ? parsed.account.displayName.slice(0, 32) : '',
+				username:
+					typeof parsed.account?.username === 'string'
+						? parsed.account.username.replace(/^@+/, '').trim().slice(0, 32)
+						: '',
+				email: typeof parsed.account?.email === 'string' ? parsed.account.email.trim().slice(0, 64) : '',
+				twoFactor: parsed.account?.twoFactor ?? false,
+			},
+			privacy: {
+				profileVisibility: (() => {
+					const stored = parsed.privacy?.profileVisibility;
+					if (stored === 'public' || stored === 'private') return stored;
+					if (stored === 'friends') return 'private';
+					return 'public';
+				})(),
+				allowDirectMessages: parsed.privacy?.allowDirectMessages ?? true,
+				showReadActivity: parsed.privacy?.showReadActivity ?? true,
+				readReceipts: parsed.privacy?.readReceipts ?? true,
+				typingIndicators: parsed.privacy?.typingIndicators ?? true,
+				showCloseFriendsBadge: parsed.privacy?.showCloseFriendsBadge ?? true,
+			},
+			notifications: {
+				mention: kindToggles(parsed.notifications?.mention),
+				like: kindToggles(parsed.notifications?.like),
+				follow_request: kindToggles(parsed.notifications?.follow_request),
+				reply: kindToggles(parsed.notifications?.reply),
+				comment: kindToggles(parsed.notifications?.comment),
+			},
+			accessibility: {
+				reduceMotion: parsed.accessibility?.reduceMotion ?? false,
+				compactDensity: parsed.accessibility?.compactDensity ?? false,
+			},
+			voice: {
+				noiseSuppression: parsed.voice?.noiseSuppression ?? true,
+				echoCancellation: parsed.voice?.echoCancellation ?? true,
+				microphone:
+					typeof parsed.voice?.microphone === 'string' && parsed.voice.microphone ? parsed.voice.microphone : 'Default',
+				camera: typeof parsed.voice?.camera === 'string' && parsed.voice.camera ? parsed.voice.camera : 'Off',
+			},
+		};
+	} catch {
+		return DEFAULT_SETTINGS;
+	}
+}
 
 function isFeedScope(value: unknown): value is string {
 	return (
@@ -98,6 +175,8 @@ function App() {
 	const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels));
 	const [activeDmId, setActiveDmId] = useState(lastVisited.dm);
 	const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all');
+	const [settingsCategory, setSettingsCategory] = useState<SettingsCategory>('account');
+	const [settingsPrefs, setSettingsPrefs] = useState<SettingsPrefs>(loadSettings);
 	const [joinedNames, setJoinedNames] = useState<string[]>(() =>
 		communities.filter((community) => community.joined).map((community) => community.name),
 	);
@@ -209,7 +288,7 @@ function App() {
 		setMode('communities');
 	};
 
-	const totalUnread = notifications.length;
+	const totalUnread = notifications.filter((item) => settingsPrefs.notifications[item.kind]).length;
 
 	const composerDefault = communities.some((community) => community.name === activeCommunityName)
 		? activeCommunityName
@@ -259,6 +338,22 @@ function App() {
 			// Storage unavailable — recents still apply for this session.
 		}
 	}, [recentSearches]);
+
+	useEffect(() => {
+		try {
+			localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsPrefs));
+		} catch {
+			// Storage unavailable — prefs still apply for this session.
+		}
+	}, [settingsPrefs]);
+
+	useEffect(() => {
+		document.documentElement.classList.toggle('reduce-motion', settingsPrefs.accessibility.reduceMotion);
+	}, [settingsPrefs.accessibility.reduceMotion]);
+
+	const updateSettings = <K extends keyof SettingsPrefs>(section: K, patch: Partial<SettingsPrefs[K]>) => {
+		setSettingsPrefs((prev) => ({ ...prev, [section]: { ...prev[section], ...patch } }));
+	};
 
 	const openMenu = (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle = false) => {
 		setMenu((prev) =>
@@ -335,6 +430,8 @@ function App() {
 			<WorkspaceRail
 				mode={mode}
 				totalUnread={totalUnread}
+				displayName={settingsPrefs.account.displayName || currentUser.displayName}
+				username={settingsPrefs.account.username || currentUser.username.replace(/^@+/, '')}
 				onChangeMode={(nextMode) => {
 					if (nextMode === 'feed') {
 						setFeedScope(lastVisited.feed);
@@ -372,6 +469,8 @@ function App() {
 					recentSearches={recentSearches}
 					onCommitSearch={commitSearch}
 					onClearRecentSearches={clearRecentSearches}
+					settingsCategory={settingsCategory}
+					onSelectSettingsCategory={setSettingsCategory}
 				/>
 
 				<WorkspaceContent
@@ -396,6 +495,9 @@ function App() {
 					onOpenDm={openDm}
 					onOpenDmWithName={openDmWithName}
 					onToggleJoin={toggleJoin}
+					settingsCategory={settingsCategory}
+					settingsPrefs={settingsPrefs}
+					onUpdateSettings={updateSettings}
 				/>
 
 				{activeThread && (

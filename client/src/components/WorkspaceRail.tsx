@@ -16,7 +16,6 @@ import {
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { WorkspaceMode } from '../types';
-import { currentUser } from '../appData';
 import { copyText } from '../lib/clipboard';
 import shared from '../styles/shared.module.css';
 import styles from './WorkspaceRail.module.css';
@@ -30,15 +29,17 @@ type RailItem = {
 type WorkspaceRailProps = {
 	mode: WorkspaceMode;
 	totalUnread: number;
+	displayName: string;
+	username: string;
 	onChangeMode: (nextMode: WorkspaceMode) => void;
 	onCompose: () => void;
 };
 
-function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: WorkspaceRailProps) {
+function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode, onCompose }: WorkspaceRailProps) {
 	const [muted, setMuted] = useState(false);
 	const [deafened, setDeafened] = useState(false);
 	const navigate = useNavigate();
-	// Deafening implies mute, like Discord: undeafening restores the prior mic state.
+	// Deafening implies mute, undeafening restores the prior mic state.
 	const micMuted = muted || deafened;
 
 	const [status, setStatus] = useState<'online' | 'away' | 'offline'>('online');
@@ -72,7 +73,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
 	);
 
 	const copyUsername = async () => {
-		await copyText(currentUser.username);
+		await copyText(`@${username}`);
 		setCopied(true);
 		if (copyTimer.current !== null) window.clearTimeout(copyTimer.current);
 		copyTimer.current = window.setTimeout(() => setCopied(false), 1500);
@@ -157,7 +158,7 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
 						aria-label="Current user profile"
 						title="Current user profile"
 					>
-						<span className={styles.railAvatar}>N</span>
+						<span className={styles.railAvatar}>{displayName.charAt(0).toUpperCase() || '?'}</span>
 					</button>
 					<div className={styles.profileCard}>
 						<button
@@ -170,19 +171,19 @@ function WorkspaceRail({ mode, totalUnread, onChangeMode, onCompose }: Workspace
 							aria-label={`Status: ${status}. Activate to change status.`}
 							title="Change status"
 						>
-							N
+							{displayName.charAt(0).toUpperCase() || '?'}
 							<span aria-hidden="true" className={`${shared.statusDot} ${shared[status]} ${shared.presenceDot}`} />
 						</button>
 						<span className={styles.profileDetails}>
 							<span className={styles.profileCopy}>
-								<strong>{currentUser.displayName}</strong>
+								<strong>{displayName}</strong>
 								<button
 									type="button"
 									className={`${styles.profileCopyName} ${copied ? styles.copied : ''}`}
 									onClick={copyUsername}
 									title="Copy username"
 								>
-									{copied ? 'Copied!' : currentUser.username}
+									{copied ? 'Copied!' : `@${username}`}
 								</button>
 							</span>
 							<button

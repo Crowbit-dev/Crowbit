@@ -1,22 +1,31 @@
 import {
 	AtSign,
+	Bell,
 	FileText,
-	Hash,
+	Headphones,
 	Heart,
 	History,
 	House,
 	LayoutGrid,
 	MessageCircle,
+	PersonStanding,
 	Reply,
 	Search,
-	Settings,
+	Shield,
 	User,
 	UserPlus,
 	Users,
 	X,
 } from 'lucide-react';
 import { useState, type CSSProperties } from 'react';
-import type { Community, DirectMessage, NotificationKind, SearchFilter, WorkspaceMode } from '../types';
+import type {
+	Community,
+	DirectMessage,
+	NotificationKind,
+	SearchFilter,
+	SettingsCategory,
+	WorkspaceMode,
+} from '../types';
 import { notifications } from '../appData';
 import { gradientCommunityColor } from '../lib/communityColor';
 import { searchFilterLabels } from '../lib/searchFilterLabels';
@@ -42,6 +51,8 @@ type WorkspaceSidebarProps = {
 	onSelectCommunity: (communityName: string) => void;
 	onSelectChannel: (communityName: string, channelId: string) => void;
 	onSelectDm: (dmId: string) => void;
+	settingsCategory: SettingsCategory;
+	onSelectSettingsCategory: (category: SettingsCategory) => void;
 	searchQuery: string;
 	onSearchQuery: (query: string) => void;
 };
@@ -127,6 +138,8 @@ function WorkspaceSidebar({
 	onClearRecentSearches,
 	onSelectCommunity,
 	onSelectDm,
+	settingsCategory,
+	onSelectSettingsCategory,
 	searchQuery,
 	onSearchQuery,
 }: WorkspaceSidebarProps) {
@@ -385,45 +398,32 @@ function WorkspaceSidebar({
 	}
 
 	if (mode === 'settings') {
+		const categories = [
+			{ id: 'account', label: 'Account', icon: <User size={16} aria-hidden="true" /> },
+			{ id: 'privacy', label: 'Privacy', icon: <Shield size={16} aria-hidden="true" /> },
+			{ id: 'notifications', label: 'Notifications', icon: <Bell size={16} aria-hidden="true" /> },
+			{ id: 'accessibility', label: 'Accessibility', icon: <PersonStanding size={16} aria-hidden="true" /> },
+			{ id: 'voice', label: 'Voice & Video', icon: <Headphones size={16} aria-hidden="true" /> },
+		] as const;
 		return (
-			<aside className={styles.workspaceSidebar}>
-				<SidebarHeading
-					key="settings"
-					id="settings"
-					kicker="Settings"
-					title="Preferences"
-					copy="Control visibility, notifications, and privacy defaults."
-				/>
+			<aside className={`${styles.workspaceSidebar} ${styles.settingsSidebar}`}>
+				<h2 className={styles.settingsHeading}>Settings</h2>
 
 				<div className={styles.sidebarSection}>
-					<div className={styles.sidebarSectionHead}>
-						<span>Categories</span>
-					</div>
 					<div className={styles.sidebarList}>
-						<div className={styles.sidebarItem}>
-							<span className={styles.sidebarItemIcon}>
-								<Users aria-hidden="true" />
-							</span>
-							<span className={styles.sidebarItemCopy}>
-								<strong>Privacy</strong>
-							</span>
-						</div>
-						<div className={styles.sidebarItem}>
-							<span className={styles.sidebarItemIcon}>
-								<Settings aria-hidden="true" />
-							</span>
-							<span className={styles.sidebarItemCopy}>
-								<strong>Account</strong>
-							</span>
-						</div>
-						<div className={styles.sidebarItem}>
-							<span className={styles.sidebarItemIcon}>
-								<Hash aria-hidden="true" />
-							</span>
-							<span className={styles.sidebarItemCopy}>
-								<strong>Experience</strong>
-							</span>
-						</div>
+						{categories.map((category) => (
+							<button
+								key={category.id}
+								type="button"
+								className={`${styles.sidebarItem} ${settingsCategory === category.id ? styles.active : ''}`}
+								onClick={() => onSelectSettingsCategory(category.id)}
+							>
+								<span className={styles.sidebarItemIcon}>{category.icon}</span>
+								<span className={styles.sidebarItemCopy}>
+									<strong>{category.label}</strong>
+								</span>
+							</button>
+						))}
 					</div>
 				</div>
 			</aside>

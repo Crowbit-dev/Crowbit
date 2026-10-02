@@ -134,3 +134,10 @@ code {
 	background-clip: padding-box;
 	border: 2px solid transparent;
 }
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+	animation: none !important;
+	transition: none !important;
+}
