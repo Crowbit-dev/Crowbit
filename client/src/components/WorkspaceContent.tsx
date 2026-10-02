@@ -773,6 +773,17 @@ function WorkspaceContent({
 									</>
 								}
 							/>
+							<SettingRow
+								label="Show close friends badge"
+								copy="Display a badge on posts for close friends."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.privacy.showCloseFriendsBadge}
+										onChange={(next) => onUpdateSettings('privacy', { showCloseFriendsBadge: next })}
+										label="Show close friends badge"
+									/>
+								}
+							/>
 							<h3 className={settingStyles.subHead}>Messaging</h3>
 							<SettingRow
 								label="Message requests"
