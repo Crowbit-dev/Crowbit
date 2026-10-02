@@ -46,7 +46,14 @@ import { postLink, profileLink } from '../lib/site';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
 import ConversationView from './ConversationView';
-import { SettingRadioGroup, SettingRow, SettingSelect, SettingEditableText, SettingToggle } from './SettingControls';
+import {
+	SettingRadioGroup,
+	SettingRow,
+	SettingSelect,
+	SettingEditableText,
+	SettingToggle,
+	SettingCheckbox,
+} from './SettingControls';
 import settingStyles from './SettingControls.module.css';
 import { delaunay, type DelaunayPoint } from '../lib/delaunay';
 import { formatCount } from '../lib/formatCount';
@@ -873,6 +880,27 @@ function WorkspaceContent({
 									}
 								/>
 							))}
+							<h3 className={settingStyles.subHead}>Mute notifications from people</h3>
+							<SettingRow
+								label="You don't follow"
+								control={
+									<SettingCheckbox
+										checked={settingsPrefs.mutedSenders.notFollowing}
+										onChange={(next) => onUpdateSettings('mutedSenders', { notFollowing: next })}
+										label="You don't follow"
+									/>
+								}
+							/>
+							<SettingRow
+								label="Don't follow you"
+								control={
+									<SettingCheckbox
+										checked={settingsPrefs.mutedSenders.notFollowedBy}
+										onChange={(next) => onUpdateSettings('mutedSenders', { notFollowedBy: next })}
+										label="Don't follow you"
+									/>
+								}
+							/>
 						</div>
 					)}
 					{settingsCategory === 'accessibility' && (

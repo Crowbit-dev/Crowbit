@@ -1,4 +1,4 @@
-import { Pencil } from 'lucide-react';
+import { Check, Pencil } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import styles from './SettingControls.module.css';
 
@@ -33,6 +33,29 @@ export function SettingToggle({
 			onClick={() => onChange(!checked)}
 		>
 			<span className={styles.knob} aria-hidden="true" />
+		</button>
+	);
+}
+
+export function SettingCheckbox({
+	checked,
+	onChange,
+	label,
+}: {
+	checked: boolean;
+	onChange: (next: boolean) => void;
+	label: string;
+}) {
+	return (
+		<button
+			type="button"
+			role="checkbox"
+			aria-checked={checked}
+			aria-label={label}
+			className={`${styles.checkbox} ${checked ? styles.checked : ''}`}
+			onClick={() => onChange(!checked)}
+		>
+			<Check size={14} aria-hidden="true" />
 		</button>
 	);
 }

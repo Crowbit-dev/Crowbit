@@ -77,6 +77,36 @@
 	background: white;
 }
 
+.checkbox {
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border-radius: 6px;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	background: transparent;
+	color: transparent;
+	cursor: pointer;
+	transition:
+		background 120ms ease,
+		border-color 120ms ease,
+		color 120ms ease;
+}
+
+.checkbox:hover,
+.checkbox:focus-visible {
+	outline: none;
+	border-color: rgba(255, 255, 255, 0.3);
+}
+
+.checkbox.checked {
+	background: var(--accent);
+	border-color: transparent;
+	color: white;
+}
+
 .select,
 .textField {
 	flex: 0 1 auto;

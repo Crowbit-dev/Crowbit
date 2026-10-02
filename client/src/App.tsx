@@ -48,6 +48,7 @@ const DEFAULT_SETTINGS: SettingsPrefs = {
 		reply: 'everyone',
 		comment: 'everyone',
 	},
+	mutedSenders: { notFollowing: false, notFollowedBy: false },
 	accessibility: { reduceMotion: false, compactDensity: false },
 	voice: { noiseSuppression: true, echoCancellation: true, microphone: 'Default', camera: 'Off' },
 };
@@ -95,6 +96,10 @@ function loadSettings(): SettingsPrefs {
 					typeof parsed.notifications?.friend_request === 'boolean' ? parsed.notifications.friend_request : true,
 				reply: kindAudience(parsed.notifications?.reply),
 				comment: kindAudience(parsed.notifications?.comment),
+			},
+			mutedSenders: {
+				notFollowing: parsed.mutedSenders?.notFollowing ?? false,
+				notFollowedBy: parsed.mutedSenders?.notFollowedBy ?? false,
 			},
 			accessibility: {
 				reduceMotion: parsed.accessibility?.reduceMotion ?? false,

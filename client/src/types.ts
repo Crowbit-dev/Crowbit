@@ -111,6 +111,7 @@ export type SettingsPrefs = {
 	notifications: Record<Exclude<NotificationKind, 'friend_request'>, NotificationAudience> & {
 		friend_request: boolean;
 	};
+	mutedSenders: { notFollowing: boolean; notFollowedBy: boolean };
 	accessibility: { reduceMotion: boolean; compactDensity: boolean };
 	voice: { noiseSuppression: boolean; echoCancellation: boolean; microphone: string; camera: string };
 };
