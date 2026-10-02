@@ -843,7 +843,7 @@ function WorkspaceContent({
 										<span className={styles.postDivider}>•</span>
 										<span className={styles.postTime}>{post.time}</span>
 									</div>
-									{post.community && (
+									{post.community && (feedScope === 'all' || feedScope === 'home') && (
 										<div className={styles.communityTag}>
 											<span
 												className={shared.sidebarDot}
