@@ -9,6 +9,7 @@ import WorkspaceSidebar from './components/WorkspaceSidebar';
 import { communities, currentUser, directMessages, notifications, posts } from './appData';
 import type {
 	DirectMessage,
+	MessageRequestsAudience,
 	NotificationKind,
 	Post,
 	SearchFilter,
@@ -33,11 +34,11 @@ const DEFAULT_SETTINGS: SettingsPrefs = {
 	account: { displayName: '', username: '', email: '', twoFactor: false },
 	privacy: {
 		profileVisibility: 'public',
-		allowDirectMessages: true,
 		showReadActivity: true,
 		readReceipts: true,
 		typingIndicators: true,
 		showCloseFriendsBadge: true,
+		messageRequests: 'everyone',
 	},
 	notifications: { mention: true, like: true, friend_request: true, reply: true, comment: true },
 	accessibility: { reduceMotion: false, compactDensity: false },
@@ -67,11 +68,15 @@ function loadSettings(): SettingsPrefs {
 					if (stored === 'friends') return 'private';
 					return 'public';
 				})(),
-				allowDirectMessages: parsed.privacy?.allowDirectMessages ?? true,
 				showReadActivity: parsed.privacy?.showReadActivity ?? true,
 				readReceipts: parsed.privacy?.readReceipts ?? true,
 				typingIndicators: parsed.privacy?.typingIndicators ?? true,
 				showCloseFriendsBadge: parsed.privacy?.showCloseFriendsBadge ?? true,
+				messageRequests: (['everyone', 'followers', 'none'] as MessageRequestsAudience[]).includes(
+					parsed.privacy?.messageRequests as MessageRequestsAudience,
+				)
+					? (parsed.privacy?.messageRequests as MessageRequestsAudience)
+					: 'everyone',
 			},
 			notifications: {
 				mention: kindToggles(parsed.notifications?.mention),

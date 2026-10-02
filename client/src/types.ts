@@ -94,17 +94,19 @@ export type SettingsCategory = 'account' | 'privacy' | 'notifications' | 'access
 
 export type ProfileVisibility = 'public' | 'private';
 
+export type MessageRequestsAudience = 'everyone' | 'followers' | 'none';
+
 export type NotificationKindToggles = Record<NotificationKind, boolean>;
 
 export type SettingsPrefs = {
 	account: { displayName: string; username: string; email: string; twoFactor: boolean };
 	privacy: {
 		profileVisibility: ProfileVisibility;
-		allowDirectMessages: boolean;
 		showReadActivity: boolean;
 		readReceipts: boolean;
 		typingIndicators: boolean;
 		showCloseFriendsBadge: boolean;
+		messageRequests: MessageRequestsAudience;
 	};
 	notifications: NotificationKindToggles;
 	accessibility: { reduceMotion: boolean; compactDensity: boolean };

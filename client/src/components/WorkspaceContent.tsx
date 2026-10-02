@@ -29,6 +29,7 @@ import type {
 	Community,
 	CommunityMember,
 	DirectMessage,
+	MessageRequestsAudience,
 	NotificationItem,
 	Post,
 	ProfileVisibility,
@@ -772,26 +773,22 @@ function WorkspaceContent({
 									</>
 								}
 							/>
-							<SettingRow
-								label="Show close friends badge"
-								copy="Display a badge on posts for close friends."
-								control={
-									<SettingToggle
-										checked={settingsPrefs.privacy.showCloseFriendsBadge}
-										onChange={(next) => onUpdateSettings('privacy', { showCloseFriendsBadge: next })}
-										label="Show close friends badge"
-									/>
-								}
-							/>
 							<h3 className={settingStyles.subHead}>Messaging</h3>
 							<SettingRow
-								label="Allow direct messages"
-								copy="Let people outside your spaces message you."
+								label="Message requests"
+								copy="Who can send you message requests."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.privacy.allowDirectMessages}
-										onChange={(next) => onUpdateSettings('privacy', { allowDirectMessages: next })}
-										label="Allow direct messages"
+									<SettingRadioGroup
+										value={settingsPrefs.privacy.messageRequests}
+										onChange={(next) =>
+											onUpdateSettings('privacy', { messageRequests: next as MessageRequestsAudience })
+										}
+										label="Message requests"
+										options={[
+											{ value: 'everyone', label: 'Everyone' },
+											{ value: 'followers', label: 'Followers' },
+											{ value: 'none', label: 'No one' },
+										]}
 									/>
 								}
 							/>
