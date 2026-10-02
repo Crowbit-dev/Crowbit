@@ -151,7 +151,7 @@ function ThreadPanel({
 				onSelect: () => void copyText(`https://crowbit.net/c/${post.title}/${index}`),
 			},
 			{ type: 'separator' },
-			{ icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyToComment(index) },
+			{ icon: <Reply size={16} aria-hidden="true" />, label: 'Comment', onSelect: () => replyToComment(index) },
 			...(comment.author === 'You'
 				? [{ icon: <Pencil size={16} aria-hidden="true" />, label: 'Edit Comment', onSelect: () => startEdit(index) }]
 				: []),
@@ -303,7 +303,7 @@ function ThreadPanel({
 			{replyTarget !== null && comments[replyTarget] && (
 				<div className={`${styles.replyPreview} ${shared.replyPreview}`}>
 					<span className={shared.replyPreviewText}>
-						Replying to <strong>{comments[replyTarget].author}</strong>
+						Commenting on <strong>{comments[replyTarget].author}</strong>
 					</span>
 					<span className={shared.replyPreviewSnippet}>{snippet(comments[replyTarget].body)}</span>
 					<button
@@ -329,16 +329,18 @@ function ThreadPanel({
 					value={draft}
 					onChange={(e) => setDraft(e.target.value)}
 					placeholder={
-						replyTarget !== null && comments[replyTarget] ? `Reply to ${comments[replyTarget].author}...` : 'Reply...'
+						replyTarget !== null && comments[replyTarget]
+							? `Comment on ${comments[replyTarget].author}...`
+							: 'Comment...'
 					}
 					aria-label={
 						replyTarget !== null && comments[replyTarget]
-							? `Reply to ${comments[replyTarget].author}`
-							: `Reply to ${post.title}`
+							? `Comment on ${comments[replyTarget].author}'s comment`
+							: `Comment on ${post.title}`
 					}
 					maxLength={2000}
 				/>
-				<button type="submit" className={styles.send} disabled={!draft.trim()} aria-label="Send reply" title="Send">
+				<button type="submit" className={styles.send} disabled={!draft.trim()} aria-label="Send comment" title="Send">
 					<SendHorizontal size={16} aria-hidden="true" />
 				</button>
 			</form>
