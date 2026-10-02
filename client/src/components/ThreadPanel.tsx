@@ -49,7 +49,7 @@ function ThreadPanel({
 		if (!ta) return;
 		ta.style.height = 'auto';
 		const fullHeight = ta.scrollHeight;
-		const cappedHeight = Math.min(fullHeight, 140);
+		const cappedHeight = Math.min(fullHeight, 200);
 		ta.style.height = `${cappedHeight}px`;
 		ta.style.overflowY = fullHeight > cappedHeight ? 'auto' : 'hidden';
 	}, [draft]);
