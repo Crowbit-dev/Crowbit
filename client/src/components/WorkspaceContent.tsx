@@ -846,7 +846,7 @@ function WorkspaceContent({
 					{settingsCategory === 'notifications' && (
 						<div>
 							<h3 className={settingStyles.subHead}>Push notifications</h3>
-							{(['friend_request', 'mention', 'like',  'reply', 'comment'] as const).map((kind) => (
+							{(['friend_request', 'mention', 'like', 'reply', 'comment'] as const).map((kind) => (
 								<SettingRow
 									key={kind}
 									label={notifFilterLabels[kind]}
