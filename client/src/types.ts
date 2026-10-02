@@ -33,6 +33,8 @@ export type DirectMessage = {
 	time: string;
 };
 
+export type PostAudience = 'everyone' | 'closeFriends';
+
 export type Post = {
 	author: string;
 	handle: string;
@@ -41,6 +43,7 @@ export type Post = {
 	title: string;
 	body: string;
 	image?: string;
+	audience: PostAudience;
 	stats: {
 		comments: number;
 		upvotes: number;

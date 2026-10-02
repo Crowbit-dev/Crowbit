@@ -104,6 +104,7 @@ export const posts: Post[] = [
 		title: 'How are you building your personal brand in 2026?',
 		body: 'I am trying to keep my portfolio, content, and design process aligned without burning out. Curious what other creators are doing.',
 		image: crowPhotograph,
+		audience: 'everyone',
 		stats: { comments: 182, upvotes: 2400, shares: 42 },
 	},
 	{
@@ -114,6 +115,7 @@ export const posts: Post[] = [
 		title: 'What is everyone using for fast internal tooling right now?',
 		body: 'I am comparing auth, dashboards, and deployment speed. I want something practical, not just shiny demos.',
 		image: crowSideProfile,
+		audience: 'everyone',
 		stats: { comments: 96, upvotes: 1800, shares: 21 },
 	},
 	{
@@ -123,6 +125,7 @@ export const posts: Post[] = [
 		community: 'Startup',
 		title: 'Founders: what do your best community rituals look like?',
 		body: 'The most sustainable communities usually feel less like a launch and more like a habit. I am collecting examples.',
+		audience: 'closeFriends',
 		stats: { comments: 243, upvotes: 3100, shares: 58 },
 	},
 	{
@@ -132,6 +135,7 @@ export const posts: Post[] = [
 		community: 'Tech',
 		title: 'What is on your security audit checklist this quarter?',
 		body: 'I am putting together a lightweight checklist for small teams: access reviews, dependency updates, and backup drills. What am I missing?',
+		audience: 'everyone',
 		stats: { comments: 64, upvotes: 1200, shares: 15 },
 	},
 ];

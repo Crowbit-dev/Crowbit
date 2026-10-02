@@ -503,6 +503,12 @@ function WorkspaceContent({
 														<span>{post.community}</span>
 													</div>
 												)}
+												{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (
+													<span className={styles.closeFriendsTag}>
+														<span className={styles.closeFriendsDot} aria-hidden="true" />
+														Close friends
+													</span>
+												)}
 											</div>
 										</div>
 
@@ -1169,6 +1175,12 @@ function WorkspaceContent({
 											/>
 											<span>{post.community}</span>
 										</div>
+									)}
+									{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (
+										<span className={styles.closeFriendsTag}>
+											<span className={styles.closeFriendsDot} aria-hidden="true" />
+											Close friends
+										</span>
 									)}
 								</div>
 							</div>

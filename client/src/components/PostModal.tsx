@@ -1,6 +1,6 @@
-import { AlignLeft, Check, ChevronDown, Globe, Paperclip, X } from 'lucide-react';
+import { AlignLeft, Check, ChevronDown, Globe, Paperclip, Users, X } from 'lucide-react';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
-import type { Community, Post } from '../types';
+import type { Community, Post, PostAudience } from '../types';
 import { AvatarGroup } from './ConversationView';
 import styles from './PostModal.module.css';
 
@@ -21,6 +21,8 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 	const [bodyOpen, setBodyOpen] = useState(false);
 	const [community, setCommunity] = useState(defaultCommunity);
 	const [pickerOpen, setPickerOpen] = useState(false);
+	const [audience, setAudience] = useState<PostAudience>('everyone');
+	const [visibilityOpen, setVisibilityOpen] = useState(false);
 	const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([]);
 	const mainRef = useRef<HTMLTextAreaElement>(null);
 	const bodyRef = useRef<HTMLTextAreaElement>(null);
@@ -105,6 +107,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 			title: resolvedTitle,
 			body: bodyText,
 			image: attachments[0]?.url,
+			audience: postingToProfile ? audience : 'everyone',
 			stats: { comments: 0, upvotes: 0, shares: 0 },
 		});
 		attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url));
@@ -124,11 +127,66 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 						<div className={styles.avatar}>N</div>
 						<div className={styles.authorCopy}>
 							<strong>New post</strong>
-							{/* TEMPORARY: future post visibility button until visibility controls land. */}
-							<button type="button" className={styles.visibilityButton} aria-label="Post visibility">
-								<Globe size={13} aria-hidden="true" />
-								Visible to the whole network
-							</button>
+							{postingToProfile && (
+								<div
+									className={styles.visibilityWrap}
+									onBlur={(e) => {
+										if (!e.currentTarget.contains(e.relatedTarget as Node)) setVisibilityOpen(false);
+									}}
+								>
+									<button
+										type="button"
+										className={styles.visibilityButton}
+										onClick={() => setVisibilityOpen((prev) => !prev)}
+										aria-haspopup="listbox"
+										aria-expanded={visibilityOpen}
+										aria-label="Post visibility"
+									>
+										{audience === 'everyone' ? (
+											<Globe size={13} aria-hidden="true" />
+										) : (
+											<Users size={13} aria-hidden="true" />
+										)}
+										{audience === 'everyone' ? 'Visible to everyone' : 'Visible to close friends'}
+									</button>
+									{visibilityOpen && (
+										<div className={styles.pickerList} role="listbox" aria-label="Post visibility">
+											<button
+												type="button"
+												role="option"
+												aria-selected={audience === 'everyone'}
+												className={`${styles.pickerOption} ${audience === 'everyone' ? styles.pickerSelected : ''}`}
+												onClick={() => {
+													setAudience('everyone');
+													setVisibilityOpen(false);
+												}}
+											>
+												<Globe size={14} aria-hidden="true" />
+												<span className={styles.pickerCopy}>
+													<strong>Everyone</strong>
+												</span>
+												{audience === 'everyone' && <Check size={16} aria-hidden="true" />}
+											</button>
+											<button
+												type="button"
+												role="option"
+												aria-selected={audience === 'closeFriends'}
+												className={`${styles.pickerOption} ${audience === 'closeFriends' ? styles.pickerSelected : ''}`}
+												onClick={() => {
+													setAudience('closeFriends');
+													setVisibilityOpen(false);
+												}}
+											>
+												<Users size={14} aria-hidden="true" />
+												<span className={styles.pickerCopy}>
+													<strong>Close friends</strong>
+												</span>
+												{audience === 'closeFriends' && <Check size={16} aria-hidden="true" />}
+											</button>
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 					</div>
 					<button type="button" className={styles.close} onClick={onClose} aria-label="Close composer" title="Close">

@@ -97,6 +97,11 @@
 	color: var(--text-h);
 }
 
+.visibilityWrap {
+	position: relative;
+	justify-self: start;
+}
+
 .close {
 	display: grid;
 	place-items: center;
