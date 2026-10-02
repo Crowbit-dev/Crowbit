@@ -1014,7 +1014,8 @@
 .communityTag {
 	display: inline-flex;
 	align-items: center;
-	color: color-mix(in srgb, var(--community-color) 55%, white);
+	gap: 6px;
+	color: var(--offwhite);
 	font-size: 0.74rem;
 	font-weight: 700;
 	cursor: pointer;

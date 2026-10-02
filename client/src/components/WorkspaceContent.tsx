@@ -474,15 +474,14 @@ function WorkspaceContent({
 													<span className={styles.postTime}>{post.time}</span>
 												</div>
 												{post.community && (
-													<div
-														className={styles.communityTag}
-														style={
-															{
-																'--community-color': communities.find((community) => community.name === post.community)
-																	?.color,
-															} as CSSProperties
-														}
-													>
+													<div className={styles.communityTag}>
+														<span
+															className={shared.sidebarDot}
+															style={{
+																background: communities.find((community) => community.name === post.community)?.color,
+															}}
+															aria-hidden="true"
+														/>
 														<span>{post.community}</span>
 													</div>
 												)}
@@ -845,15 +844,14 @@ function WorkspaceContent({
 										<span className={styles.postTime}>{post.time}</span>
 									</div>
 									{post.community && (
-										<div
-											className={styles.communityTag}
-											style={
-												{
-													'--community-color': communities.find((community) => community.name === post.community)
-														?.color,
-												} as CSSProperties
-											}
-										>
+										<div className={styles.communityTag}>
+											<span
+												className={shared.sidebarDot}
+												style={{
+													background: communities.find((community) => community.name === post.community)?.color,
+												}}
+												aria-hidden="true"
+											/>
 											<span>{post.community}</span>
 										</div>
 									)}
