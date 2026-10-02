@@ -2,6 +2,7 @@ import { Copy, Link2, Pencil, Reply, SendHorizontal, Trash2, X } from 'lucide-re
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { comments as seedComments } from '../appData';
 import { copyText } from '../lib/clipboard';
+import { commentLink } from '../lib/site';
 import { formatCount } from '../lib/formatCount';
 import shared from '../styles/shared.module.css';
 import type { Post, ThreadComment } from '../types';
@@ -148,7 +149,7 @@ function ThreadPanel({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Comment Link',
-				onSelect: () => void copyText(`https://crowbit.net/c/${post.title}/${index}`),
+				onSelect: () => void copyText(commentLink(post.title, index)),
 			},
 			{ type: 'separator' },
 			{ icon: <Reply size={16} aria-hidden="true" />, label: 'Comment', onSelect: () => replyToComment(index) },

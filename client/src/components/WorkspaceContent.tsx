@@ -37,6 +37,7 @@ import type {
 } from '../types';
 import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications } from '../appData';
 import { copyText } from '../lib/clipboard';
+import { postLink, profileLink } from '../lib/site';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
 import ConversationView from './ConversationView';
@@ -191,7 +192,7 @@ function WorkspaceContent({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Profile Link',
-				onSelect: () => void copyText(`https://crowbit.net/u/${id}`),
+				onSelect: () => void copyText(profileLink(id)),
 			},
 			{ type: 'separator' },
 			{
@@ -783,7 +784,7 @@ function WorkspaceContent({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Post Link',
-				onSelect: () => void copyText(`https://crowbit.net/p/${postSlug}`),
+				onSelect: () => void copyText(postLink(postSlug)),
 			},
 		];
 		if (post.author === 'You') {

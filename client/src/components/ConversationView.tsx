@@ -23,6 +23,7 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { copyText } from '../lib/clipboard';
+import { messageLink } from '../lib/site';
 import type { Community, ConversationMutuals, MessageEntry } from '../types';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
@@ -254,7 +255,7 @@ function ConversationView({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Message Link',
-				onSelect: () => void copyText(`https://crowbit.net/m/${message.id}`),
+				onSelect: () => void copyText(messageLink(message.id)),
 			},
 			{ type: 'separator' },
 			{ icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyTo(message) },
