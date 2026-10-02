@@ -277,7 +277,7 @@ function WorkspaceSidebar({
 			{ id: 'all', icon: <LayoutGrid size={16} aria-hidden="true" /> },
 			{ id: 'mention', icon: <AtSign size={16} aria-hidden="true" /> },
 			{ id: 'like', icon: <Heart size={16} aria-hidden="true" /> },
-			{ id: 'follow_request', icon: <UserPlus size={16} aria-hidden="true" /> },
+			{ id: 'friend_request', icon: <UserPlus size={16} aria-hidden="true" /> },
 			{ id: 'reply', icon: <Reply size={16} aria-hidden="true" /> },
 			{ id: 'comment', icon: <MessageCircle size={16} aria-hidden="true" /> },
 		] as const;

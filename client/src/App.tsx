@@ -39,7 +39,7 @@ const DEFAULT_SETTINGS: SettingsPrefs = {
 		typingIndicators: true,
 		showCloseFriendsBadge: true,
 	},
-	notifications: { mention: true, like: true, follow_request: true, reply: true, comment: true },
+	notifications: { mention: true, like: true, friend_request: true, reply: true, comment: true },
 	accessibility: { reduceMotion: false, compactDensity: false },
 	voice: { noiseSuppression: true, echoCancellation: true, microphone: 'Default', camera: 'Off' },
 };
@@ -76,7 +76,7 @@ function loadSettings(): SettingsPrefs {
 			notifications: {
 				mention: kindToggles(parsed.notifications?.mention),
 				like: kindToggles(parsed.notifications?.like),
-				follow_request: kindToggles(parsed.notifications?.follow_request),
+				friend_request: kindToggles(parsed.notifications?.friend_request),
 				reply: kindToggles(parsed.notifications?.reply),
 				comment: kindToggles(parsed.notifications?.comment),
 			},

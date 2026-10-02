@@ -51,7 +51,7 @@ export type Post = {
 	};
 };
 
-export type NotificationKind = 'mention' | 'like' | 'follow_request' | 'reply' | 'comment';
+export type NotificationKind = 'mention' | 'like' | 'friend_request' | 'reply' | 'comment';
 
 export type NotificationItem = {
 	id: string;

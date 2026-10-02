@@ -206,11 +206,11 @@ export const notifications: NotificationItem[] = [
 	},
 	{
 		id: 'n4',
-		kind: 'follow_request',
+		kind: 'friend_request',
 		actor: 'Kai',
 		community: 'Art',
 		channel: 'sketches',
-		snippet: 'wants to follow you',
+		snippet: 'sent you a friend request',
 		time: '58m',
 	},
 	{
@@ -262,11 +262,11 @@ export const notifications: NotificationItem[] = [
 	},
 	{
 		id: 'n10',
-		kind: 'follow_request',
+		kind: 'friend_request',
 		actor: 'Sage',
 		community: 'Art',
 		channel: 'inspiration',
-		snippet: 'wants to follow you',
+		snippet: 'sent you a friend request',
 		time: '4h',
 	},
 	{

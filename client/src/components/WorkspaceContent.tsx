@@ -336,7 +336,7 @@ function WorkspaceContent({
 					) : (
 						visibleItems.map((item) => {
 							const color = communities.find((community) => community.name === item.community)?.color ?? '#533e52';
-							if (item.kind === 'follow_request') {
+							if (item.kind === 'friend_request') {
 								return (
 									<article key={item.id} className={styles.notifRow}>
 										<span className={styles.notifAvatar}>{item.actor[0]}</span>
@@ -346,14 +346,14 @@ function WorkspaceContent({
 										<span className={styles.notifCopy}>
 											<span className={styles.notifText}>
 												<strong>{item.actor}</strong>
-												{' requested to follow you'}
+												{' sent you a friend request'}
 											</span>
 											<span className={styles.notifMeta}>
 												<span className={shared.sidebarDot} style={{ background: color }} />
 												{item.community} · {item.time}
 											</span>
 											<span className={styles.notifFollowActions}>
-												{/* TEMPORARY: decorative until follow requests land. */}
+												{/* TEMPORARY: decorative until friend requests land. */}
 												<button type="button" className={styles.contentChip}>
 													Accept
 												</button>
@@ -834,7 +834,7 @@ function WorkspaceContent({
 					)}
 					{settingsCategory === 'notifications' && (
 						<div>
-							{(['mention', 'like', 'follow_request', 'reply', 'comment'] as const).map((kind) => (
+							{(['mention', 'like', 'friend_request', 'reply', 'comment'] as const).map((kind) => (
 								<SettingRow
 									key={kind}
 									label={notifFilterLabels[kind]}
