@@ -53,6 +53,7 @@ import {
 	SettingEditableText,
 	SettingToggle,
 	SettingCheckbox,
+	SettingSlider,
 } from './SettingControls';
 import settingStyles from './SettingControls.module.css';
 import { delaunay, type DelaunayPoint } from '../lib/delaunay';
@@ -194,6 +195,10 @@ function WorkspaceContent({
 	);
 	const [metaOpen, setMetaOpen] = useState(false);
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
+	const [chatTextSize, setChatTextSize] = useState(16);
+	const [messageSpacing, setMessageSpacing] = useState(12);
+	const [saturation, setSaturation] = useState(100);
+	const [highContrast, setHighContrast] = useState(false);
 
 	const openMemberMenu = (
 		x: number,
@@ -905,15 +910,38 @@ function WorkspaceContent({
 					)}
 					{settingsCategory === 'accessibility' && (
 						<div>
+							<h3 className={settingStyles.subHead}>Text readability</h3>
 							<SettingRow
-								label="Reduce motion"
-								copy="Disable animations and transitions."
+								label="Chat text size"
+								copy="Adjust the size of text in chats."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.accessibility.reduceMotion}
-										onChange={(next) => onUpdateSettings('accessibility', { reduceMotion: next })}
-										label="Reduce motion"
-									/>
+									<>
+										{/* TEMPORARY: decorative until text scaling lands. */}
+										<SettingSlider
+											value={chatTextSize}
+											min={12}
+											max={24}
+											onChange={setChatTextSize}
+											label="Chat text size"
+										/>
+									</>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Visual density</h3>
+							<SettingRow
+								label="Space between messages"
+								copy="Adjust the spacing between messages."
+								control={
+									<>
+										{/* TEMPORARY: decorative until density scaling lands. */}
+										<SettingSlider
+											value={messageSpacing}
+											min={4}
+											max={24}
+											onChange={setMessageSpacing}
+											label="Space between messages"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
@@ -924,6 +952,39 @@ function WorkspaceContent({
 										checked={settingsPrefs.accessibility.compactDensity}
 										onChange={(next) => onUpdateSettings('accessibility', { compactDensity: next })}
 										label="Compact density"
+									/>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Color & contrast</h3>
+							<SettingRow
+								label="Saturation"
+								copy="Adjust color intensity across the app."
+								control={
+									<>
+										{/* TEMPORARY: decorative until color filters land. */}
+										<SettingSlider value={saturation} min={0} max={200} onChange={setSaturation} label="Saturation" />
+									</>
+								}
+							/>
+							<SettingRow
+								label="High contrast mode"
+								copy="Boost contrast for text and interface elements."
+								control={
+									<>
+										{/* TEMPORARY: decorative until high contrast theme lands. */}
+										<SettingToggle checked={highContrast} onChange={setHighContrast} label="High contrast mode" />
+									</>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Motion</h3>
+							<SettingRow
+								label="Reduce motion"
+								copy="Disable animations and transitions."
+								control={
+									<SettingToggle
+										checked={settingsPrefs.accessibility.reduceMotion}
+										onChange={(next) => onUpdateSettings('accessibility', { reduceMotion: next })}
+										label="Reduce motion"
 									/>
 								}
 							/>

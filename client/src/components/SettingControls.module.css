@@ -122,6 +122,40 @@
 	font-size: 0.88rem;
 }
 
+.slider {
+	-webkit-appearance: none;
+	appearance: none;
+	flex: 0 0 auto;
+	width: 160px;
+	height: 4px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.12);
+	cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--accent);
+	border: 0;
+}
+
+.slider::-moz-range-thumb {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--accent);
+	border: 0;
+}
+
+.slider:focus-visible {
+	outline: 2px solid var(--accent-border);
+	outline-offset: 6px;
+}
+
 .select:focus,
 .textField:focus {
 	outline: none;

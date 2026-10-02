@@ -60,6 +60,35 @@ export function SettingCheckbox({
 	);
 }
 
+export function SettingSlider({
+	value,
+	min,
+	max,
+	step = 1,
+	onChange,
+	label,
+}: {
+	value: number;
+	min: number;
+	max: number;
+	step?: number;
+	onChange: (next: number) => void;
+	label: string;
+}) {
+	return (
+		<input
+			type="range"
+			value={value}
+			min={min}
+			max={max}
+			step={step}
+			onChange={(e) => onChange(Number(e.target.value))}
+			aria-label={label}
+			className={styles.slider}
+		/>
+	);
+}
+
 export function SettingSelect({
 	value,
 	onChange,
