@@ -86,7 +86,7 @@
 	min-height: 0;
 	overflow-y: auto;
 	overscroll-behavior-y: contain;
-	gap: 10px;
+	gap: calc(var(--message-spacing, 20px) / 2);
 	padding: 0 2px 4px;
 }
 
@@ -96,7 +96,7 @@
 	grid-template-columns: 42px minmax(0, 1fr);
 	gap: 12px;
 	align-items: start;
-	padding: 10px 0 0;
+	padding: calc(var(--message-spacing, 20px) / 2) 0 0;
 	border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -118,6 +118,7 @@
 
 .chatMessageCopy p {
 	color: var(--offwhite);
+	font-size: var(--chat-text-size, 15px);
 	white-space: pre-wrap;
 	overflow-wrap: break-word;
 }

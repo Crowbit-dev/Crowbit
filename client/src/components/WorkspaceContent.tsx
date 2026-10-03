@@ -60,6 +60,7 @@ import { delaunay, type DelaunayPoint } from '../lib/delaunay';
 import { formatCount } from '../lib/formatCount';
 import { gradientCommunityColor } from '../lib/communityColor';
 import { notifFilterLabels } from '../lib/notifFilterLabels';
+import { CHAT_TEXT_SIZES, MESSAGE_SPACINGS } from '../lib/chatScales';
 import { searchFilterLabels } from '../lib/searchFilterLabels';
 import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching';
 import styles from './WorkspaceContent.module.css';
@@ -147,9 +148,6 @@ function TriangulatedMosaic({ seed }: { seed: string }) {
 	);
 }
 
-const CHAT_TEXT_SIZES = [12, 14, 15, 16, 18, 20, 24];
-const MESSAGE_SPACINGS = [0, 4, 8, 16, 20, 24];
-
 function WorkspaceContent({
 	mode,
 	communities,
@@ -198,9 +196,6 @@ function WorkspaceContent({
 	);
 	const [metaOpen, setMetaOpen] = useState(false);
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
-	const [chatTextSize, setChatTextSize] = useState(15);
-	const [messageSpacing, setMessageSpacing] = useState(20);
-	const [saturation, setSaturation] = useState(100);
 	const [highContrast, setHighContrast] = useState(false);
 
 	const openMemberMenu = (
@@ -691,11 +686,14 @@ function WorkspaceContent({
 								label="Two-factor authentication"
 								copy="Require a code when signing in."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.account.twoFactor}
-										onChange={(next) => onUpdateSettings('account', { twoFactor: next })}
-										label="Two-factor authentication"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until backend enforcement lands. */}
+										<SettingToggle
+											checked={settingsPrefs.account.twoFactor}
+											onChange={(next) => onUpdateSettings('account', { twoFactor: next })}
+											label="Two-factor authentication"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
@@ -757,26 +755,32 @@ function WorkspaceContent({
 								label="Profile visibility"
 								copy="Who can view your profile."
 								control={
-									<SettingRadioGroup
-										value={settingsPrefs.privacy.profileVisibility}
-										onChange={(next) => onUpdateSettings('privacy', { profileVisibility: next as ProfileVisibility })}
-										label="Profile visibility"
-										options={[
-											{ value: 'public', label: 'Public' },
-											{ value: 'private', label: 'Private' },
-										]}
-									/>
+									<>
+										{/* TEMPORARY: persisted only until backend enforcement lands. */}
+										<SettingRadioGroup
+											value={settingsPrefs.privacy.profileVisibility}
+											onChange={(next) => onUpdateSettings('privacy', { profileVisibility: next as ProfileVisibility })}
+											label="Profile visibility"
+											options={[
+												{ value: 'public', label: 'Public' },
+												{ value: 'private', label: 'Private' },
+											]}
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Show read activity"
 								copy="Let others see what you have read."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.privacy.showReadActivity}
-										onChange={(next) => onUpdateSettings('privacy', { showReadActivity: next })}
-										label="Show read activity"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until backend enforcement lands. */}
+										<SettingToggle
+											checked={settingsPrefs.privacy.showReadActivity}
+											onChange={(next) => onUpdateSettings('privacy', { showReadActivity: next })}
+											label="Show read activity"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
@@ -807,40 +811,49 @@ function WorkspaceContent({
 								label="Message requests"
 								copy="Who can send you message requests."
 								control={
-									<SettingRadioGroup
-										value={settingsPrefs.privacy.messageRequests}
-										onChange={(next) =>
-											onUpdateSettings('privacy', { messageRequests: next as MessageRequestsAudience })
-										}
-										label="Message requests"
-										options={[
-											{ value: 'everyone', label: 'Everyone' },
-											{ value: 'followers', label: 'Followers' },
-											{ value: 'none', label: 'No one' },
-										]}
-									/>
+									<>
+										{/* TEMPORARY: persisted only until backend enforcement lands. */}
+										<SettingRadioGroup
+											value={settingsPrefs.privacy.messageRequests}
+											onChange={(next) =>
+												onUpdateSettings('privacy', { messageRequests: next as MessageRequestsAudience })
+											}
+											label="Message requests"
+											options={[
+												{ value: 'everyone', label: 'Everyone' },
+												{ value: 'followers', label: 'Followers' },
+												{ value: 'none', label: 'No one' },
+											]}
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Read receipts"
 								copy="Send read confirmations in conversations."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.privacy.readReceipts}
-										onChange={(next) => onUpdateSettings('privacy', { readReceipts: next })}
-										label="Read receipts"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until backend enforcement lands. */}
+										<SettingToggle
+											checked={settingsPrefs.privacy.readReceipts}
+											onChange={(next) => onUpdateSettings('privacy', { readReceipts: next })}
+											label="Read receipts"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Typing indicators"
 								copy="Show when you are typing a message."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.privacy.typingIndicators}
-										onChange={(next) => onUpdateSettings('privacy', { typingIndicators: next })}
-										label="Typing indicators"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until backend enforcement lands. */}
+										<SettingToggle
+											checked={settingsPrefs.privacy.typingIndicators}
+											onChange={(next) => onUpdateSettings('privacy', { typingIndicators: next })}
+											label="Typing indicators"
+										/>
+									</>
 								}
 							/>
 							<h3 className={settingStyles.subHead}>Blocked users</h3>
@@ -892,21 +905,27 @@ function WorkspaceContent({
 							<SettingRow
 								label="You don't follow"
 								control={
-									<SettingCheckbox
-										checked={settingsPrefs.mutedSenders.notFollowing}
-										onChange={(next) => onUpdateSettings('mutedSenders', { notFollowing: next })}
-										label="You don't follow"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until follow-graph filtering lands. */}
+										<SettingCheckbox
+											checked={settingsPrefs.mutedSenders.notFollowing}
+											onChange={(next) => onUpdateSettings('mutedSenders', { notFollowing: next })}
+											label="You don't follow"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Don't follow you"
 								control={
-									<SettingCheckbox
-										checked={settingsPrefs.mutedSenders.notFollowedBy}
-										onChange={(next) => onUpdateSettings('mutedSenders', { notFollowedBy: next })}
-										label="Don't follow you"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until follow-graph filtering lands. */}
+										<SettingCheckbox
+											checked={settingsPrefs.mutedSenders.notFollowedBy}
+											onChange={(next) => onUpdateSettings('mutedSenders', { notFollowedBy: next })}
+											label="Don't follow you"
+										/>
+									</>
 								}
 							/>
 						</div>
@@ -919,18 +938,19 @@ function WorkspaceContent({
 								stacked
 								copy="Adjust the size of the chat font."
 								control={
-									<>
-										{/* TEMPORARY: decorative until text scaling lands. */}
-										<SettingSlider
-											value={CHAT_TEXT_SIZES.indexOf(chatTextSize)}
-											min={0}
-											max={CHAT_TEXT_SIZES.length - 1}
-											onChange={(next) => setChatTextSize(CHAT_TEXT_SIZES[next] ?? chatTextSize)}
-											label="Text size in chat"
-											ticks={CHAT_TEXT_SIZES.map((size) => `${size}px`)}
-											highlightTick="15px"
-										/>
-									</>
+									<SettingSlider
+										value={CHAT_TEXT_SIZES.indexOf(settingsPrefs.accessibility.chatTextSize)}
+										min={0}
+										max={CHAT_TEXT_SIZES.length - 1}
+										onChange={(next) =>
+											onUpdateSettings('accessibility', {
+												chatTextSize: CHAT_TEXT_SIZES[next] ?? settingsPrefs.accessibility.chatTextSize,
+											})
+										}
+										label="Text size in chat"
+										ticks={CHAT_TEXT_SIZES.map((size) => `${size}px`)}
+										highlightTick="15px"
+									/>
 								}
 							/>
 							<h3 className={settingStyles.subHead}>Visual density</h3>
@@ -939,29 +959,33 @@ function WorkspaceContent({
 								stacked
 								copy="Adjust the spacing between message groups."
 								control={
-									<>
-										{/* TEMPORARY: decorative until density scaling lands. */}
-										<SettingSlider
-											value={MESSAGE_SPACINGS.indexOf(messageSpacing)}
-											min={0}
-											max={MESSAGE_SPACINGS.length - 1}
-											onChange={(next) => setMessageSpacing(MESSAGE_SPACINGS[next] ?? messageSpacing)}
-											label="Space Between Message Groups"
-											ticks={MESSAGE_SPACINGS.map((space) => `${space}px`)}
-											highlightTick="20px"
-										/>
-									</>
+									<SettingSlider
+										value={MESSAGE_SPACINGS.indexOf(settingsPrefs.accessibility.messageSpacing)}
+										min={0}
+										max={MESSAGE_SPACINGS.length - 1}
+										onChange={(next) =>
+											onUpdateSettings('accessibility', {
+												messageSpacing: MESSAGE_SPACINGS[next] ?? settingsPrefs.accessibility.messageSpacing,
+											})
+										}
+										label="Space Between Message Groups"
+										ticks={MESSAGE_SPACINGS.map((space) => `${space}px`)}
+										highlightTick="20px"
+									/>
 								}
 							/>
 							<SettingRow
 								label="Compact density"
 								copy="Tighter spacing in lists and cards."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.accessibility.compactDensity}
-										onChange={(next) => onUpdateSettings('accessibility', { compactDensity: next })}
-										label="Compact density"
-									/>
+									<>
+										{/* TEMPORARY: decorative until density scaling lands. */}
+										<SettingToggle
+											checked={settingsPrefs.accessibility.compactDensity}
+											onChange={(next) => onUpdateSettings('accessibility', { compactDensity: next })}
+											label="Compact density"
+										/>
+									</>
 								}
 							/>
 							<h3 className={settingStyles.subHead}>Color & contrast</h3>
@@ -970,19 +994,16 @@ function WorkspaceContent({
 								stacked
 								copy="Reduce the saturation of colors within the app, for those with color sensitivities. This does not affect images, videos, role colors or other user content."
 								control={
-									<>
-										{/* TEMPORARY: decorative until color filters land. */}
-										<SettingSlider
-											value={saturation}
-											min={0}
-											max={100}
-											step={10}
-											onChange={setSaturation}
-											label="Saturation"
-											ticks={['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%']}
-											highlightTick="100%"
-										/>
-									</>
+									<SettingSlider
+										value={settingsPrefs.accessibility.saturation}
+										min={0}
+										max={100}
+										step={10}
+										onChange={(next) => onUpdateSettings('accessibility', { saturation: next })}
+										label="Saturation"
+										ticks={['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%']}
+										highlightTick="100%"
+									/>
 								}
 							/>
 							<SettingRow
@@ -1015,44 +1036,56 @@ function WorkspaceContent({
 								label="Noise suppression"
 								copy="Filter background noise from your microphone."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.voice.noiseSuppression}
-										onChange={(next) => onUpdateSettings('voice', { noiseSuppression: next })}
-										label="Noise suppression"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until voice wiring lands. */}
+										<SettingToggle
+											checked={settingsPrefs.voice.noiseSuppression}
+											onChange={(next) => onUpdateSettings('voice', { noiseSuppression: next })}
+											label="Noise suppression"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Echo cancellation"
 								copy="Prevent echo during voice calls."
 								control={
-									<SettingToggle
-										checked={settingsPrefs.voice.echoCancellation}
-										onChange={(next) => onUpdateSettings('voice', { echoCancellation: next })}
-										label="Echo cancellation"
-									/>
+									<>
+										{/* TEMPORARY: persisted only until voice wiring lands. */}
+										<SettingToggle
+											checked={settingsPrefs.voice.echoCancellation}
+											onChange={(next) => onUpdateSettings('voice', { echoCancellation: next })}
+											label="Echo cancellation"
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Microphone"
 								control={
-									<SettingSelect
-										value={settingsPrefs.voice.microphone}
-										onChange={(next) => onUpdateSettings('voice', { microphone: next })}
-										label="Microphone"
-										options={['Default', 'Built-in Microphone', 'USB Headset']}
-									/>
+									<>
+										{/* TEMPORARY: persisted only until voice wiring lands. */}
+										<SettingSelect
+											value={settingsPrefs.voice.microphone}
+											onChange={(next) => onUpdateSettings('voice', { microphone: next })}
+											label="Microphone"
+											options={['Default', 'Built-in Microphone', 'USB Headset']}
+										/>
+									</>
 								}
 							/>
 							<SettingRow
 								label="Camera"
 								control={
-									<SettingSelect
-										value={settingsPrefs.voice.camera}
-										onChange={(next) => onUpdateSettings('voice', { camera: next })}
-										label="Camera"
-										options={['Off', 'FaceTime HD Camera', 'USB Camera']}
-									/>
+									<>
+										{/* TEMPORARY: persisted only until voice wiring lands. */}
+										<SettingSelect
+											value={settingsPrefs.voice.camera}
+											onChange={(next) => onUpdateSettings('voice', { camera: next })}
+											label="Camera"
+											options={['Off', 'FaceTime HD Camera', 'USB Camera']}
+										/>
+									</>
 								}
 							/>
 						</div>

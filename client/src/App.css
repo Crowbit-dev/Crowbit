@@ -19,6 +19,10 @@
 	grid-template-columns: 264px minmax(0, 1fr);
 }
 
+.saturation-fx .workspace-frame {
+	filter: saturate(var(--saturation, 100%));
+}
+
 .thread-wrap {
 	display: block;
 	position: fixed;

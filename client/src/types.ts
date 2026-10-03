@@ -112,7 +112,13 @@ export type SettingsPrefs = {
 		friend_request: boolean;
 	};
 	mutedSenders: { notFollowing: boolean; notFollowedBy: boolean };
-	accessibility: { reduceMotion: boolean; compactDensity: boolean };
+	accessibility: {
+		reduceMotion: boolean;
+		compactDensity: boolean;
+		chatTextSize: number;
+		messageSpacing: number;
+		saturation: number;
+	};
 	voice: { noiseSuppression: boolean; echoCancellation: boolean; microphone: string; camera: string };
 };
 

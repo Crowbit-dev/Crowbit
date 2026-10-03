@@ -14,6 +14,10 @@
 	backdrop-filter: blur(16px);
 }
 
+:global(.saturation-fx) .workspaceRail {
+	filter: saturate(var(--saturation, 100%));
+}
+
 .workspaceRailTop {
 	display: flex;
 	flex-direction: column;

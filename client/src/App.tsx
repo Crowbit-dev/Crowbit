@@ -4,6 +4,14 @@ import ContextMenu, { type ContextMenuItem, type ContextMenuState } from './comp
 import PostModal from './components/PostModal';
 import ThreadPanel from './components/ThreadPanel';
 import WorkspaceContent from './components/WorkspaceContent';
+import {
+	CHAT_TEXT_SIZES,
+	CHAT_TEXT_SIZE_DEFAULT,
+	MESSAGE_SPACINGS,
+	MESSAGE_SPACING_DEFAULT,
+	SATURATION_DEFAULT,
+	snapCheckpoint,
+} from './lib/chatScales';
 import WorkspaceRail from './components/WorkspaceRail';
 import WorkspaceSidebar from './components/WorkspaceSidebar';
 import { communities, currentUser, directMessages, notifications, posts } from './appData';
@@ -49,7 +57,13 @@ const DEFAULT_SETTINGS: SettingsPrefs = {
 		comment: 'everyone',
 	},
 	mutedSenders: { notFollowing: false, notFollowedBy: false },
-	accessibility: { reduceMotion: false, compactDensity: false },
+	accessibility: {
+		reduceMotion: false,
+		compactDensity: false,
+		chatTextSize: CHAT_TEXT_SIZE_DEFAULT,
+		messageSpacing: MESSAGE_SPACING_DEFAULT,
+		saturation: SATURATION_DEFAULT,
+	},
 	voice: { noiseSuppression: true, echoCancellation: true, microphone: 'Default', camera: 'Off' },
 };
 
@@ -104,6 +118,12 @@ function loadSettings(): SettingsPrefs {
 			accessibility: {
 				reduceMotion: parsed.accessibility?.reduceMotion ?? false,
 				compactDensity: parsed.accessibility?.compactDensity ?? false,
+				chatTextSize: snapCheckpoint(CHAT_TEXT_SIZES, parsed.accessibility?.chatTextSize, CHAT_TEXT_SIZE_DEFAULT),
+				messageSpacing: snapCheckpoint(MESSAGE_SPACINGS, parsed.accessibility?.messageSpacing, MESSAGE_SPACING_DEFAULT),
+				saturation:
+					typeof parsed.accessibility?.saturation === 'number' && Number.isFinite(parsed.accessibility.saturation)
+						? Math.min(100, Math.max(0, Math.round(parsed.accessibility.saturation / 10) * 10))
+						: 100,
 			},
 			voice: {
 				noiseSuppression: parsed.voice?.noiseSuppression ?? true,
@@ -371,6 +391,18 @@ function App() {
 	useEffect(() => {
 		document.documentElement.classList.toggle('reduce-motion', settingsPrefs.accessibility.reduceMotion);
 	}, [settingsPrefs.accessibility.reduceMotion]);
+
+	useEffect(() => {
+		const root = document.documentElement;
+		root.style.setProperty('--chat-text-size', `${settingsPrefs.accessibility.chatTextSize}px`);
+		root.style.setProperty('--message-spacing', `${settingsPrefs.accessibility.messageSpacing}px`);
+		root.style.setProperty('--saturation', `${settingsPrefs.accessibility.saturation}%`);
+		root.classList.toggle('saturation-fx', settingsPrefs.accessibility.saturation !== 100);
+	}, [
+		settingsPrefs.accessibility.chatTextSize,
+		settingsPrefs.accessibility.messageSpacing,
+		settingsPrefs.accessibility.saturation,
+	]);
 
 	const updateSettings = <K extends keyof SettingsPrefs>(section: K, patch: Partial<SettingsPrefs[K]>) => {
 		setSettingsPrefs((prev) => ({ ...prev, [section]: { ...prev[section], ...patch } }));
