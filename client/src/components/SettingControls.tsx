@@ -1,10 +1,20 @@
 import { Check, Pencil } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import styles from './SettingControls.module.css';
 
-export function SettingRow({ label, copy, control }: { label: string; copy?: string; control: ReactNode }) {
+export function SettingRow({
+	label,
+	copy,
+	control,
+	stacked = false,
+}: {
+	label: string;
+	copy?: string;
+	control: ReactNode;
+	stacked?: boolean;
+}) {
 	return (
-		<div className={styles.row}>
+		<div className={`${styles.row} ${stacked ? styles.stacked : ''}`}>
 			<div className={styles.copy}>
 				<strong>{label}</strong>
 				{copy && <span>{copy}</span>}
@@ -67,6 +77,8 @@ export function SettingSlider({
 	step = 1,
 	onChange,
 	label,
+	ticks,
+	highlightTick,
 }: {
 	value: number;
 	min: number;
@@ -74,18 +86,54 @@ export function SettingSlider({
 	step?: number;
 	onChange: (next: number) => void;
 	label: string;
+	ticks?: string[];
+	highlightTick?: string;
 }) {
+	const pct = max === min ? 0 : ((value - min) / (max - min)) * 100;
 	return (
-		<input
-			type="range"
-			value={value}
-			min={min}
-			max={max}
-			step={step}
-			onChange={(e) => onChange(Number(e.target.value))}
-			aria-label={label}
-			className={styles.slider}
-		/>
+		<div className={styles.sliderWrap}>
+			{ticks && ticks.length > 1 && (
+				<div className={styles.sliderTicks} aria-hidden="true">
+					{ticks.map((tick, index) => (
+						<span
+							key={tick}
+							style={{ left: `${(index / (ticks.length - 1)) * 100}%` }}
+							className={tick === highlightTick ? styles.activeTick : undefined}
+						>
+							{tick}
+						</span>
+					))}
+				</div>
+			)}
+			<div className={styles.sliderTrackWrap}>
+				<div
+					className={styles.sliderTrackBg}
+					aria-hidden="true"
+					style={
+						{
+							'--slider-fill': `${pct}%`,
+						} as CSSProperties
+					}
+				/>
+				{ticks && ticks.length > 1 && (
+					<div className={styles.sliderTickMarks} aria-hidden="true">
+						{ticks.map((tick) => (
+							<span key={tick} />
+						))}
+					</div>
+				)}
+				<input
+					type="range"
+					value={value}
+					min={min}
+					max={max}
+					step={step}
+					onChange={(e) => onChange(Number(e.target.value))}
+					aria-label={label}
+					className={styles.sliderInput}
+				/>
+			</div>
+		</div>
 	);
 }
 

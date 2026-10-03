@@ -147,6 +147,9 @@ function TriangulatedMosaic({ seed }: { seed: string }) {
 	);
 }
 
+const CHAT_TEXT_SIZES = [12, 14, 15, 16, 18, 20, 24];
+const MESSAGE_SPACINGS = [0, 4, 8, 16, 24];
+
 function WorkspaceContent({
 	mode,
 	communities,
@@ -196,7 +199,7 @@ function WorkspaceContent({
 	const [metaOpen, setMetaOpen] = useState(false);
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
 	const [chatTextSize, setChatTextSize] = useState(16);
-	const [messageSpacing, setMessageSpacing] = useState(12);
+	const [messageSpacing, setMessageSpacing] = useState(16);
 	const [saturation, setSaturation] = useState(100);
 	const [highContrast, setHighContrast] = useState(false);
 
@@ -912,34 +915,40 @@ function WorkspaceContent({
 						<div>
 							<h3 className={settingStyles.subHead}>Text readability</h3>
 							<SettingRow
-								label="Chat text size"
-								copy="Adjust the size of text in chats."
+								label="Text size in chat"
+								stacked
+								copy="Adjust the size of the chat font."
 								control={
 									<>
 										{/* TEMPORARY: decorative until text scaling lands. */}
 										<SettingSlider
-											value={chatTextSize}
-											min={12}
-											max={24}
-											onChange={setChatTextSize}
-											label="Chat text size"
+											value={CHAT_TEXT_SIZES.indexOf(chatTextSize)}
+											min={0}
+											max={CHAT_TEXT_SIZES.length - 1}
+											onChange={(next) => setChatTextSize(CHAT_TEXT_SIZES[next] ?? chatTextSize)}
+											label="Text size in chat"
+											ticks={CHAT_TEXT_SIZES.map((size) => `${size}px`)}
+											highlightTick="16px"
 										/>
 									</>
 								}
 							/>
 							<h3 className={settingStyles.subHead}>Visual density</h3>
 							<SettingRow
-								label="Space between messages"
-								copy="Adjust the spacing between messages."
+								label="Space Between Message Groups"
+								stacked
+								copy="Adjust the spacing between message groups."
 								control={
 									<>
 										{/* TEMPORARY: decorative until density scaling lands. */}
 										<SettingSlider
-											value={messageSpacing}
-											min={4}
-											max={24}
-											onChange={setMessageSpacing}
-											label="Space between messages"
+											value={MESSAGE_SPACINGS.indexOf(messageSpacing)}
+											min={0}
+											max={MESSAGE_SPACINGS.length - 1}
+											onChange={(next) => setMessageSpacing(MESSAGE_SPACINGS[next] ?? messageSpacing)}
+											label="Space Between Message Groups"
+											ticks={MESSAGE_SPACINGS.map((space) => `${space}px`)}
+											highlightTick="16px"
 										/>
 									</>
 								}
@@ -958,11 +967,21 @@ function WorkspaceContent({
 							<h3 className={settingStyles.subHead}>Color & contrast</h3>
 							<SettingRow
 								label="Saturation"
-								copy="Adjust color intensity across the app."
+								stacked
+								copy="Reduce the saturation of colors within the app, for those with color sensitivities. This does not affect images, videos, role colors or other user content."
 								control={
 									<>
 										{/* TEMPORARY: decorative until color filters land. */}
-										<SettingSlider value={saturation} min={0} max={200} onChange={setSaturation} label="Saturation" />
+										<SettingSlider
+											value={saturation}
+											min={0}
+											max={100}
+											step={10}
+											onChange={setSaturation}
+											label="Saturation"
+											ticks={['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%']}
+											highlightTick="100%"
+										/>
 									</>
 								}
 							/>
