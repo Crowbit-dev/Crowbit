@@ -20,6 +20,7 @@
 
 .settingsHeading {
 	color: var(--offwhite);
+	user-select: none;
 }
 
 .settingsSidebar {
