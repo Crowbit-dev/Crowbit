@@ -148,7 +148,7 @@ function TriangulatedMosaic({ seed }: { seed: string }) {
 }
 
 const CHAT_TEXT_SIZES = [12, 14, 15, 16, 18, 20, 24];
-const MESSAGE_SPACINGS = [0, 4, 8, 16, 24];
+const MESSAGE_SPACINGS = [0, 4, 8, 16, 20, 24];
 
 function WorkspaceContent({
 	mode,
@@ -198,8 +198,8 @@ function WorkspaceContent({
 	);
 	const [metaOpen, setMetaOpen] = useState(false);
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
-	const [chatTextSize, setChatTextSize] = useState(16);
-	const [messageSpacing, setMessageSpacing] = useState(16);
+	const [chatTextSize, setChatTextSize] = useState(15);
+	const [messageSpacing, setMessageSpacing] = useState(20);
 	const [saturation, setSaturation] = useState(100);
 	const [highContrast, setHighContrast] = useState(false);
 
@@ -928,7 +928,7 @@ function WorkspaceContent({
 											onChange={(next) => setChatTextSize(CHAT_TEXT_SIZES[next] ?? chatTextSize)}
 											label="Text size in chat"
 											ticks={CHAT_TEXT_SIZES.map((size) => `${size}px`)}
-											highlightTick="16px"
+											highlightTick="15px"
 										/>
 									</>
 								}
@@ -948,7 +948,7 @@ function WorkspaceContent({
 											onChange={(next) => setMessageSpacing(MESSAGE_SPACINGS[next] ?? messageSpacing)}
 											label="Space Between Message Groups"
 											ticks={MESSAGE_SPACINGS.map((space) => `${space}px`)}
-											highlightTick="16px"
+											highlightTick="20px"
 										/>
 									</>
 								}
