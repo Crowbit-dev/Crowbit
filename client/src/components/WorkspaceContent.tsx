@@ -16,6 +16,7 @@ import {
 	Reply,
 	Search,
 	Share2,
+	Star,
 	Trash2,
 	User,
 	UserPlus,
@@ -518,9 +519,8 @@ function WorkspaceContent({
 													</div>
 												)}
 												{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (
-													<span className={styles.closeFriendsTag}>
-														<span className={styles.closeFriendsDot} aria-hidden="true" />
-														Close friends
+													<span className={styles.closeFriendsTag} title="Close friends">
+														<Star size={12} fill="currentColor" aria-hidden="true" />
 													</span>
 												)}
 											</div>
@@ -1343,9 +1343,8 @@ function WorkspaceContent({
 										</div>
 									)}
 									{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (
-										<span className={styles.closeFriendsTag}>
-											<span className={styles.closeFriendsDot} aria-hidden="true" />
-											Close friends
+										<span className={styles.closeFriendsTag} title="Close friends">
+											<Star size={12} fill="currentColor" aria-hidden="true" />
 										</span>
 									)}
 								</div>
