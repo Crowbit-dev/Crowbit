@@ -12,9 +12,8 @@ export default function Terms() {
 				<p>
 					Crowbit is available only to people who are at least 13 years old. By creating an account you represent that
 					you meet this requirement and that the information you provide is accurate.
-
-					Violating this section may result in content removal and account termination, as described in Section 5.
 				</p>
+				<p>Violating this section may result in content removal and account termination, as described in Section 5.</p>
 
 				<h3>2. Your account</h3>
 				<p>
