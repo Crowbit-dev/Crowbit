@@ -1137,12 +1137,6 @@ function WorkspaceContent({
 									</>
 								}
 							/>
-							<h3 className={settingStyles.subHead}>About</h3>
-							<SettingRow
-								label="App version"
-								copy="The client build you are running."
-								control={<span className={settingStyles.staticValue}>0.0.0</span>}
-							/>
 						</div>
 					)}
 				</section>
