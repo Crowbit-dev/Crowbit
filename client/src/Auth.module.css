@@ -111,6 +111,62 @@
 	text-align: center;
 }
 
+.authForm label.authConsent {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 10px;
+	font-size: 13px;
+	font-weight: 400;
+	color: var(--text);
+	cursor: pointer;
+}
+
+.authConsent input[type='checkbox'] {
+	flex: 0 0 auto;
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+	padding: 0;
+	accent-color: var(--accent);
+	cursor: pointer;
+}
+
+.authConsent a {
+	color: var(--text-h);
+	font-weight: 700;
+}
+
+.authDoc {
+	width: 100%;
+	max-width: 720px;
+	text-align: left;
+}
+
+.authDoc h2 {
+	margin: 0 0 4px;
+	font-size: 1.4rem;
+	color: #fff;
+}
+
+.authDoc h3 {
+	margin: 24px 0 6px;
+	font-size: 1rem;
+	color: var(--text-h);
+}
+
+.authDoc p {
+	margin: 0 0 10px;
+	font-size: 15px;
+	line-height: 1.6;
+	color: var(--text);
+}
+
+.authDocStamp {
+	font-size: 13px;
+	color: var(--offwhite);
+}
+
 .authSwitch {
 	display: flex;
 	align-items: center;

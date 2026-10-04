@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import crowpng from './assets/crowsideprofile.png';
 import styles from './Auth.module.css';
@@ -21,7 +21,13 @@ const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v
 
 export default function Signup() {
 	const [form, setForm] = useState<FormData>(initial);
+	const [agreed, setAgreed] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const errorRef = useRef<HTMLParagraphElement>(null);
+
+	useEffect(() => {
+		if (error) errorRef.current?.focus();
+	}, [error]);
 
 	const update = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) =>
 		setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -44,6 +50,10 @@ export default function Signup() {
 		}
 		if (form.password.length < 6) {
 			setError('Password must be at least 6 characters');
+			return;
+		}
+		if (!agreed) {
+			setError('Please agree to the Terms of Service and Privacy Policy to create an account');
 			return;
 		}
 
@@ -76,17 +86,35 @@ export default function Signup() {
 
 				<label>
 					Email
-					<input type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" />
+					<input
+						type="email"
+						value={form.email}
+						onChange={update('email')}
+						placeholder="you@example.com"
+						aria-describedby={error ? 'signup-error' : undefined}
+					/>
 				</label>
 
 				<label>
 					Username
-					<input type="text" value={form.username} onChange={update('username')} placeholder="username" />
+					<input
+						type="text"
+						value={form.username}
+						onChange={update('username')}
+						placeholder="username"
+						aria-describedby={error ? 'signup-error' : undefined}
+					/>
 				</label>
 
 				<label>
 					Password
-					<input type="password" value={form.password} onChange={update('password')} placeholder="••••••" />
+					<input
+						type="password"
+						value={form.password}
+						onChange={update('password')}
+						placeholder="••••••"
+						aria-describedby={error ? 'signup-error' : undefined}
+					/>
 				</label>
 
 				<label>
@@ -96,10 +124,23 @@ export default function Signup() {
 						value={form.confirmPassword}
 						onChange={update('confirmPassword')}
 						placeholder="••••••"
+						aria-describedby={error ? 'signup-error' : undefined}
 					/>
 				</label>
 
-				{error && <p className={styles.authError}>{error}</p>}
+				<label className={styles.authConsent}>
+					<input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
+					<span>
+						I am at least 13 years old and agree to the <Link to="/terms">Terms of Service</Link> and{' '}
+						<Link to="/privacy">Privacy Policy</Link>.
+					</span>
+				</label>
+
+				{error && (
+					<p ref={errorRef} tabIndex={-1} role="alert" id="signup-error" className={styles.authError}>
+						{error}
+					</p>
+				)}
 
 				<button type="submit">Sign up</button>
 			</form>
