@@ -26,12 +26,17 @@ export default function Privacy() {
 					<strong>Operational data:</strong> IP address, device/browser type, and timestamps, collected for security,
 					abuse prevention, and troubleshooting. This is not used to build an advertising profile.
 				</p>
-				<p>We do not use third-party trackers or advertising pixels.</p>
+				<p>
+					<strong>Aggregated analytics:</strong> we measure page views and approximate visitor counts, including
+					country, device, browser, and referrer breakdowns. Visitors are identified only by an anonymous hash that
+					resets daily, so visits cannot be linked across days or across websites. Analytics uses no cookies and no
+					advertising pixels.
+				</p>
 
 				<h3>2. Why we collect it</h3>
 				<p>
-					To create and secure your account, show content to the audience you chose, operate messaging, prevent abuse,
-					and communicate with you about the service.
+					To create and secure your account, show content to the audience you chose, operate messaging, understand
+					aggregate usage, prevent abuse, and communicate with you about the service.
 				</p>
 				<p>
 					Your feed is chronological by default and is not built from a behavioral profile. Marketing email is sent only
