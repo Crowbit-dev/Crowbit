@@ -62,19 +62,6 @@ import { formatCount } from '../lib/formatCount';
 import { gradientCommunityColor } from '../lib/communityColor';
 import { notifFilterLabels } from '../lib/notifFilterLabels';
 import { CHAT_TEXT_SIZES, MESSAGE_SPACINGS } from '../lib/chatScales';
-
-type BuildCheck = 'idle' | 'checking' | 'match' | 'behind' | 'modified' | 'local' | 'unknown';
-
-const fetchRepoMainSha = async (): Promise<string | null> => {
-	try {
-		const res = await fetch('https://api.github.com/repos/crowbit-dev/crowbit/commits/main');
-		if (!res.ok) return null;
-		const data = (await res.json()) as { sha?: unknown };
-		return typeof data.sha === 'string' ? data.sha : null;
-	} catch {
-		return null;
-	}
-};
 import { searchFilterLabels } from '../lib/searchFilterLabels';
 import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching';
 import styles from './WorkspaceContent.module.css';
@@ -211,35 +198,6 @@ function WorkspaceContent({
 	const [metaOpen, setMetaOpen] = useState(false);
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
 	const [highContrast, setHighContrast] = useState(false);
-	const [buildCheck, setBuildCheck] = useState<BuildCheck>('idle');
-	const [remoteSha, setRemoteSha] = useState<string | null>(null);
-	const buildDate =
-		__BUILD_SHA__ === 'dev'
-			? null
-			: new Date(__BUILD_TIME__).toLocaleDateString(undefined, {
-					month: 'short',
-					day: 'numeric',
-					year: 'numeric',
-				});
-
-	const verifyBuild = async () => {
-		if (__BUILD_SHA__ === 'dev') {
-			setBuildCheck('local');
-			return;
-		}
-		if (__BUILD_DIRTY__) {
-			setBuildCheck('modified');
-			return;
-		}
-		setBuildCheck('checking');
-		const sha = await fetchRepoMainSha();
-		if (!sha) {
-			setBuildCheck('unknown');
-			return;
-		}
-		setRemoteSha(sha);
-		setBuildCheck(sha === __BUILD_SHA__ ? 'match' : 'behind');
-	};
 
 	const openMemberMenu = (
 		x: number,
@@ -1181,45 +1139,9 @@ function WorkspaceContent({
 							/>
 							<h3 className={settingStyles.subHead}>About</h3>
 							<SettingRow
-								label="Build verification"
-								stacked
-								copy="Compare this build against the public repo. The check runs in your browser against GitHub's API."
-								control={
-									<>
-										<span className={settingStyles.staticValue}>
-											{buildCheck === 'idle' && 'Not checked yet.'}
-											{buildCheck === 'checking' && 'Checking…'}
-											{buildCheck === 'local' && 'Local dev build — nothing to compare against GitHub.'}
-											{buildCheck === 'modified' &&
-												`Built from ${__BUILD_SHA__.slice(0, 7)} with uncommitted changes — this build matches no commit in the repo.`}
-											{buildCheck === 'unknown' && "Couldn't reach GitHub. Check your connection and try again."}
-											{buildCheck === 'match' &&
-												`Matches the repo's latest commit (${__BUILD_SHA__.slice(0, 7)}), built ${buildDate}.`}
-											{buildCheck === 'behind' &&
-												`This build is ${__BUILD_SHA__.slice(0, 7)} (built ${buildDate}); latest on main is ${remoteSha?.slice(0, 7) ?? 'unknown'}. Behind is normal after new commits land.`}
-										</span>
-										<span className={settingStyles.editableRow}>
-											{__BUILD_SHA__ !== 'dev' && (
-												<a
-													href={`https://github.com/crowbit-dev/crowbit/tree/${__BUILD_SHA__}`}
-													target="_blank"
-													rel="noreferrer"
-													className={settingStyles.plainButton}
-												>
-													View on GitHub
-												</a>
-											)}
-											<button
-												type="button"
-												className={settingStyles.plainButton}
-												onClick={() => void verifyBuild()}
-												disabled={buildCheck === 'checking'}
-											>
-												{buildCheck === 'idle' ? 'Verify now' : 'Check again'}
-											</button>
-										</span>
-									</>
-								}
+								label="App version"
+								copy="The client build you are running."
+								control={<span className={settingStyles.staticValue}>0.0.0</span>}
 							/>
 						</div>
 					)}
