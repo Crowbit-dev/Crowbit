@@ -160,3 +160,6 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Vercel CLI metadata (never part of the build)
+.vercel
