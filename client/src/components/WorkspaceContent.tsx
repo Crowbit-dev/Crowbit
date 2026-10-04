@@ -63,7 +63,7 @@ import { gradientCommunityColor } from '../lib/communityColor';
 import { notifFilterLabels } from '../lib/notifFilterLabels';
 import { CHAT_TEXT_SIZES, MESSAGE_SPACINGS } from '../lib/chatScales';
 
-type BuildCheck = 'idle' | 'checking' | 'match' | 'behind' | 'local' | 'unknown';
+type BuildCheck = 'idle' | 'checking' | 'match' | 'behind' | 'modified' | 'local' | 'unknown';
 
 const fetchRepoMainSha = async (): Promise<string | null> => {
 	try {
@@ -225,6 +225,10 @@ function WorkspaceContent({
 	const verifyBuild = async () => {
 		if (__BUILD_SHA__ === 'dev') {
 			setBuildCheck('local');
+			return;
+		}
+		if (__BUILD_DIRTY__) {
+			setBuildCheck('modified');
 			return;
 		}
 		setBuildCheck('checking');
@@ -1186,6 +1190,8 @@ function WorkspaceContent({
 											{buildCheck === 'idle' && 'Not checked yet.'}
 											{buildCheck === 'checking' && 'Checking…'}
 											{buildCheck === 'local' && 'Local dev build — nothing to compare against GitHub.'}
+											{buildCheck === 'modified' &&
+												`Built from ${__BUILD_SHA__.slice(0, 7)} with uncommitted changes — this build matches no commit in the repo.`}
 											{buildCheck === 'unknown' && "Couldn't reach GitHub. Check your connection and try again."}
 											{buildCheck === 'match' &&
 												`Matches the repo's latest commit (${__BUILD_SHA__.slice(0, 7)}), built ${buildDate}.`}
