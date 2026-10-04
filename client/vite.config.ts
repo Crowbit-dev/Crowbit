@@ -8,6 +8,9 @@ export default defineConfig({
 		__BUILD_SHA__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA ?? 'dev'),
 		__BUILD_TIME__: JSON.stringify(new Date().toISOString()),
 	},
+	build: {
+		sourcemap: true,
+	},
 	server: {
 		proxy: {
 			'/api': {
