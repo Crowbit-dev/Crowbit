@@ -111,6 +111,10 @@
 	text-align: center;
 }
 
+.authError:focus {
+	outline: none;
+}
+
 .authForm label.authConsent {
 	display: flex;
 	flex-direction: row;
@@ -187,4 +191,33 @@
 .authLink:hover {
 	opacity: 0.8;
 	text-decoration: underline;
+}
+
+.authLinkButton {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--text-h);
+	font: inherit;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: opacity 0.15s ease;
+}
+
+.authLinkButton:hover {
+	opacity: 0.8;
+	text-decoration: underline;
+}
+
+.authLegal {
+	margin: 18px 0 0;
+	font-size: 13px;
+	color: var(--text);
+	text-align: center;
+}
+
+.authLegal a {
+	color: var(--text-h);
+	font-weight: 700;
 }

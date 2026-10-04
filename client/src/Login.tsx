@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Auth.module.css';
 import crowpng from './assets/crowphotograph.png';
@@ -18,6 +18,11 @@ const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v
 export default function Login() {
 	const [form, setForm] = useState<FormData>(initial);
 	const [error, setError] = useState<string | null>(null);
+	const errorRef = useRef<HTMLParagraphElement>(null);
+
+	useEffect(() => {
+		if (error) errorRef.current?.focus();
+	}, [error]);
 
 	const update = (field: keyof FormData) => (e: ChangeEvent<HTMLInputElement>) =>
 		setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -54,18 +59,41 @@ export default function Login() {
 			<form className={styles.authForm} onSubmit={handleSubmit}>
 				<label>
 					Email
-					<input type="email" value={form.email} onChange={update('email')} placeholder="you@example.com" />
+					<input
+						type="email"
+						value={form.email}
+						onChange={update('email')}
+						placeholder="you@example.com"
+						aria-describedby={error ? 'login-error' : undefined}
+					/>
 				</label>
 
 				<label>
 					Password
-					<input type="password" value={form.password} onChange={update('password')} placeholder="••••••" />
+					<input
+						type="password"
+						value={form.password}
+						onChange={update('password')}
+						placeholder="••••••"
+						aria-describedby={error ? 'login-error' : undefined}
+					/>
 				</label>
 
-				{error && <p className={styles.authError}>{error}</p>}
+				{error && (
+					<p ref={errorRef} tabIndex={-1} role="alert" id="login-error" className={styles.authError}>
+						{error}
+					</p>
+				)}
 
 				<button type="submit">Log in</button>
 			</form>
+
+			<div className={styles.authSwitch}>
+				{/* TEMPORARY: decorative until password reset lands. */}
+				<button type="button" className={styles.authLinkButton}>
+					Forgot password?
+				</button>
+			</div>
 
 			<div className={styles.authSwitch}>
 				<span>Need an account?</span>
@@ -73,6 +101,10 @@ export default function Login() {
 					Sign up
 				</Link>
 			</div>
+
+			<p className={styles.authLegal}>
+				Protected by our <Link to="/terms">Terms</Link> &amp; <Link to="/privacy">Privacy Policy</Link>
+			</p>
 		</div>
 	);
 }
