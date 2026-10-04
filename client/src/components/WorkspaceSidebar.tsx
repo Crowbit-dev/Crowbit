@@ -1,6 +1,7 @@
 import {
 	AtSign,
 	Bell,
+	CircleHelp,
 	FileText,
 	Headphones,
 	Heart,
@@ -404,6 +405,7 @@ function WorkspaceSidebar({
 			{ id: 'notifications', label: 'Notifications', icon: <Bell size={16} aria-hidden="true" /> },
 			{ id: 'accessibility', label: 'Accessibility', icon: <PersonStanding size={16} aria-hidden="true" /> },
 			{ id: 'voice', label: 'Voice & Video', icon: <Headphones size={16} aria-hidden="true" /> },
+			{ id: 'help', label: 'Help center', icon: <CircleHelp size={16} aria-hidden="true" /> },
 		] as const;
 		return (
 			<aside className={`${styles.workspaceSidebar} ${styles.settingsSidebar}`}>

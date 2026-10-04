@@ -62,6 +62,19 @@ import { formatCount } from '../lib/formatCount';
 import { gradientCommunityColor } from '../lib/communityColor';
 import { notifFilterLabels } from '../lib/notifFilterLabels';
 import { CHAT_TEXT_SIZES, MESSAGE_SPACINGS } from '../lib/chatScales';
+
+type BuildCheck = 'idle' | 'checking' | 'match' | 'behind' | 'local' | 'unknown';
+
+const fetchRepoMainSha = async (): Promise<string | null> => {
+	try {
+		const res = await fetch('https://api.github.com/repos/crowbit-dev/crowbit/commits/main');
+		if (!res.ok) return null;
+		const data = (await res.json()) as { sha?: unknown };
+		return typeof data.sha === 'string' ? data.sha : null;
+	} catch {
+		return null;
+	}
+};
 import { searchFilterLabels } from '../lib/searchFilterLabels';
 import { matchCommunities, matchPosts, matchUsers } from '../lib/searchMatching';
 import styles from './WorkspaceContent.module.css';
@@ -198,6 +211,31 @@ function WorkspaceContent({
 	const [metaOpen, setMetaOpen] = useState(false);
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
 	const [highContrast, setHighContrast] = useState(false);
+	const [buildCheck, setBuildCheck] = useState<BuildCheck>('idle');
+	const [remoteSha, setRemoteSha] = useState<string | null>(null);
+	const buildDate =
+		__BUILD_SHA__ === 'dev'
+			? null
+			: new Date(__BUILD_TIME__).toLocaleDateString(undefined, {
+					month: 'short',
+					day: 'numeric',
+					year: 'numeric',
+				});
+
+	const verifyBuild = async () => {
+		if (__BUILD_SHA__ === 'dev') {
+			setBuildCheck('local');
+			return;
+		}
+		setBuildCheck('checking');
+		const sha = await fetchRepoMainSha();
+		if (!sha) {
+			setBuildCheck('unknown');
+			return;
+		}
+		setRemoteSha(sha);
+		setBuildCheck(sha === __BUILD_SHA__ ? 'match' : 'behind');
+	};
 
 	const openMemberMenu = (
 		x: number,
@@ -1085,6 +1123,95 @@ function WorkspaceContent({
 											label="Camera"
 											options={['Off', 'FaceTime HD Camera', 'USB Camera']}
 										/>
+									</>
+								}
+							/>
+						</div>
+					)}
+					{settingsCategory === 'help' && (
+						<div>
+							<h3 className={settingStyles.subHead}>Open source</h3>
+							<SettingRow
+								label="Source code"
+								copy="Crowbit is open source under the AGPLv3 license."
+								control={
+									<a
+										href="https://github.com/crowbit-dev/crowbit"
+										target="_blank"
+										rel="noreferrer"
+										className={settingStyles.plainButton}
+									>
+										<svg width={24} height={24} aria-hidden="true">
+											<use href="/icons.svg#github-icon" />
+										</svg>
+										GitHub
+									</a>
+								}
+							/>
+							<SettingRow
+								label="Report an issue"
+								copy="Found a bug or have an idea? Tell us about it."
+								control={
+									<a
+										href="https://github.com/crowbit-dev/crowbit/issues"
+										target="_blank"
+										rel="noreferrer"
+										className={settingStyles.plainButton}
+									>
+										New issue
+									</a>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>Support</h3>
+							<SettingRow
+								label="Keyboard shortcuts"
+								copy="Move around Crowbit without touching the mouse."
+								control={
+									<>
+										{/* TEMPORARY: decorative until the shortcuts dialog lands. */}
+										<button type="button" className={settingStyles.plainButton}>
+											View shortcuts
+										</button>
+									</>
+								}
+							/>
+							<h3 className={settingStyles.subHead}>About</h3>
+							<SettingRow
+								label="Build verification"
+								stacked
+								copy="Compare this build against the public repo. The check runs in your browser against GitHub's API."
+								control={
+									<>
+										<span className={settingStyles.staticValue}>
+											{buildCheck === 'idle' && 'Not checked yet.'}
+											{buildCheck === 'checking' && 'Checking…'}
+											{buildCheck === 'local' && 'Local dev build — nothing to compare against GitHub.'}
+											{buildCheck === 'unknown' && "Couldn't reach GitHub. Check your connection and try again."}
+											{buildCheck === 'match' &&
+												`Matches the repo's latest commit (${__BUILD_SHA__.slice(0, 7)}), built ${buildDate}.`}
+											{buildCheck === 'behind' &&
+												`This build is ${__BUILD_SHA__.slice(0, 7)} (built ${buildDate}); latest on main is ${remoteSha?.slice(0, 7) ?? 'unknown'}. Behind is normal after new commits land.`}
+										</span>
+										<span className={settingStyles.editableRow}>
+											{__BUILD_SHA__ !== 'dev' && (
+												<a
+													href={`https://github.com/crowbit-dev/crowbit/tree/${__BUILD_SHA__}`}
+													target="_blank"
+													rel="noreferrer"
+													className={settingStyles.plainButton}
+												>
+													View on GitHub
+												</a>
+											)}
+											<button
+												type="button"
+												className={settingStyles.plainButton}
+												onClick={() => void verifyBuild()}
+												disabled={buildCheck === 'checking'}
+											>
+												{buildCheck === 'idle' ? 'Verify now' : 'Check again'}
+											</button>
+										</span>
 									</>
 								}
 							/>

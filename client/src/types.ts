@@ -90,7 +90,7 @@ export type ConversationMutuals = {
 
 export type SearchFilter = 'post' | 'user' | 'community';
 
-export type SettingsCategory = 'account' | 'privacy' | 'notifications' | 'accessibility' | 'voice';
+export type SettingsCategory = 'account' | 'privacy' | 'notifications' | 'accessibility' | 'voice' | 'help';
 
 export type ProfileVisibility = 'public' | 'private';
 
