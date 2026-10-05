@@ -250,7 +250,7 @@ function WorkspaceContent({
 					<div className={styles.dmBarIdentity}>
 						<h2 className={styles.dmBarName}>
 							{activeDm.name}
-							<span className={styles.dmBarHandle}>@{activeDm.id}</span>
+							<span className={styles.dmBarHandle}>{activeDm.username}</span>
 						</h2>
 						<p className={styles.dmBarStatus}>{activeDm.customStatus}</p>
 					</div>

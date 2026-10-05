@@ -385,7 +385,15 @@ function App() {
 			if (prev.some((entry) => entry.id === member.id)) return prev;
 			return [
 				...prev,
-				{ id: member.id, name: member.name, status: member.status, customStatus: '', preview: '', time: 'now' },
+				{
+					id: member.id,
+					name: member.name,
+					username: `@${member.name.toLowerCase()}`,
+					status: member.status,
+					customStatus: '',
+					preview: '',
+					time: 'now',
+				},
 			];
 		});
 		openDm(member.id);

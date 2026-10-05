@@ -196,7 +196,7 @@
 
 .dmBarName {
 	display: flex;
-	align-items: center;
+	align-items: baseline;
 	gap: 7px;
 	min-width: 0;
 	overflow: hidden;

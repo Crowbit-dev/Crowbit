@@ -29,6 +29,7 @@ export type Community = {
 export type DirectMessage = {
 	id: string;
 	name: string;
+	username: string;
 	status: 'online' | 'away' | 'offline';
 	customStatus: string;
 	preview: string;

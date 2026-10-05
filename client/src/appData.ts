@@ -227,6 +227,7 @@ export const directMessages: DirectMessage[] = [
 	{
 		id: '100000000000000001',
 		name: 'Maya',
+		username: '@maya',
 		status: 'online',
 		customStatus: '🚀 shipping the launch deck',
 		preview: 'The deck is ready for review',
@@ -235,6 +236,7 @@ export const directMessages: DirectMessage[] = [
 	{
 		id: '100000000000000002',
 		name: 'Jules',
+		username: '@jules',
 		status: 'away',
 		customStatus: '🎨 deep in mockups, brb',
 		preview: 'I sent over the mockups',
@@ -243,6 +245,7 @@ export const directMessages: DirectMessage[] = [
 	{
 		id: '100000000000000003',
 		name: 'Sami',
+		username: '@sami',
 		status: 'online',
 		customStatus: 'probably breaking prod',
 		preview: 'We should ship the beta this week',
@@ -251,6 +254,7 @@ export const directMessages: DirectMessage[] = [
 	{
 		id: '100000000000000004',
 		name: 'Theo',
+		username: '@theo',
 		status: 'offline',
 		customStatus: '✍️ drafting the next post',
 		preview: 'Thanks for the feedback on the post',
