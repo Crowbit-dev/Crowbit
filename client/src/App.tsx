@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import './App.css';
 import ContextMenu, { type ContextMenuItem, type ContextMenuState } from './components/ContextMenu';
+import NotFound from './NotFound';
 import PostModal from './components/PostModal';
 import ThreadPanel from './components/ThreadPanel';
 import WorkspaceContent from './components/WorkspaceContent';
@@ -15,6 +17,8 @@ import {
 import WorkspaceRail from './components/WorkspaceRail';
 import WorkspaceSidebar from './components/WorkspaceSidebar';
 import { communities, currentUser, directMessages, notifications, posts } from './appData';
+import { communityPath, dmsPath, feedPath, notificationsPath, parseWorkspacePath, searchPath, settingsPath } from './lib/workspacePaths';
+import { postSlug } from './lib/postSlug';
 import type {
 	DirectMessage,
 	MessageRequestsAudience,
@@ -138,17 +142,25 @@ function loadSettings(): SettingsPrefs {
 	}
 }
 
+function communityIdOf(value: unknown): string | null {
+	if (typeof value !== 'string') return null;
+	const byId = communities.find((entry) => entry.id === value);
+	if (byId) return byId.id;
+	const byName = communities.find((entry) => entry.name === value);
+	return byName ? byName.id : null;
+}
+
 function isFeedScope(value: unknown): value is string {
 	return (
 		value === 'all' ||
 		value === 'home' ||
-		(typeof value === 'string' && communities.some((entry) => entry.name === value))
+		(typeof value === 'string' && communities.some((entry) => entry.id === value))
 	);
 }
 
-function channelFor(communityName: string, channels: Record<string, string>): string {
-	const community = communities.find((entry) => entry.name === communityName) ?? communities[0];
-	const stored = channels[community.name];
+function channelFor(communityId: string, channels: Record<string, string>): string {
+	const community = communities.find((entry) => entry.id === communityId) ?? communities[0];
+	const stored = channels[community.id];
 	if (stored && community.channels.some((channel) => channel.id === stored)) return stored;
 	return community.channels[0]?.id ?? 'general';
 }
@@ -170,7 +182,7 @@ function loadRecentSearches(): string[] {
 
 function loadLastVisited(): LastVisited {
 	const fallback: LastVisited = {
-		community: communities[0].name,
+		community: communities[0].id,
 		channels: {},
 		dm: directMessages[0].id,
 		feed: 'home',
@@ -182,59 +194,59 @@ function loadLastVisited(): LastVisited {
 		const community =
 			typeof parsed.community === 'string' &&
 			parsed.community !== 'all' &&
-			parsed.community !== 'home' &&
-			communities.some((entry) => entry.name === parsed.community)
-				? parsed.community
+			parsed.community !== 'home'
+				? (communityIdOf(parsed.community) ?? fallback.community)
 				: fallback.community;
 		const channels: Record<string, string> = {};
 		if (parsed.channels && typeof parsed.channels === 'object') {
-			for (const [name, id] of Object.entries(parsed.channels)) {
-				const owner = communities.find((entry) => entry.name === name);
+			for (const [key, id] of Object.entries(parsed.channels)) {
+				const ownerId = communityIdOf(key);
+				const owner = ownerId ? communities.find((entry) => entry.id === ownerId) : undefined;
 				if (owner && typeof id === 'string' && owner.channels.some((channel) => channel.id === id)) {
-					channels[name] = id;
+					channels[owner.id] = id;
 				}
 			}
 		}
 		const dm =
 			typeof parsed.dm === 'string' && directMessages.some((entry) => entry.id === parsed.dm) ? parsed.dm : fallback.dm;
+		const feedScope = typeof parsed.feed === 'string' ? (communityIdOf(parsed.feed) ?? parsed.feed) : parsed.feed;
 		return {
 			community,
 			channels,
 			dm,
-			feed: isFeedScope(parsed.feed) ? parsed.feed : fallback.feed,
+			feed: isFeedScope(feedScope) ? feedScope : fallback.feed,
 		};
 	} catch {
 		return fallback;
 	}
 }
 
+const NOTIF_FILTERS = ['all', 'mention', 'like', 'friend_request', 'reply', 'comment'] as const;
+const SEARCH_FILTERS = ['post', 'user', 'community'] as const;
+const SETTINGS_CATEGORIES = ['account', 'privacy', 'notifications', 'accessibility', 'voice', 'help'] as const;
+
 function App() {
-	const [mode, setMode] = useState<WorkspaceMode>('feed');
+	const location = useLocation();
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	const route = parseWorkspacePath(location.pathname);
 	const [lastVisited, setLastVisited] = useState<LastVisited>(loadLastVisited);
-	const [activeCommunityName, setActiveCommunityName] = useState(lastVisited.community);
 	const [feedScope, setFeedScope] = useState(lastVisited.feed);
-	const [activeChannelId, setActiveChannelId] = useState(() => channelFor(lastVisited.community, lastVisited.channels));
-	const [activeDmId, setActiveDmId] = useState(lastVisited.dm);
-	const [notifFilter, setNotifFilter] = useState<'all' | NotificationKind>('all');
-	const [settingsCategory, setSettingsCategory] = useState<SettingsCategory>('account');
 	const [settingsPrefs, setSettingsPrefs] = useState<SettingsPrefs>(loadSettings);
-	const [joinedNames, setJoinedNames] = useState<string[]>(() =>
-		communities.filter((community) => community.joined).map((community) => community.name),
+	const [dmList, setDmList] = useState<DirectMessage[]>(directMessages);
+	const [localPosts, setLocalPosts] = useState(posts);
+	const [joinedIds, setJoinedIds] = useState<string[]>(() =>
+		communities.filter((community) => community.joined).map((community) => community.id),
 	);
 	const visibleCommunities = useMemo(
-		() => communities.map((community) => ({ ...community, joined: joinedNames.includes(community.name) })),
-		[joinedNames],
+		() => communities.map((community) => ({ ...community, joined: joinedIds.includes(community.id) })),
+		[joinedIds],
 	);
-	const toggleJoin = (communityName: string) => {
-		setJoinedNames((prev) =>
-			prev.includes(communityName) ? prev.filter((name) => name !== communityName) : [...prev, communityName],
+	const toggleJoin = (communityId: string) => {
+		setJoinedIds((prev) =>
+			prev.includes(communityId) ? prev.filter((id) => id !== communityId) : [...prev, communityId],
 		);
 	};
-	const [searchFilter, setSearchFilter] = useState<SearchFilter>('post');
-	const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches);
-	const [appliedSearch, setAppliedSearch] = useState('');
-	const [localPosts, setLocalPosts] = useState(posts);
-	const [composerOpen, setComposerOpen] = useState(false);
 	const [searchQueries, setSearchQueries] = useState<Record<WorkspaceMode, string>>({
 		feed: '',
 		dms: '',
@@ -243,9 +255,12 @@ function App() {
 		search: '',
 		settings: '',
 	});
+	const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches);
+	const [composerOpen, setComposerOpen] = useState(false);
 	const [activeThread, setActiveThread] = useState<Post | null>(null);
 	const [threadVisible, setThreadVisible] = useState(false);
 	const threadCloseTimer = useRef<number | null>(null);
+	const closingRef = useRef(false);
 	const [menu, setMenu] = useState<ContextMenuState | null>(null);
 	const modalityRef = useRef<'mouse' | 'keyboard'>('mouse');
 	const [windowWidth, setWindowWidth] = useState(() => window.innerWidth);
@@ -259,94 +274,159 @@ function App() {
 		return 400;
 	});
 
+	const closeMenu = () => setMenu(null);
+
+	const go = (path: string, overrides: Record<string, string | null> = {}, opts?: { replace?: boolean }) => {
+		closeMenu();
+		const next = new URLSearchParams();
+		if (path === location.pathname) {
+			for (const [key, value] of new URLSearchParams(location.search)) next.set(key, value);
+		} else if (!('thread' in overrides)) {
+			const thread = new URLSearchParams(location.search).get('thread');
+			if (thread !== null) next.set('thread', thread);
+		}
+		for (const [key, value] of Object.entries(overrides)) {
+			if (value === null) next.delete(key);
+			else next.set(key, value);
+		}
+		const query = next.toString();
+		const target = query ? `${path}?${query}` : path;
+		const replace = opts?.replace ?? target === `${location.pathname}${location.search}`;
+		navigate(target, { replace });
+	};
+
+	const mode: WorkspaceMode = route?.mode ?? 'feed';
+	const routeCommunity =
+		route?.mode === 'communities' ? communities.find((entry) => entry.id === route.communityId) : undefined;
+	const activeCommunity =
+		routeCommunity ?? communities.find((entry) => entry.id === lastVisited.community) ?? communities[0];
+	const activeCommunityId = activeCommunity.id;
+	const routeChannelId = route?.mode === 'communities' ? route.channelId : undefined;
+	const activeChannelId = routeChannelId ?? channelFor(activeCommunity.id, lastVisited.channels);
+	const routeDmId = route?.mode === 'dms' ? route.dmId : undefined;
+	const activeDmId = routeDmId ?? lastVisited.dm;
+	const notifFilterRaw = mode === 'notifications' ? searchParams.get('filter') : null;
+	const notifFilter: 'all' | NotificationKind =
+		notifFilterRaw && (NOTIF_FILTERS as readonly string[]).includes(notifFilterRaw)
+			? (notifFilterRaw as 'all' | NotificationKind)
+			: 'all';
+	const searchFilterRaw = mode === 'search' ? searchParams.get('filter') : null;
+	const searchFilter: SearchFilter =
+		searchFilterRaw && (SEARCH_FILTERS as readonly string[]).includes(searchFilterRaw)
+			? (searchFilterRaw as SearchFilter)
+			: 'post';
+	const appliedSearch = mode === 'search' ? (searchParams.get('q') ?? '') : '';
+	const categoryRaw = route?.mode === 'settings' ? (route.category ?? 'account') : 'account';
+	const settingsCategory: SettingsCategory = (SETTINGS_CATEGORIES as readonly string[]).includes(categoryRaw)
+		? (categoryRaw as SettingsCategory)
+		: 'account';
+	const threadSlug = searchParams.get('thread');
+	const threadPost = threadSlug
+		? (localPosts.find((entry) => postSlug(entry.author, entry.title) === threadSlug) ?? null)
+		: null;
+	const invalidRoute =
+		route === null ||
+		(route.mode === 'communities' &&
+			(routeCommunity === undefined ||
+				(route.channelId !== undefined &&
+					!routeCommunity.channels.some((channel) => channel.id === route.channelId)))) ||
+		(route.mode === 'dms' && route.dmId !== undefined && !dmList.some((entry) => entry.id === route.dmId)) ||
+		(route.mode === 'settings' &&
+			route.category !== undefined &&
+			!(SETTINGS_CATEGORIES as readonly string[]).includes(route.category)) ||
+		(notifFilterRaw !== null && !(NOTIF_FILTERS as readonly string[]).includes(notifFilterRaw)) ||
+		(searchFilterRaw !== null && !(SEARCH_FILTERS as readonly string[]).includes(searchFilterRaw)) ||
+		(threadSlug !== null && threadPost === null);
+
 	const selectFeedScope = (scope: string) => {
 		setFeedScope(scope);
 		setLastVisited((prev) => ({ ...prev, feed: scope }));
 	};
 
-	const selectCommunity = (communityName: string) => {
-		const community = communities.find((entry) => entry.name === communityName) ?? communities[0];
-		setActiveCommunityName(community.name);
-		setActiveChannelId(channelFor(community.name, lastVisited.channels));
-		setLastVisited((prev) => ({ ...prev, community: community.name }));
+	const selectCommunity = (communityId: string) => {
+		const community = communities.find((entry) => entry.id === communityId) ?? communities[0];
+		setLastVisited((prev) => ({ ...prev, community: community.id }));
+		go(communityPath(community.id, channelFor(community.id, lastVisited.channels)));
 	};
 
-	const selectChannel = (communityName: string, channelId: string) => {
-		setActiveCommunityName(communityName);
-		setActiveChannelId(channelId);
+	const selectChannel = (communityId: string, channelId: string) => {
 		setLastVisited((prev) => ({
 			...prev,
-			community: communityName,
-			channels: { ...prev.channels, [communityName]: channelId },
+			community: communityId,
+			channels: { ...prev.channels, [communityId]: channelId },
 		}));
+		const community = communities.find((entry) => entry.id === communityId) ?? communities[0];
+		go(communityPath(community.id, channelId));
 	};
 
 	const selectDm = (dmId: string) => {
-		setActiveDmId(dmId);
 		setLastVisited((prev) => ({ ...prev, dm: dmId }));
+		go(dmsPath(dmId));
 	};
-
-	const [dmList, setDmList] = useState<DirectMessage[]>(directMessages);
 
 	const openDm = (dmId: string) => {
 		selectDm(dmId);
-		setMode('dms');
 	};
 
 	const openDmWithName = (name: string) => {
 		const trimmed = name.trim();
 		if (!trimmed) return;
-		const id = trimmed.toLowerCase();
-		const memberStatus =
-			visibleCommunities.flatMap((community) => community.members).find((member) => member.name.toLowerCase() === id)
-				?.status ?? 'online';
+		const member = visibleCommunities
+			.flatMap((community) => community.members)
+			.find((entry) => entry.name.toLowerCase() === trimmed.toLowerCase());
+		if (!member) return;
 		setDmList((prev) => {
-			if (prev.some((entry) => entry.id === id)) return prev;
-			return [...prev, { id, name: trimmed, status: memberStatus, customStatus: '', preview: '', time: 'now' }];
+			if (prev.some((entry) => entry.id === member.id)) return prev;
+			return [
+				...prev,
+				{ id: member.id, name: member.name, status: member.status, customStatus: '', preview: '', time: 'now' },
+			];
 		});
-		openDm(id);
+		openDm(member.id);
 	};
 
 	const commitSearch = (query: string) => {
 		const trimmed = query.trim().slice(0, 80);
 		if (!trimmed) return;
 		setSearchQueries((prev) => ({ ...prev, search: trimmed }));
-		setAppliedSearch(trimmed);
 		setRecentSearches((prev) =>
 			[trimmed, ...prev.filter((entry) => entry.toLowerCase() !== trimmed.toLowerCase())].slice(0, MAX_RECENT_SEARCHES),
 		);
+		go(searchPath(), { q: trimmed, filter: searchFilter === 'post' ? null : searchFilter });
 	};
 
 	const clearRecentSearches = () => setRecentSearches([]);
 
 	const resetSearch = () => {
 		setSearchQueries((prev) => ({ ...prev, search: '' }));
-		setAppliedSearch('');
+		go(searchPath(), { q: null }, { replace: true });
 	};
 
-	const openChannel = (communityName: string, channelId: string) => {
-		selectChannel(communityName, channelId);
-		setMode('communities');
+	const openChannel = (communityId: string, channelId: string) => {
+		selectChannel(communityId, channelId);
 	};
 
 	const totalUnread = notifications.filter((item) => settingsPrefs.notifications[item.kind]).length;
 
-	const composerDefault = communities.some((community) => community.name === activeCommunityName)
-		? activeCommunityName
-		: communities.some((community) => community.name === feedScope)
+	const composerDefault = communities.some((community) => community.id === activeCommunityId)
+		? activeCommunityId
+		: communities.some((community) => community.id === feedScope)
 			? feedScope
-			: (communities.find((community) => community.joined)?.name ?? communities[0].name);
+			: (communities.find((community) => community.joined)?.id ?? communities[0].id);
 
 	const handlePost = (post: Post) => {
 		setLocalPosts((prev) => [post, ...prev]);
 		setComposerOpen(false);
-		setMode('feed');
+		go(feedPath());
 	};
 
 	// LOCAL-ONLY: removes from in-memory state; nothing persists without a backend.
 	const handleDeletePost = (post: Post) => {
 		setLocalPosts((prev) => prev.filter((entry) => !(entry.author === post.author && entry.title === post.title)));
 		setActiveThread((prev) => (prev && prev.author === post.author && prev.title === post.title ? null : prev));
+		if (activeThread && activeThread.author === post.author && activeThread.title === post.title) {
+			go(location.pathname, { thread: null }, { replace: true });
+		}
 	};
 
 	useEffect(() => {
@@ -389,6 +469,33 @@ function App() {
 	}, [settingsPrefs]);
 
 	useEffect(() => {
+		if (threadSlug) {
+			if (threadPost && (!activeThread || postSlug(activeThread.author, activeThread.title) !== threadSlug)) {
+				setActiveThread(threadPost);
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => setThreadVisible(true));
+				});
+			}
+		} else if (activeThread && !closingRef.current) {
+			setThreadVisible(false);
+			setActiveThread(null);
+		}
+	}, [threadSlug, threadPost, activeThread]);
+
+	useEffect(() => {
+		const needsQuery = mode === 'search';
+		const needsFilter = mode === 'notifications' || mode === 'search';
+		const hasStrayQuery = searchParams.get('q') !== null && !needsQuery;
+		const hasStrayFilter = searchParams.get('filter') !== null && !needsFilter;
+		if (!hasStrayQuery && !hasStrayFilter) return;
+		const next = new URLSearchParams(location.search);
+		if (hasStrayQuery) next.delete('q');
+		if (hasStrayFilter) next.delete('filter');
+		const query = next.toString();
+		navigate(`${location.pathname}${query ? `?${query}` : ''}`, { replace: true });
+	}, [location.pathname, location.search, mode, navigate, searchParams]);
+
+	useEffect(() => {
 		document.documentElement.classList.toggle('reduce-motion', settingsPrefs.accessibility.reduceMotion);
 	}, [settingsPrefs.accessibility.reduceMotion]);
 
@@ -416,26 +523,29 @@ function App() {
 		);
 	};
 
-	const closeMenu = () => setMenu(null);
-
 	const openThread = (post: Post) => {
 		if (threadCloseTimer.current !== null) {
 			window.clearTimeout(threadCloseTimer.current);
 			threadCloseTimer.current = null;
 		}
+		closingRef.current = false;
 		setActiveThread(post);
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => setThreadVisible(true));
 		});
+		go(location.pathname, { thread: postSlug(post.author, post.title) });
 	};
 
 	const closeThread = () => {
 		setThreadVisible(false);
+		closingRef.current = true;
 		if (threadCloseTimer.current !== null) {
 			window.clearTimeout(threadCloseTimer.current);
 		}
+		go(location.pathname, { thread: null }, { replace: true });
 		threadCloseTimer.current = window.setTimeout(() => {
 			setActiveThread(null);
+			closingRef.current = false;
 			threadCloseTimer.current = null;
 		}, 200);
 	};
@@ -478,7 +588,9 @@ function App() {
 		setActiveThread(null);
 	};
 
-	return (
+	return invalidRoute ? (
+		<NotFound />
+	) : (
 		<div className="home-shell">
 			<WorkspaceRail
 				mode={mode}
@@ -488,13 +600,20 @@ function App() {
 				onChangeMode={(nextMode) => {
 					if (nextMode === 'feed') {
 						setFeedScope(lastVisited.feed);
+						go(feedPath(), { thread: null });
 					} else if (nextMode === 'communities') {
-						setActiveCommunityName(lastVisited.community);
-						setActiveChannelId(channelFor(lastVisited.community, lastVisited.channels));
+						const community =
+							communities.find((entry) => entry.id === lastVisited.community) ?? communities[0];
+						go(communityPath(community.id, channelFor(community.id, lastVisited.channels)), { thread: null });
 					} else if (nextMode === 'dms') {
-						setActiveDmId(lastVisited.dm);
+						go(dmsPath(lastVisited.dm), { thread: null });
+					} else if (nextMode === 'notifications') {
+						go(notificationsPath(), { thread: null });
+					} else if (nextMode === 'search') {
+						go(searchPath(), { thread: null });
+					} else {
+						go(settingsPath(), { thread: null });
 					}
-					setMode(nextMode);
 					closeThreadNow();
 					closeMenu();
 				}}
@@ -506,24 +625,24 @@ function App() {
 					mode={mode}
 					communities={visibleCommunities}
 					directMessages={dmList}
-					activeCommunityName={activeCommunityName}
+					activeCommunityId={activeCommunityId}
 					activeDmId={activeDmId}
 					feedScope={feedScope}
 					onSelectFeedScope={selectFeedScope}
 					onSelectCommunity={selectCommunity}
 					onSelectChannel={selectChannel}
 					notifFilter={notifFilter}
-					onSelectNotifFilter={setNotifFilter}
+					onSelectNotifFilter={(filter) => go(notificationsPath(), { filter: filter === 'all' ? null : filter })}
 					onSelectDm={selectDm}
 					searchQuery={searchQueries[mode]}
 					onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
 					searchFilter={searchFilter}
-					onSelectSearchFilter={setSearchFilter}
+					onSelectSearchFilter={(filter) => go(searchPath(), { filter: filter === 'post' ? null : filter })}
 					recentSearches={recentSearches}
 					onCommitSearch={commitSearch}
 					onClearRecentSearches={clearRecentSearches}
 					settingsCategory={settingsCategory}
-					onSelectSettingsCategory={setSettingsCategory}
+					onSelectSettingsCategory={(category) => go(settingsPath(category))}
 				/>
 
 				<WorkspaceContent
@@ -531,7 +650,7 @@ function App() {
 					communities={visibleCommunities}
 					posts={localPosts}
 					directMessages={dmList}
-					activeCommunityName={activeCommunityName}
+					activeCommunityId={activeCommunityId}
 					activeChannelId={activeChannelId}
 					activeDmId={activeDmId}
 					feedScope={feedScope}
@@ -558,6 +677,7 @@ function App() {
 						<ThreadPanel
 							key={`${activeThread.author}-${activeThread.title}`}
 							post={activeThread}
+							communityName={communities.find((entry) => entry.id === activeThread.community)?.name ?? ''}
 							onClose={closeThread}
 							width={clampedThreadWidth}
 							maxWidth={threadMaxWidth}
@@ -577,7 +697,7 @@ function App() {
 			)}
 			{menu && <ContextMenu menu={menu} onClose={closeMenu} />}
 		</div>
-	);
+		);
 }
 
 export default App;

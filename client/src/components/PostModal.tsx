@@ -28,7 +28,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 	const bodyRef = useRef<HTMLTextAreaElement>(null);
 	const fileRef = useRef<HTMLInputElement>(null);
 
-	const selectedCommunity = communities.find((entry) => entry.name === community) ?? communities[0];
+	const selectedCommunity = communities.find((entry) => entry.id === community) ?? communities[0];
 	const postingToProfile = community === '';
 
 	// Close the picker on Escape, the modal on a second press.
@@ -237,13 +237,13 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 							</button>
 							{communities.map((entry) => (
 								<button
-									key={entry.name}
+									key={entry.id}
 									type="button"
 									role="option"
-									aria-selected={entry.name === community}
-									className={`${styles.pickerOption} ${entry.name === community ? styles.pickerSelected : ''}`}
+									aria-selected={entry.id === community}
+									className={`${styles.pickerOption} ${entry.id === community ? styles.pickerSelected : ''}`}
 									onClick={() => {
-										setCommunity(entry.name);
+										setCommunity(entry.id);
 										setPickerOpen(false);
 									}}
 								>
@@ -252,7 +252,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 										<strong>{entry.name}</strong>
 										<span>{entry.members.length} members</span>
 									</span>
-									{entry.name === community && <Check size={16} aria-hidden="true" />}
+									{entry.id === community && <Check size={16} aria-hidden="true" />}
 								</button>
 							))}
 						</div>

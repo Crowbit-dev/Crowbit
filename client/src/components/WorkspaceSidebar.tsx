@@ -38,7 +38,7 @@ type WorkspaceSidebarProps = {
 	mode: WorkspaceMode;
 	communities: Community[];
 	directMessages: DirectMessage[];
-	activeCommunityName: string;
+	activeCommunityId: string;
 	activeDmId: string;
 	feedScope: string;
 	onSelectFeedScope: (scope: string) => void;
@@ -49,8 +49,8 @@ type WorkspaceSidebarProps = {
 	recentSearches: string[];
 	onCommitSearch: (query: string) => void;
 	onClearRecentSearches: () => void;
-	onSelectCommunity: (communityName: string) => void;
-	onSelectChannel: (communityName: string, channelId: string) => void;
+	onSelectCommunity: (communityId: string) => void;
+	onSelectChannel: (communityId: string, channelId: string) => void;
 	onSelectDm: (dmId: string) => void;
 	settingsCategory: SettingsCategory;
 	onSelectSettingsCategory: (category: SettingsCategory) => void;
@@ -126,7 +126,7 @@ function WorkspaceSidebar({
 	mode,
 	communities,
 	directMessages,
-	activeCommunityName,
+	activeCommunityId,
 	activeDmId,
 	feedScope,
 	onSelectFeedScope,
@@ -144,7 +144,7 @@ function WorkspaceSidebar({
 	searchQuery,
 	onSearchQuery,
 }: WorkspaceSidebarProps) {
-	const activeCommunity = communities.find((community) => community.name === activeCommunityName) ?? communities[0];
+	const activeCommunity = communities.find((community) => community.id === activeCommunityId) ?? communities[0];
 	const query = searchQuery.trim().toLowerCase();
 
 	if (mode === 'feed') {
@@ -202,11 +202,11 @@ function WorkspaceSidebar({
 						)}
 						{visibleCommunities.map((community) => (
 							<button
-								key={community.name}
+								key={community.id}
 								type="button"
-								className={`${styles.sidebarItem} ${feedScope === community.name ? styles.active : ''}`}
+								className={`${styles.sidebarItem} ${feedScope === community.id ? styles.active : ''}`}
 								style={{ '--community-color': gradientCommunityColor(community.color) } as CSSProperties}
-								onClick={() => onSelectFeedScope(community.name)}
+								onClick={() => onSelectFeedScope(community.id)}
 							>
 								<span className={shared.sidebarDot} style={{ background: community.color }} />
 								<span className={styles.sidebarItemCopy}>
@@ -456,11 +456,11 @@ function WorkspaceSidebar({
 					{(query ? communities.filter((community) => community.name.toLowerCase().includes(query)) : communities).map(
 						(community) => (
 							<button
-								key={community.name}
+								key={community.id}
 								type="button"
-								className={`${styles.sidebarItem} ${styles.compact} ${activeCommunity.name === community.name ? styles.active : ''}`}
+								className={`${styles.sidebarItem} ${styles.compact} ${activeCommunity.id === community.id ? styles.active : ''}`}
 								style={{ '--community-color': gradientCommunityColor(community.color) } as CSSProperties}
-								onClick={() => onSelectCommunity(community.name)}
+								onClick={() => onSelectCommunity(community.id)}
 							>
 								<span className={shared.sidebarDot} style={{ background: community.color }} />
 								<span className={styles.sidebarItemCopy}>

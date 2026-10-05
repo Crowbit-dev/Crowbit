@@ -11,6 +11,7 @@ import styles from './ThreadPanel.module.css';
 
 function ThreadPanel({
 	post,
+	communityName,
 	onClose,
 	width,
 	maxWidth,
@@ -18,6 +19,7 @@ function ThreadPanel({
 	openMenu,
 }: {
 	post: Post;
+	communityName: string;
 	onClose: () => void;
 	width: number;
 	maxWidth: number;
@@ -220,7 +222,7 @@ function ThreadPanel({
 					<span className={styles.meta}>
 						<span className={styles.metaItem}>{post.handle}</span>
 						{' · '}
-						<span className={styles.metaItem}>{post.community || 'Profile'}</span>
+						<span className={styles.metaItem}>{communityName || 'Profile'}</span>
 					</span>
 					<span className={styles.stats}>
 						{formatCount(post.stats.upvotes)} upvotes · {formatCount(post.stats.comments + comments.length)} comments ·{' '}

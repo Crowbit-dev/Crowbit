@@ -44,6 +44,7 @@ import type {
 import { buildChannelThread, buildDmThread, mutualFriendsByDm, notifications, currentUser } from '../appData';
 import { copyText } from '../lib/clipboard';
 import { postLink, profileLink } from '../lib/site';
+import { postSlug } from '../lib/postSlug';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
 import ConversationView from './ConversationView';
@@ -71,17 +72,17 @@ type WorkspaceContentProps = {
 	communities: Community[];
 	posts: Post[];
 	directMessages: DirectMessage[];
-	activeCommunityName: string;
+	activeCommunityId: string;
 	activeChannelId: string;
 	activeDmId: string;
 	feedScope: string;
 	notifFilter: 'all' | NotificationItem['kind'];
 	searchFilter: SearchFilter;
 	appliedSearchQuery: string;
-	onOpenChannel: (communityName: string, channelId: string) => void;
+	onOpenChannel: (communityId: string, channelId: string) => void;
 	onOpenDm: (dmId: string) => void;
 	onOpenDmWithName: (name: string) => void;
-	onToggleJoin: (communityName: string) => void;
+	onToggleJoin: (communityId: string) => void;
 	settingsCategory: SettingsCategory;
 	settingsPrefs: SettingsPrefs;
 	onUpdateSettings: <K extends keyof SettingsPrefs>(section: K, patch: Partial<SettingsPrefs[K]>) => void;
@@ -154,7 +155,7 @@ function WorkspaceContent({
 	communities,
 	posts,
 	directMessages,
-	activeCommunityName,
+	activeCommunityId,
 	activeChannelId,
 	activeDmId,
 	feedScope,
@@ -176,8 +177,8 @@ function WorkspaceContent({
 	onResetSearch,
 }: WorkspaceContentProps) {
 	const activeCommunity = useMemo(
-		() => communities.find((community) => community.name === activeCommunityName) ?? communities[0],
-		[activeCommunityName, communities],
+		() => communities.find((community) => community.id === activeCommunityId) ?? communities[0],
+		[activeCommunityId, communities],
 	);
 	const activeChannel = useMemo(
 		() => activeCommunity.channels.find((channel) => channel.id === activeChannelId) ?? activeCommunity.channels[0],
@@ -191,8 +192,8 @@ function WorkspaceContent({
 		() => communities.filter((community) => community.members.some((member) => member.name === activeDm.name)),
 		[activeDm.name, communities],
 	);
-	const joinedCommunityNames = useMemo(
-		() => new Set(communities.filter((community) => community.joined).map((community) => community.name)),
+	const joinedCommunityIds = useMemo(
+		() => new Set(communities.filter((community) => community.joined).map((community) => community.id)),
 		[communities],
 	);
 	const [metaOpen, setMetaOpen] = useState(false);
@@ -206,17 +207,16 @@ function WorkspaceContent({
 		invoker: HTMLElement | null,
 		toggle = false,
 	) => {
-		// LOCAL-ONLY: handle and id are derived from the mock name; a real backend would provide both.
+		// LOCAL-ONLY: handle is derived from the mock name; a real backend would provide it.
 		const handle = `@${member.name.toLowerCase()}`;
-		const id = member.name.toLowerCase();
 		const items: ContextMenuItem[] = [
 			{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Username', onSelect: () => void copyText(handle) },
-			{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy User ID', onSelect: () => void copyText(id) },
+			{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy User ID', onSelect: () => void copyText(member.id) },
 			// LOCAL-ONLY: fake link; no backend route exists for it yet.
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Profile Link',
-				onSelect: () => void copyText(profileLink(id)),
+				onSelect: () => void copyText(profileLink(member.id)),
 			},
 			{ type: 'separator' },
 			{
@@ -350,7 +350,8 @@ function WorkspaceContent({
 						</div>
 					) : (
 						visibleItems.map((item) => {
-							const color = communities.find((community) => community.name === item.community)?.color ?? '#533e52';
+							const community = communities.find((entry) => entry.id === item.community);
+							const color = community?.color ?? '#533e52';
 							if (item.kind === 'friend_request') {
 								return (
 									<article key={item.id} className={styles.notifRow}>
@@ -365,7 +366,7 @@ function WorkspaceContent({
 											</span>
 											<span className={styles.notifMeta}>
 												<span className={shared.sidebarDot} style={{ background: color }} />
-												{item.community} · {item.time}
+												{community?.name ?? item.community} · {item.time}
 											</span>
 											<span className={styles.notifFollowActions}>
 												{/* TEMPORARY: decorative until friend requests land. */}
@@ -421,7 +422,7 @@ function WorkspaceContent({
 										<span className={styles.notifSnippet}>{item.snippet}</span>
 										<span className={styles.notifMeta}>
 											<span className={shared.sidebarDot} style={{ background: color }} />
-											{item.community} · {item.time}
+											{community?.name ?? item.community} · {item.time}
 										</span>
 									</span>
 								</button>
@@ -448,8 +449,8 @@ function WorkspaceContent({
 				onOpenDm(user.dmId);
 				return;
 			}
-			const community = communities.find((entry) => entry.name === user.community);
-			if (community) onOpenChannel(community.name, community.channels[0]?.id ?? 'general');
+			const community = communities.find((entry) => entry.id === user.community);
+			if (community) onOpenChannel(community.id, community.channels[0]?.id ?? 'general');
 		};
 
 		return (
@@ -511,11 +512,11 @@ function WorkspaceContent({
 														<span
 															className={shared.sidebarDot}
 															style={{
-																background: communities.find((community) => community.name === post.community)?.color,
+																background: communities.find((entry) => entry.id === post.community)?.color,
 															}}
 															aria-hidden="true"
 														/>
-														<span>{post.community}</span>
+														<span>{communities.find((entry) => entry.id === post.community)?.name ?? post.community}</span>
 													</div>
 												)}
 												{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (
@@ -565,10 +566,10 @@ function WorkspaceContent({
 								);
 							})}
 							{matchedCommunities.map((community) => {
-								const openResult = () => onOpenChannel(community.name, community.channels[0]?.id ?? 'general');
+								const openResult = () => onOpenChannel(community.id, community.channels[0]?.id ?? 'general');
 								return (
 									<article
-										key={community.name}
+										key={community.id}
 										className={styles.resultCommunityCard}
 										style={{ '--community-color': gradientCommunityColor(community.color) } as CSSProperties}
 										onClick={openResult}
@@ -594,7 +595,7 @@ function WorkspaceContent({
 												className={styles.contentChip}
 												onClick={(e) => {
 													e.stopPropagation();
-													onToggleJoin(community.name);
+													onToggleJoin(community.id);
 												}}
 												aria-label={community.joined ? `Leave ${community.name}` : `Join ${community.name}`}
 											>
@@ -1192,7 +1193,7 @@ function WorkspaceContent({
 								<button
 									key={channel.id}
 									type="button"
-									onClick={() => onOpenChannel(activeCommunity.name, channel.id)}
+									onClick={() => onOpenChannel(activeCommunity.id, channel.id)}
 									title={channel.topic}
 									aria-current={activeChannel.id === channel.id ? 'true' : undefined}
 									className={`${styles.channelCard} ${activeChannel.id === channel.id ? styles.active : ''}`}
@@ -1242,11 +1243,11 @@ function WorkspaceContent({
 					</aside>
 					<div className={styles.channelConversation}>
 						<ConversationView
-							key={`${activeCommunity.name}-${activeChannel.id}`}
+							key={`${activeCommunity.id}-${activeChannel.id}`}
 							peerName={`# ${activeChannel.name}`}
 							initialMessages={buildChannelThread(
 								activeChannel,
-								activeCommunity.name,
+								activeCommunity.id,
 								activeCommunity.members.map((member) => member.name),
 							)}
 							edgeScrollbar
@@ -1262,11 +1263,7 @@ function WorkspaceContent({
 
 	const openPostMenu = (e: ReactMouseEvent<HTMLElement>, post: Post) => {
 		e.preventDefault();
-		// LOCAL-ONLY: slug is fabricated; no backend route exists for it yet.
-		const postSlug = `${post.author}-${post.title}`
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/(^-|-$)/g, '');
+		const slug = postSlug(post.author, post.title);
 		// Capture the highlight now — opening the menu collapses the selection.
 		const selection = window.getSelection()?.toString().trim() ?? '';
 		const items: ContextMenuItem[] = [
@@ -1293,7 +1290,7 @@ function WorkspaceContent({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Post Link',
-				onSelect: () => void copyText(postLink(postSlug)),
+				onSelect: () => void copyText(postLink(slug)),
 			},
 		];
 		if (post.author === 'You') {
@@ -1313,11 +1310,11 @@ function WorkspaceContent({
 		feedScope === 'all'
 			? posts
 			: feedScope === 'home'
-				? posts.filter((post) => post.community === '' || joinedCommunityNames.has(post.community))
+				? posts.filter((post) => post.community === '' || joinedCommunityIds.has(post.community))
 				: posts.filter((post) => post.community === feedScope);
 	const scopedCommunity =
 		feedScope !== 'all' && feedScope !== 'home'
-			? communities.find((community) => community.name === feedScope)
+			? communities.find((community) => community.id === feedScope)
 			: undefined;
 	const scopedOnline = scopedCommunity?.members.filter((member) => member.status !== 'offline').length ?? 0;
 
@@ -1360,7 +1357,7 @@ function WorkspaceContent({
 				{visiblePosts.length === 0 ? (
 					<div className={styles.emptyState}>
 						<strong>No posts here yet</strong>
-						<p>Nothing from {feedScope === 'home' ? 'your spaces' : feedScope} so far — try another space.</p>
+						<p>Nothing from {feedScope === 'home' ? 'your spaces' : (communities.find((entry) => entry.id === feedScope)?.name ?? feedScope)} so far — try another space.</p>
 					</div>
 				) : (
 					visiblePosts.map((post) => (
@@ -1384,11 +1381,11 @@ function WorkspaceContent({
 											<span
 												className={shared.sidebarDot}
 												style={{
-													background: communities.find((community) => community.name === post.community)?.color,
+													background: communities.find((entry) => entry.id === post.community)?.color,
 												}}
 												aria-hidden="true"
 											/>
-											<span>{post.community}</span>
+											<span>{communities.find((entry) => entry.id === post.community)?.name ?? post.community}</span>
 										</div>
 									)}
 									{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (

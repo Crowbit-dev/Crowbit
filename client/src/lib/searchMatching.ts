@@ -34,12 +34,12 @@ export function matchUsers(communities: Community[], directMessages: DirectMessa
 			status: dm.status,
 			dmId: dm.id,
 			community:
-				communities.find((community) => community.members.some((member) => member.name === dm.name))?.name ?? '',
+				communities.find((community) => community.members.some((member) => member.name === dm.name))?.id ?? '',
 		});
 	}
 	for (const community of communities) {
 		for (const member of community.members) {
-			consider({ name: member.name, detail: member.role, status: member.status, community: community.name });
+			consider({ name: member.name, detail: member.role, status: member.status, community: community.id });
 		}
 	}
 	return query ? users : users.slice(0, 2);

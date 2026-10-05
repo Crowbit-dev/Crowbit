@@ -9,6 +9,7 @@ export type CommunityChannel = {
 };
 
 export type CommunityMember = {
+	id: string;
 	name: string;
 	status: 'online' | 'away' | 'offline';
 	role: string;
@@ -16,6 +17,7 @@ export type CommunityMember = {
 };
 
 export type Community = {
+	id: string;
 	name: string;
 	color: string;
 	joined: boolean;
