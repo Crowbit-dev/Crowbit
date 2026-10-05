@@ -143,6 +143,10 @@ export default function Signup() {
 				)}
 
 				<button type="submit">Sign up</button>
+
+				<p>
+					There&apos;s no backend yet — <Link to="/home">go to /home directly</Link>.
+				</p>
 			</form>
 
 			<div className={styles.authSwitch}>

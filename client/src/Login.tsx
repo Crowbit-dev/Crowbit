@@ -86,6 +86,10 @@ export default function Login() {
 				)}
 
 				<button type="submit">Log in</button>
+
+				<p>
+					There&apos;s no backend yet, <Link to="/home">go to /home directly</Link>.
+				</p>
 			</form>
 
 			<div className={styles.authSwitch}>

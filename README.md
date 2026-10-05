@@ -1,51 +1,49 @@
 **Project & README are WIP**
 
+**FOR STARDANCE REVIEWERS: *THERE IS NO BACKEND YET !!!! THIS IS JUST A UI DESIGN SHIP***
+
 # Crowbit
 
-An open-source, privacy-first social media alternative that gives users full control over their personal data and content visibility.
+Open-source privacy-based social media alternative that gives the user full control over their personal data and content visibility.
 
-**Key ideas:** privacy-by-default, user-owned data, simple moderation controls, and transparent open-source design.
+Crowbit is designed to minimize trust with the server as much as a centralized social media possibly can to prevent any data profiles being built on the user while maintaining convenience for the user.
 
-**Privacy Principles**
-- Complete control over your data and the right to be forgotten
-- No analytics or third-party trackers
-- Encryption at rest and in transit
+### Ethics
 
-**Repository Layout**
-- `client/` — frontend app (Vite + React + TypeScript)
-- `server/` — API and backend services
-- `client/public/` — static assets served by the client
-- `.github/` — CI workflows and Dependabot config
+This project is built on the philosophy that you should not have to trade convenience for privacy.
 
-**Quick Start (development)**
-Prerequisites: `node` (20+), `npm` (the repo uses `package-lock.json`, so stick to npm).
+Crowbit does not collect data for AI training or resale to third parties, and it is designed to completely minimize data collection.
 
-1. Install dependencies (npm workspaces — one command at the root covers both apps)
+### Crowbit monorepo
+
+This monorepo includes the client app, the server API, and related tooling/configuration:
+
+- [Client app](./client)
+- [Server API](./server)
+- [Root workspace configuration](./package.json)
+
+# Getting Started (development)
+
+### Prerequisites
+Before running the application, make sure you have the following installed:
+- Node.js (20+)
+
+### Installation
+
+1. Clone the repo
+
+```bash
+git clone https://github.com/crowbit-dev/Crowbit
+```
+
+2. Install dependencies (run in the root folder)
 
 ```bash
 npm ci
 ```
+3. Environment
 
-2. Run dev servers (two terminals, or use the root shortcuts below)
-
-Terminal A (server):
-
-```bash
-npm run server
-```
-
-Terminal B (client):
-
-```bash
-npm run dev
-```
-
-Root shortcuts: `npm run dev` (client), `npm run server` (server), `npm run build` (client build), `npm run lint` (client lint), `npm run typecheck` (server typecheck).
-
-The client dev server proxies `/api` to `http://localhost:3001`, so run both halves together.
-
-**Environment**
-The server exits on boot without a secret. Create a `.env` file in `server/`:
+The server exits on boot without a `.env` file. Create a `.env` file in [server/](./server):
 
 ```bash
 SESSION_SECRET=replace-me-with-a-long-random-string
@@ -54,15 +52,32 @@ SESSION_SECRET=replace-me-with-a-long-random-string
 # NODE_ENV=development
 ```
 
-See `server/src/env.ts` for the full list of variables.
+See [server/src/env.ts](./server/src/env.ts) for more details.
 
-**Contributing**
-- Open an issue to discuss large changes.
-- Fork, create a feature branch, implement changes, then open a pull request.
-- Keep changes focused and include tests where applicable.
+4. Run dev servers (two terminals)
 
-**Contact & Security**
-- For questions or security reports, open an issue or contact the maintainers via the repository or email gizzi@crowbit.dev
+Terminal 1 (client):
 
+```bash
+npm run dev
+```
 
-Thanks for checking out Crowbit — privacy-first social for people who value control.
+Terminal 2 (server):
+
+```bash
+npm run server
+```
+
+### npm shortcuts
+
+See [package.json](./package.json) for the root workspace scripts.
+
+## Contributing
+
+Open issues with any bugs or errors that you find or to discuss features.
+
+For security reports, refer to the section below.
+
+## Contact
+
+Email [gizzixz@crowbit.dev](mailto:gizzixz@crowbit.dev) for any questions or security reports that can't be disclosed publicly.
