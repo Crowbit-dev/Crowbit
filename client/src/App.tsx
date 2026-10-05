@@ -23,6 +23,7 @@ import {
 	feedPath,
 	notificationsPath,
 	parseWorkspacePath,
+	profilePath,
 	searchPath,
 	settingsPath,
 } from './lib/workspacePaths';
@@ -260,6 +261,7 @@ function App() {
 		notifications: '',
 		search: '',
 		settings: '',
+		profile: '',
 	});
 	const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches);
 	const [composerOpen, setComposerOpen] = useState(false);
@@ -624,6 +626,8 @@ function App() {
 						go(notificationsPath(), { thread: null });
 					} else if (nextMode === 'search') {
 						go(searchPath(), { thread: null });
+					} else if (nextMode === 'profile') {
+						go(profilePath(), { thread: null });
 					} else {
 						go(settingsPath(), { thread: null });
 					}
@@ -656,6 +660,9 @@ function App() {
 					onClearRecentSearches={clearRecentSearches}
 					settingsCategory={settingsCategory}
 					onSelectSettingsCategory={(category) => go(settingsPath(category))}
+					profileDisplayName={settingsPrefs.account.displayName || currentUser.displayName}
+					profileUsername={settingsPrefs.account.username || currentUser.username.replace(/^@+/, '')}
+					onEditProfile={() => go(settingsPath('account'))}
 				/>
 
 				<WorkspaceContent

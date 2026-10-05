@@ -4,7 +4,8 @@ export type WorkspaceRoute =
 	| { mode: 'communities'; communityId: string; channelId?: string }
 	| { mode: 'notifications' }
 	| { mode: 'search' }
-	| { mode: 'settings'; category?: string };
+	| { mode: 'settings'; category?: string }
+	| { mode: 'profile' };
 
 export const feedPath = () => '/home';
 
@@ -19,6 +20,8 @@ export const searchPath = () => '/home/search';
 
 export const settingsPath = (category?: string) =>
 	category && category !== 'account' ? `/home/settings/${category}` : '/home/settings';
+
+export const profilePath = () => '/profile';
 
 function segments(pathname: string): string[] | null {
 	const clean = pathname.split('?')[0].split('#')[0];
@@ -38,6 +41,8 @@ function segments(pathname: string): string[] | null {
 }
 
 export function parseWorkspacePath(pathname: string): WorkspaceRoute | null {
+	const clean = pathname.split('?')[0].split('#')[0];
+	if (clean === '/profile' || clean === '/profile/') return { mode: 'profile' };
 	const parts = segments(pathname);
 	if (parts === null) return null;
 	if (parts.length === 0) return { mode: 'feed' };
@@ -58,6 +63,9 @@ export function parseWorkspacePath(pathname: string): WorkspaceRoute | null {
 		case 'settings':
 			if (tail.length > 1) return null;
 			return { mode: 'settings', category: tail[0] };
+		case 'profile':
+			if (tail.length > 0) return null;
+			return { mode: 'profile' };
 		default:
 			return null;
 	}

@@ -54,6 +54,9 @@ type WorkspaceSidebarProps = {
 	onSelectDm: (dmId: string) => void;
 	settingsCategory: SettingsCategory;
 	onSelectSettingsCategory: (category: SettingsCategory) => void;
+	profileDisplayName: string;
+	profileUsername: string;
+	onEditProfile: () => void;
 	searchQuery: string;
 	onSearchQuery: (query: string) => void;
 };
@@ -141,6 +144,9 @@ function WorkspaceSidebar({
 	onSelectDm,
 	settingsCategory,
 	onSelectSettingsCategory,
+	profileDisplayName,
+	profileUsername,
+	onEditProfile,
 	searchQuery,
 	onSearchQuery,
 }: WorkspaceSidebarProps) {
@@ -394,6 +400,32 @@ function WorkspaceSidebar({
 						</div>
 					</div>
 				)}
+			</aside>
+		);
+	}
+
+	if (mode === 'profile') {
+		return (
+			<aside className={styles.workspaceSidebar}>
+				<div className={styles.sidebarSection}>
+					<div className={styles.sidebarList}>
+						<span className={`${styles.sidebarItem} ${styles.sidebarItemStatic}`} aria-hidden="true">
+							<span className={styles.sidebarAvatar}>{profileDisplayName.charAt(0).toUpperCase() || '?'}</span>
+							<span className={styles.sidebarItemCopy}>
+								<strong>{profileDisplayName}</strong>
+								<span>@{profileUsername.replace(/^@+/, '')}</span>
+							</span>
+						</span>
+						<button type="button" className={styles.sidebarItem} onClick={onEditProfile}>
+							<span className={styles.sidebarItemIcon}>
+								<User size={16} aria-hidden="true" />
+							</span>
+							<span className={styles.sidebarItemCopy}>
+								<strong>Edit profile</strong>
+							</span>
+						</button>
+					</div>
+				</div>
 			</aside>
 		);
 	}

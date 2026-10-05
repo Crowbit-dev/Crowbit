@@ -14,6 +14,7 @@ import CommunityView from './CommunityView';
 import DmView from './DmView';
 import FeedView from './FeedView';
 import NotificationsView from './NotificationsView';
+import ProfileView from './ProfileView';
 import SearchResultsView from './SearchResultsView';
 import SettingsView from './SettingsView';
 
@@ -134,6 +135,12 @@ function WorkspaceContent({
 				onOpenDmWithName={onOpenDmWithName}
 				openMenu={openMenu}
 			/>
+		);
+	}
+
+	if (mode === 'profile') {
+		return (
+			<ProfileView posts={posts} communities={communities} settingsPrefs={settingsPrefs} onOpenThread={onOpenThread} />
 		);
 	}
 

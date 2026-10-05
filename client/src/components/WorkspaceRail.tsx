@@ -176,7 +176,14 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 						</button>
 						<span className={styles.profileDetails}>
 							<span className={styles.profileCopy}>
-								<strong>{displayName}</strong>
+								<button
+									type="button"
+									className={styles.profileNameButton}
+									onClick={() => onChangeMode('profile')}
+									title="Open your profile"
+								>
+									{displayName}
+								</button>
 								<button
 									type="button"
 									className={`${styles.profileCopyName} ${copied ? styles.copied : ''}`}

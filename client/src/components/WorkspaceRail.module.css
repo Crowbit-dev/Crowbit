@@ -224,9 +224,25 @@
 	line-height: 1.3;
 }
 
-.profileCopy strong {
+.profileNameButton {
+	padding: 0;
+	border: 0;
+	background: transparent;
 	color: var(--text-h);
+	font: inherit;
 	font-size: 0.85rem;
+	font-weight: 700;
+	text-align: left;
+	cursor: pointer;
+}
+
+.profileNameButton:hover {
+	text-decoration: underline;
+}
+
+.profileNameButton:focus-visible {
+	outline: none;
+	text-decoration: underline;
 }
 
 .profileCopy span {
