@@ -5,7 +5,7 @@ import ContextMenu, { type ContextMenuItem, type ContextMenuState } from './comp
 import NotFound from './NotFound';
 import PostModal from './components/PostModal';
 import ThreadPanel from './components/ThreadPanel';
-import WorkspaceContent from './components/WorkspaceContent';
+import WorkspaceContent from './components/workspace-content/WorkspaceContent';
 import {
 	CHAT_TEXT_SIZES,
 	CHAT_TEXT_SIZE_DEFAULT,
