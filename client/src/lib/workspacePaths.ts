@@ -1,4 +1,5 @@
-export type WorkspaceRoute =	| { mode: 'feed' }
+export type WorkspaceRoute =
+	| { mode: 'feed' }
 	| { mode: 'dms'; dmId?: string }
 	| { mode: 'communities'; communityId: string; channelId?: string }
 	| { mode: 'notifications' }

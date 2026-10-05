@@ -17,7 +17,15 @@ import {
 import WorkspaceRail from './components/WorkspaceRail';
 import WorkspaceSidebar from './components/WorkspaceSidebar';
 import { communities, currentUser, directMessages, notifications, posts } from './appData';
-import { communityPath, dmsPath, feedPath, notificationsPath, parseWorkspacePath, searchPath, settingsPath } from './lib/workspacePaths';
+import {
+	communityPath,
+	dmsPath,
+	feedPath,
+	notificationsPath,
+	parseWorkspacePath,
+	searchPath,
+	settingsPath,
+} from './lib/workspacePaths';
 import { postSlug } from './lib/postSlug';
 import type {
 	DirectMessage,
@@ -192,9 +200,7 @@ function loadLastVisited(): LastVisited {
 		if (!raw) return fallback;
 		const parsed = JSON.parse(raw) as Partial<LastVisited>;
 		const community =
-			typeof parsed.community === 'string' &&
-			parsed.community !== 'all' &&
-			parsed.community !== 'home'
+			typeof parsed.community === 'string' && parsed.community !== 'all' && parsed.community !== 'home'
 				? (communityIdOf(parsed.community) ?? fallback.community)
 				: fallback.community;
 		const channels: Record<string, string> = {};
@@ -602,8 +608,7 @@ function App() {
 						setFeedScope(lastVisited.feed);
 						go(feedPath(), { thread: null });
 					} else if (nextMode === 'communities') {
-						const community =
-							communities.find((entry) => entry.id === lastVisited.community) ?? communities[0];
+						const community = communities.find((entry) => entry.id === lastVisited.community) ?? communities[0];
 						go(communityPath(community.id, channelFor(community.id, lastVisited.channels)), { thread: null });
 					} else if (nextMode === 'dms') {
 						go(dmsPath(lastVisited.dm), { thread: null });
@@ -697,7 +702,7 @@ function App() {
 			)}
 			{menu && <ContextMenu menu={menu} onClose={closeMenu} />}
 		</div>
-		);
+	);
 }
 
 export default App;

@@ -33,8 +33,7 @@ export function matchUsers(communities: Community[], directMessages: DirectMessa
 			detail: dm.customStatus,
 			status: dm.status,
 			dmId: dm.id,
-			community:
-				communities.find((community) => community.members.some((member) => member.name === dm.name))?.id ?? '',
+			community: communities.find((community) => community.members.some((member) => member.name === dm.name))?.id ?? '',
 		});
 	}
 	for (const community of communities) {

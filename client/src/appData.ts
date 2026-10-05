@@ -25,9 +25,27 @@ export const communities: Community[] = [
 			{ id: '120000000000000004', name: 'stuff', topic: 'stuff' },
 		],
 		members: [
-			{ id: '100000000000000005', name: 'Nyra', status: 'online', role: 'Lead designer', preview: 'Reviewing the new landing grid' },
-			{ id: '100000000000000006', name: 'Jun', status: 'away', role: 'Motion designer', preview: 'Recording motion notes for the team' },
-			{ id: '100000000000000007', name: 'Ari', status: 'offline', role: 'Product designer', preview: 'Left a comment on the prototype' },
+			{
+				id: '100000000000000005',
+				name: 'Nyra',
+				status: 'online',
+				role: 'Lead designer',
+				preview: 'Reviewing the new landing grid',
+			},
+			{
+				id: '100000000000000006',
+				name: 'Jun',
+				status: 'away',
+				role: 'Motion designer',
+				preview: 'Recording motion notes for the team',
+			},
+			{
+				id: '100000000000000007',
+				name: 'Ari',
+				status: 'offline',
+				role: 'Product designer',
+				preview: 'Left a comment on the prototype',
+			},
 		],
 	},
 	{
@@ -42,8 +60,20 @@ export const communities: Community[] = [
 			{ id: '120000000000000007', name: 'ship-room', topic: 'Release checklists and deploy updates', unread: 1 },
 		],
 		members: [
-			{ id: '100000000000000008', name: 'Milo', status: 'online', role: 'Full-stack', preview: 'Comparing auth strategies' },
-			{ id: '100000000000000009', name: 'Tess', status: 'online', role: 'Platform', preview: 'Watching the deploy pipeline' },
+			{
+				id: '100000000000000008',
+				name: 'Milo',
+				status: 'online',
+				role: 'Full-stack',
+				preview: 'Comparing auth strategies',
+			},
+			{
+				id: '100000000000000009',
+				name: 'Tess',
+				status: 'online',
+				role: 'Platform',
+				preview: 'Watching the deploy pipeline',
+			},
 			{ id: '100000000000000010', name: 'Rowan', status: 'away', role: 'Backend', preview: 'Tuning the API cache' },
 		],
 	},
@@ -59,9 +89,27 @@ export const communities: Community[] = [
 			{ id: '120000000000000010', name: 'metrics', topic: 'Growth, retention, and experiments' },
 		],
 		members: [
-			{ id: '100000000000000011', name: 'Ava', status: 'online', role: 'Founder', preview: 'Collecting launch feedback' },
-			{ id: '100000000000000004', name: 'Theo', status: 'offline', role: 'Growth', preview: 'Shared a retention snapshot' },
-			{ id: '100000000000000013', name: 'Nia', status: 'away', role: 'Operations', preview: 'Reviewing onboarding copy' },
+			{
+				id: '100000000000000011',
+				name: 'Ava',
+				status: 'online',
+				role: 'Founder',
+				preview: 'Collecting launch feedback',
+			},
+			{
+				id: '100000000000000004',
+				name: 'Theo',
+				status: 'offline',
+				role: 'Growth',
+				preview: 'Shared a retention snapshot',
+			},
+			{
+				id: '100000000000000013',
+				name: 'Nia',
+				status: 'away',
+				role: 'Operations',
+				preview: 'Reviewing onboarding copy',
+			},
 		],
 	},
 	{
@@ -76,9 +124,21 @@ export const communities: Community[] = [
 			{ id: '120000000000000013', name: 'security', topic: 'Privacy, access, and risk reviews' },
 		],
 		members: [
-			{ id: '100000000000000014', name: 'Noor', status: 'online', role: 'Security', preview: 'Audit checklist is ready' },
+			{
+				id: '100000000000000014',
+				name: 'Noor',
+				status: 'online',
+				role: 'Security',
+				preview: 'Audit checklist is ready',
+			},
 			{ id: '100000000000000015', name: 'Ivy', status: 'away', role: 'SRE', preview: 'Investigating latency spikes' },
-			{ id: '100000000000000016', name: 'Zed', status: 'offline', role: 'Infra', preview: 'Updated the deployment notes' },
+			{
+				id: '100000000000000016',
+				name: 'Zed',
+				status: 'offline',
+				role: 'Infra',
+				preview: 'Updated the deployment notes',
+			},
 		],
 	},
 	{
@@ -93,9 +153,27 @@ export const communities: Community[] = [
 			{ id: '120000000000000016', name: 'inspiration', topic: 'Moodboards, references, and saves' },
 		],
 		members: [
-			{ id: '100000000000000017', name: 'Mira', status: 'online', role: 'Illustrator', preview: 'Posting a fresh palette study' },
-			{ id: '100000000000000018', name: 'Kai', status: 'away', role: '3D artist', preview: 'Shared a render from the night shift' },
-			{ id: '100000000000000019', name: 'Sage', status: 'offline', role: 'Art director', preview: 'Queued a feedback pass' },
+			{
+				id: '100000000000000017',
+				name: 'Mira',
+				status: 'online',
+				role: 'Illustrator',
+				preview: 'Posting a fresh palette study',
+			},
+			{
+				id: '100000000000000018',
+				name: 'Kai',
+				status: 'away',
+				role: '3D artist',
+				preview: 'Shared a render from the night shift',
+			},
+			{
+				id: '100000000000000019',
+				name: 'Sage',
+				status: 'offline',
+				role: 'Art director',
+				preview: 'Queued a feedback pass',
+			},
 		],
 	},
 ];
@@ -369,11 +447,7 @@ export const comments: Record<string, ThreadComment[]> = {
 	],
 };
 
-export function buildChannelThread(
-	channel: CommunityChannel,
-	communityId: string,
-	authors: string[],
-): MessageEntry[] {
+export function buildChannelThread(channel: CommunityChannel, communityId: string, authors: string[]): MessageEntry[] {
 	const [first = 'Ari', second = 'Jun'] = authors;
 	const base = `${communityId}-${channel.id}`;
 	return [

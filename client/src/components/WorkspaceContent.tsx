@@ -516,7 +516,9 @@ function WorkspaceContent({
 															}}
 															aria-hidden="true"
 														/>
-														<span>{communities.find((entry) => entry.id === post.community)?.name ?? post.community}</span>
+														<span>
+															{communities.find((entry) => entry.id === post.community)?.name ?? post.community}
+														</span>
 													</div>
 												)}
 												{post.audience === 'closeFriends' && settingsPrefs.privacy.showCloseFriendsBadge && (
@@ -1357,7 +1359,13 @@ function WorkspaceContent({
 				{visiblePosts.length === 0 ? (
 					<div className={styles.emptyState}>
 						<strong>No posts here yet</strong>
-						<p>Nothing from {feedScope === 'home' ? 'your spaces' : (communities.find((entry) => entry.id === feedScope)?.name ?? feedScope)} so far — try another space.</p>
+						<p>
+							Nothing from{' '}
+							{feedScope === 'home'
+								? 'your spaces'
+								: (communities.find((entry) => entry.id === feedScope)?.name ?? feedScope)}{' '}
+							so far — try another space.
+						</p>
 					</div>
 				) : (
 					visiblePosts.map((post) => (
