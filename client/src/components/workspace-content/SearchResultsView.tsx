@@ -14,6 +14,7 @@ type SearchResultsViewProps = {
 	appliedSearchQuery: string;
 	settingsPrefs: SettingsPrefs;
 	onOpenThread: (post: Post) => void;
+	onOpenProfile: (username: string) => void;
 	onOpenChannel: (communityId: string, channelId: string) => void;
 	onOpenDm: (dmId: string) => void;
 	onToggleJoin: (communityId: string) => void;
@@ -28,6 +29,7 @@ export default function SearchResultsView({
 	appliedSearchQuery,
 	settingsPrefs,
 	onOpenThread,
+	onOpenProfile,
 	onOpenChannel,
 	onOpenDm,
 	onToggleJoin,
@@ -93,6 +95,7 @@ export default function SearchResultsView({
 									showCloseFriendsBadge={settingsPrefs.privacy.showCloseFriendsBadge}
 									clickable
 									onOpenThread={onOpenThread}
+									onOpenProfile={onOpenProfile}
 								/>
 							);
 						})}

@@ -1,5 +1,5 @@
 import { Phone, Pin, Search, UserPlus, Video } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { buildDmThread, mutualFriendsByDm } from '../../appData';
 import shared from '../../styles/shared.module.css';
 import type { Community, DirectMessage } from '../../types';
@@ -11,9 +11,32 @@ type DmViewProps = {
 	dm: DirectMessage;
 	communities: Community[];
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
+	onOpenProfile: (username: string) => void;
 };
 
-export default function DmView({ dm, communities, openMenu }: DmViewProps) {
+const profileButtonBase: CSSProperties = {
+	border: 0,
+	padding: 0,
+	cursor: 'pointer',
+};
+const profileNameButtonStyle: CSSProperties = {
+	...profileButtonBase,
+	background: 'transparent',
+	font: 'inherit',
+	color: 'inherit',
+	textAlign: 'left',
+};
+const profileHandleButtonStyle: CSSProperties = {
+	...profileButtonBase,
+	background: 'transparent',
+};
+const profileAvatarButtonStyle: CSSProperties = {
+	...profileButtonBase,
+	fontFamily: 'inherit',
+	fontSize: 'inherit',
+};
+
+export default function DmView({ dm, communities, openMenu, onOpenProfile }: DmViewProps) {
 	const [metaOpen, setMetaOpen] = useState(false);
 	const mutualCommunities = communities.filter((community) =>
 		community.members.some((member) => member.name === dm.name),
@@ -22,13 +45,37 @@ export default function DmView({ dm, communities, openMenu }: DmViewProps) {
 		<main className={`${styles.workspaceContent} ${styles.dmLayout}`}>
 			<header className={styles.dmBar} onMouseEnter={() => setMetaOpen(true)} onMouseLeave={() => setMetaOpen(false)}>
 				<span className={styles.dmBarAvatarWrap}>
-					<span className={styles.dmBarAvatar}>{dm.name[0]}</span>
+					<button
+						type="button"
+						className={styles.dmBarAvatar}
+						style={profileAvatarButtonStyle}
+						onClick={() => onOpenProfile(dm.name)}
+						aria-label={`Open ${dm.name}'s profile`}
+						title={`Open ${dm.name}'s profile`}
+					>
+						{dm.name[0]}
+					</button>
 					<span className={`${shared.statusDot} ${shared[dm.status]} ${shared.presenceDot}`} />
 				</span>
 				<div className={styles.dmBarIdentity}>
 					<h2 className={styles.dmBarName}>
-						{dm.name}
-						<span className={styles.dmBarHandle}>{dm.username}</span>
+						<button
+							type="button"
+							style={profileNameButtonStyle}
+							onClick={() => onOpenProfile(dm.name)}
+							aria-label={`Open ${dm.name}'s profile`}
+						>
+							{dm.name}
+						</button>
+						<button
+							type="button"
+							className={styles.dmBarHandle}
+							style={profileHandleButtonStyle}
+							onClick={() => onOpenProfile(dm.name)}
+							aria-label={`Open ${dm.name}'s profile`}
+						>
+							{dm.username}
+						</button>
 					</h2>
 					<p className={styles.dmBarStatus}>{dm.customStatus}</p>
 				</div>

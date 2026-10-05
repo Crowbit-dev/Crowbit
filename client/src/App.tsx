@@ -28,6 +28,7 @@ import {
 	settingsPath,
 } from './lib/workspacePaths';
 import { postSlug } from './lib/postSlug';
+import { findProfileUser, type ProfileUser } from './lib/profileUser';
 import type {
 	DirectMessage,
 	MessageRequestsAudience,
@@ -304,6 +305,8 @@ function App() {
 	};
 
 	const mode: WorkspaceMode = route?.mode ?? 'feed';
+	const selfDisplayName = settingsPrefs.account.displayName || currentUser.displayName;
+	const selfUsername = settingsPrefs.account.username || currentUser.username.replace(/^@+/, '');
 	const routeCommunity =
 		route?.mode === 'communities' ? communities.find((entry) => entry.id === route.communityId) : undefined;
 	const activeCommunity =
@@ -328,6 +331,18 @@ function App() {
 	const settingsCategory: SettingsCategory = (SETTINGS_CATEGORIES as readonly string[]).includes(categoryRaw)
 		? (categoryRaw as SettingsCategory)
 		: 'account';
+	const routeUsername = route?.mode === 'profile' ? route.username : undefined;
+	const profileUser: ProfileUser | null =
+		route?.mode === 'profile'
+			? routeUsername === undefined
+				? { name: selfDisplayName, username: selfUsername, isSelf: true }
+				: findProfileUser(routeUsername, {
+						communities: visibleCommunities,
+						directMessages: dmList,
+						selfName: selfDisplayName,
+						selfUsername,
+					})
+			: null;
 	const threadSlug = searchParams.get('thread');
 	const threadPost = threadSlug
 		? (localPosts.find((entry) => postSlug(entry.author, entry.title) === threadSlug) ?? null)
@@ -342,6 +357,7 @@ function App() {
 		(route.mode === 'settings' &&
 			route.category !== undefined &&
 			!(SETTINGS_CATEGORIES as readonly string[]).includes(route.category)) ||
+		(route.mode === 'profile' && route.username !== undefined && profileUser === null) ||
 		(notifFilterRaw !== null && !(NOTIF_FILTERS as readonly string[]).includes(notifFilterRaw)) ||
 		(searchFilterRaw !== null && !(SEARCH_FILTERS as readonly string[]).includes(searchFilterRaw)) ||
 		(threadSlug !== null && threadPost === null);
@@ -420,6 +436,10 @@ function App() {
 
 	const openChannel = (communityId: string, channelId: string) => {
 		selectChannel(communityId, channelId);
+	};
+
+	const openProfile = (username: string) => {
+		go(profilePath(username));
 	};
 
 	const totalUnread = notifications.filter((item) => settingsPrefs.notifications[item.kind]).length;
@@ -611,8 +631,8 @@ function App() {
 			<WorkspaceRail
 				mode={mode}
 				totalUnread={totalUnread}
-				displayName={settingsPrefs.account.displayName || currentUser.displayName}
-				username={settingsPrefs.account.username || currentUser.username.replace(/^@+/, '')}
+				displayName={selfDisplayName}
+				username={selfUsername}
 				onChangeMode={(nextMode) => {
 					if (nextMode === 'feed') {
 						setFeedScope(lastVisited.feed);
@@ -660,8 +680,8 @@ function App() {
 					onClearRecentSearches={clearRecentSearches}
 					settingsCategory={settingsCategory}
 					onSelectSettingsCategory={(category) => go(settingsPath(category))}
-					profileDisplayName={settingsPrefs.account.displayName || currentUser.displayName}
-					profileUsername={settingsPrefs.account.username || currentUser.username.replace(/^@+/, '')}
+					profileDisplayName={selfDisplayName}
+					profileUsername={selfUsername}
 					onEditProfile={() => go(settingsPath('account'))}
 				/>
 
@@ -677,7 +697,9 @@ function App() {
 					onOpenChannel={openChannel}
 					notifFilter={notifFilter}
 					onOpenThread={toggleThread}
+					onOpenProfile={openProfile}
 					onDeletePost={handleDeletePost}
+					profileUser={profileUser}
 					threadShift={activeThread ? clampedThreadWidth : 0}
 					openMenu={openMenu}
 					searchQuery={searchQueries[mode]}

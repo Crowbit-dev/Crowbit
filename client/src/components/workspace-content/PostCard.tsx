@@ -12,6 +12,7 @@ type PostCardProps = {
 	showImage?: boolean;
 	clickable?: boolean;
 	onOpenThread: (post: Post) => void;
+	onOpenProfile: (username: string) => void;
 	onContextMenu?: (e: ReactMouseEvent<HTMLElement>, post: Post) => void;
 };
 
@@ -22,9 +23,14 @@ export default function PostCard({
 	showImage = false,
 	clickable = false,
 	onOpenThread,
+	onOpenProfile,
 	onContextMenu,
 }: PostCardProps) {
 	const openResult = () => onOpenThread(post);
+	const openProfile = (e: ReactMouseEvent<HTMLElement>) => {
+		if (clickable) e.stopPropagation();
+		onOpenProfile(post.handle.replace(/^@+/, ''));
+	};
 	return (
 		<article
 			className={`${styles.postCard} ${clickable ? styles.resultPostCard : ''}`}
@@ -45,17 +51,39 @@ export default function PostCard({
 			aria-label={clickable ? `${post.title} by ${post.author} — open thread` : undefined}
 		>
 			<div className={styles.postHeader}>
-				{/* TEMPORARY: author, handle, avatar, and community tag show link affordance until click-through lands. */}
-				<div className={styles.avatar}>{post.author[0]}</div>
+				<button
+					type="button"
+					className={`${styles.avatar} ${styles.postAvatarButton}`}
+					onClick={openProfile}
+					aria-label={`Open ${post.author}'s profile`}
+					title={`Open ${post.author}'s profile`}
+				>
+					{post.author[0]}
+				</button>
 				<div className={styles.postMeta}>
 					<div className={styles.postAuthorRow}>
-						<strong>{post.author}</strong>
-						<span className={styles.postHandle}>{post.handle}</span>
+						<button
+							type="button"
+							className={styles.postProfileButton}
+							onClick={openProfile}
+							aria-label={`Open ${post.author}'s profile`}
+						>
+							<strong>{post.author}</strong>
+						</button>
+						<button
+							type="button"
+							className={styles.postProfileButton}
+							onClick={openProfile}
+							aria-label={`Open ${post.author}'s profile`}
+						>
+							<span className={styles.postHandle}>{post.handle}</span>
+						</button>
 						<span className={styles.postDivider}>•</span>
 						<span className={styles.postTime}>{post.time}</span>
 					</div>
 					{community && (
 						<div className={styles.communityTag}>
+							{/* TEMPORARY: community tag shows link affordance until click-through lands. */}
 							<span className={shared.sidebarDot} style={{ background: community.color }} aria-hidden="true" />
 							<span>{community.name}</span>
 						</div>

@@ -17,6 +17,7 @@ type FeedViewProps = {
 	threadShift: number;
 	settingsPrefs: SettingsPrefs;
 	onOpenThread: (post: Post) => void;
+	onOpenProfile: (username: string) => void;
 	onDeletePost: (post: Post) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 };
@@ -28,6 +29,7 @@ export default function FeedView({
 	threadShift,
 	settingsPrefs,
 	onOpenThread,
+	onOpenProfile,
 	onDeletePost,
 	openMenu,
 }: FeedViewProps) {
@@ -158,6 +160,7 @@ export default function FeedView({
 								showCloseFriendsBadge={settingsPrefs.privacy.showCloseFriendsBadge}
 								showImage
 								onOpenThread={onOpenThread}
+								onOpenProfile={onOpenProfile}
 								onContextMenu={(e, target) => openPostMenu(e, target)}
 							/>
 						);

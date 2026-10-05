@@ -5,7 +5,7 @@ export type WorkspaceRoute =
 	| { mode: 'notifications' }
 	| { mode: 'search' }
 	| { mode: 'settings'; category?: string }
-	| { mode: 'profile' };
+	| { mode: 'profile'; username?: string };
 
 export const feedPath = () => '/home';
 
@@ -21,7 +21,7 @@ export const searchPath = () => '/home/search';
 export const settingsPath = (category?: string) =>
 	category && category !== 'account' ? `/home/settings/${category}` : '/home/settings';
 
-export const profilePath = () => '/profile';
+export const profilePath = (username?: string) => (username ? `/profile/${username.replace(/^@+/, '')}` : '/profile');
 
 function segments(pathname: string): string[] | null {
 	const clean = pathname.split('?')[0].split('#')[0];
@@ -43,6 +43,15 @@ function segments(pathname: string): string[] | null {
 export function parseWorkspacePath(pathname: string): WorkspaceRoute | null {
 	const clean = pathname.split('?')[0].split('#')[0];
 	if (clean === '/profile' || clean === '/profile/') return { mode: 'profile' };
+	if (clean.startsWith('/profile/')) {
+		const tail = clean.slice('/profile/'.length).split('/').filter(Boolean);
+		if (tail.length !== 1) return null;
+		try {
+			return { mode: 'profile', username: decodeURIComponent(tail[0]) };
+		} catch {
+			return { mode: 'profile', username: tail[0] };
+		}
+	}
 	const parts = segments(pathname);
 	if (parts === null) return null;
 	if (parts.length === 0) return { mode: 'feed' };

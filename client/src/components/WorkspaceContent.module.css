@@ -955,6 +955,32 @@
 	text-decoration: underline;
 }
 
+.postProfileButton {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.postProfileButton:focus-visible {
+	outline: none;
+}
+
+.postProfileButton:focus-visible strong,
+.postProfileButton:focus-visible .postHandle {
+	text-decoration: underline;
+}
+
+.postAvatarButton {
+	padding: 0;
+	border: 0;
+	font-family: inherit;
+	font-size: inherit;
+	cursor: pointer;
+}
+
 .postHandle,
 .postTime,
 .postDivider {

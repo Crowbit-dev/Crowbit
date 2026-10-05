@@ -22,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
 				<Route path="/home/search" element={<App />} />
 				<Route path="/home/settings/:category?" element={<App />} />
 				<Route path="/profile" element={<App />} />
+				<Route path="/profile/:username" element={<App />} />
 				<Route path="/home/*" element={<NotFound />} />
 				<Route path="/signup" element={<Signup />} />
 				<Route path="/login" element={<Login />} />

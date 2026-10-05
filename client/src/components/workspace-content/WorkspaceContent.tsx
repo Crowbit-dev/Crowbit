@@ -9,6 +9,7 @@ import type {
 	SettingsPrefs,
 	WorkspaceMode,
 } from '../../types';
+import type { ProfileUser } from '../../lib/profileUser';
 import type { ContextMenuItem } from '../ContextMenu';
 import CommunityView from './CommunityView';
 import DmView from './DmView';
@@ -38,6 +39,8 @@ type WorkspaceContentProps = {
 	settingsPrefs: SettingsPrefs;
 	onUpdateSettings: <K extends keyof SettingsPrefs>(section: K, patch: Partial<SettingsPrefs[K]>) => void;
 	onOpenThread: (post: Post) => void;
+	onOpenProfile: (username: string) => void;
+	profileUser: ProfileUser | null;
 	onDeletePost: (post: Post) => void;
 	threadShift: number;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
@@ -65,6 +68,8 @@ function WorkspaceContent({
 	settingsPrefs,
 	onUpdateSettings,
 	onOpenThread,
+	onOpenProfile,
+	profileUser,
 	onDeletePost,
 	threadShift,
 	openMenu,
@@ -81,7 +86,7 @@ function WorkspaceContent({
 	);
 
 	if (mode === 'dms') {
-		return <DmView dm={activeDm} communities={communities} openMenu={openMenu} />;
+		return <DmView dm={activeDm} communities={communities} openMenu={openMenu} onOpenProfile={onOpenProfile} />;
 	}
 
 	if (mode === 'notifications') {
@@ -112,6 +117,7 @@ function WorkspaceContent({
 				onOpenDm={onOpenDm}
 				onToggleJoin={onToggleJoin}
 				onResetSearch={onResetSearch}
+				onOpenProfile={onOpenProfile}
 			/>
 		);
 	}
@@ -140,7 +146,14 @@ function WorkspaceContent({
 
 	if (mode === 'profile') {
 		return (
-			<ProfileView posts={posts} communities={communities} settingsPrefs={settingsPrefs} onOpenThread={onOpenThread} />
+			<ProfileView
+				profileUser={profileUser}
+				posts={posts}
+				communities={communities}
+				settingsPrefs={settingsPrefs}
+				onOpenThread={onOpenThread}
+				onOpenProfile={onOpenProfile}
+			/>
 		);
 	}
 
@@ -152,6 +165,7 @@ function WorkspaceContent({
 			threadShift={threadShift}
 			settingsPrefs={settingsPrefs}
 			onOpenThread={onOpenThread}
+			onOpenProfile={onOpenProfile}
 			onDeletePost={onDeletePost}
 			openMenu={openMenu}
 		/>
