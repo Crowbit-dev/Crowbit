@@ -201,7 +201,7 @@
 	border-radius: 50%;
 	width: 42px;
 	height: 42px;
-	background: linear-gradient(135deg, var(--accent), #313131);
+	background: linear-gradient(135deg, var(--accent), #6f5b6d);
 	color: white;
 	font-weight: 800;
 	user-select: none;
