@@ -1,3 +1,5 @@
+import { MessageCircle, UserPlus } from 'lucide-react';
+import { currentUser } from '../../appData';
 import type { Community, Post, SettingsPrefs } from '../../types';
 import type { ProfileUser } from '../../lib/profileUser';
 import styles from '../WorkspaceContent.module.css';
@@ -10,6 +12,7 @@ type ProfileViewProps = {
 	settingsPrefs: SettingsPrefs;
 	onOpenThread: (post: Post) => void;
 	onOpenProfile: (username: string) => void;
+	onMessageUser: (name: string) => void;
 };
 
 export default function ProfileView({
@@ -19,6 +22,7 @@ export default function ProfileView({
 	settingsPrefs,
 	onOpenThread,
 	onOpenProfile,
+	onMessageUser,
 }: ProfileViewProps) {
 	if (!profileUser) {
 		return (
@@ -35,23 +39,43 @@ export default function ProfileView({
 	const userPosts = posts.filter((post) =>
 		profileUser.isSelf ? post.author === 'You' : post.author === profileUser.name,
 	);
-	const spaceCount = profileUser.isSelf
-		? communities.filter((community) => community.joined).length
-		: communities.filter((community) => community.members.some((member) => member.name === profileUser.name)).length;
+	const bioLine = profileUser.isSelf
+		? currentUser.bio
+		: communities.flatMap((community) => community.members).find((member) => member.name === profileUser.name)?.role;
 	return (
 		<main className={styles.workspaceContent}>
 			<section className={`${styles.panelStack} ${styles.feedStack}`}>
-				<div className={styles.feedCommunityRow}>
-					<span className={styles.feedCommunityIcon} aria-hidden="true">
-						{profileUser.name.charAt(0).toUpperCase() || '?'}
-					</span>
-					<div className={styles.feedCommunityCopy}>
-						<h2>{profileUser.name}</h2>
-						<p>
-							@{profileUser.username} · {userPosts.length} {userPosts.length === 1 ? 'post' : 'posts'} · {spaceCount}{' '}
-							{spaceCount === 1 ? 'space' : 'spaces'}
-						</p>
+				<div className={styles.profileHeader}>
+					<div className={styles.profileTopRow}>
+						<span className={styles.profileAvatar} aria-hidden="true">
+							{profileUser.name.charAt(0).toUpperCase() || '?'}
+						</span>
+						<div className={styles.profileCopy}>
+							<h2>{profileUser.name}</h2>
+							<p>
+								@{profileUser.username} · {userPosts.length} {userPosts.length === 1 ? 'post' : 'posts'}
+							</p>
+						</div>
+						{!profileUser.isSelf && (
+							<div className={styles.profileActions}>
+								{/* TEMPORARY: decorative until friend requests land. */}
+								<button type="button" className={styles.contentChip}>
+									<UserPlus size={16} aria-hidden="true" />
+									Add friend
+								</button>
+								<button
+									type="button"
+									className={styles.contentChip}
+									onClick={() => onMessageUser(profileUser.name)}
+									aria-label={`Message ${profileUser.name}`}
+								>
+									<MessageCircle size={16} aria-hidden="true" />
+									Message
+								</button>
+							</div>
+						)}
 					</div>
+					{bioLine && <p className={styles.profileBio}>{bioLine}</p>}
 				</div>
 				{userPosts.length === 0 ? (
 					<div className={styles.emptyState}>

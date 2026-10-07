@@ -331,6 +331,62 @@
 	background: rgba(83, 62, 82, 0.5);
 }
 
+.profileActions {
+	display: flex;
+	gap: 10px;
+	flex: 0 0 auto;
+}
+
+.profileHeader {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 20px 18px 6px;
+}
+
+.profileTopRow {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.profileAvatar {
+	display: grid;
+	place-items: center;
+	flex: 0 0 auto;
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, var(--accent), #313131);
+	color: white;
+	font-size: 1.5rem;
+	font-weight: 800;
+	user-select: none;
+}
+
+.profileCopy {
+	flex: 1;
+	min-width: 0;
+}
+
+.profileCopy h2 {
+	margin: 0;
+	font-size: 1.25rem;
+}
+
+.profileCopy p {
+	margin: 2px 0 0;
+	color: var(--offwhite);
+	font-size: 0.85rem;
+}
+
+.profileBio {
+	margin: 0;
+	color: var(--text);
+	font-size: 0.92rem;
+	line-height: 1.5;
+}
+
 .sectionHeadingRow {
 	display: flex;
 	align-items: center;

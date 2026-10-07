@@ -657,33 +657,34 @@ function App() {
 				onCompose={() => setComposerOpen(true)}
 			/>
 
-			<div className={`workspace-frame${mode === 'communities' ? ' narrow-sidebar' : ''}`}>
-				<WorkspaceSidebar
-					mode={mode}
-					communities={visibleCommunities}
-					directMessages={dmList}
-					activeCommunityId={activeCommunityId}
-					activeDmId={activeDmId}
-					feedScope={feedScope}
-					onSelectFeedScope={selectFeedScope}
-					onSelectCommunity={selectCommunity}
-					onSelectChannel={selectChannel}
-					notifFilter={notifFilter}
-					onSelectNotifFilter={(filter) => go(notificationsPath(), { filter: filter === 'all' ? null : filter })}
-					onSelectDm={selectDm}
-					searchQuery={searchQueries[mode]}
-					onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
-					searchFilter={searchFilter}
-					onSelectSearchFilter={(filter) => go(searchPath(), { filter: filter === 'post' ? null : filter })}
-					recentSearches={recentSearches}
-					onCommitSearch={commitSearch}
-					onClearRecentSearches={clearRecentSearches}
-					settingsCategory={settingsCategory}
-					onSelectSettingsCategory={(category) => go(settingsPath(category))}
-					profileDisplayName={selfDisplayName}
-					profileUsername={selfUsername}
-					onEditProfile={() => go(settingsPath('account'))}
-				/>
+			<div
+				className={`workspace-frame${mode === 'communities' ? ' narrow-sidebar' : ''}${mode === 'profile' ? ' no-sidebar' : ''}`}
+			>
+				{mode !== 'profile' && (
+					<WorkspaceSidebar
+						mode={mode}
+						communities={visibleCommunities}
+						directMessages={dmList}
+						activeCommunityId={activeCommunityId}
+						activeDmId={activeDmId}
+						feedScope={feedScope}
+						onSelectFeedScope={selectFeedScope}
+						onSelectCommunity={selectCommunity}
+						onSelectChannel={selectChannel}
+						notifFilter={notifFilter}
+						onSelectNotifFilter={(filter) => go(notificationsPath(), { filter: filter === 'all' ? null : filter })}
+						onSelectDm={selectDm}
+						searchQuery={searchQueries[mode]}
+						onSearchQuery={(query) => setSearchQueries((prev) => ({ ...prev, [mode]: query }))}
+						searchFilter={searchFilter}
+						onSelectSearchFilter={(filter) => go(searchPath(), { filter: filter === 'post' ? null : filter })}
+						recentSearches={recentSearches}
+						onCommitSearch={commitSearch}
+						onClearRecentSearches={clearRecentSearches}
+						settingsCategory={settingsCategory}
+						onSelectSettingsCategory={(category) => go(settingsPath(category))}
+					/>
+				)}
 
 				<WorkspaceContent
 					mode={mode}

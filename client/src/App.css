@@ -19,6 +19,10 @@
 	grid-template-columns: 264px minmax(0, 1fr);
 }
 
+.workspace-frame.no-sidebar {
+	grid-template-columns: minmax(0, 1fr);
+}
+
 .saturation-fx .workspace-frame {
 	filter: saturate(var(--saturation, 100%));
 }

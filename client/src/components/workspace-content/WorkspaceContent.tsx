@@ -153,6 +153,7 @@ function WorkspaceContent({
 				settingsPrefs={settingsPrefs}
 				onOpenThread={onOpenThread}
 				onOpenProfile={onOpenProfile}
+				onMessageUser={onOpenDmWithName}
 			/>
 		);
 	}
