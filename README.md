@@ -53,6 +53,7 @@ persists locally.
 - [ ] Close-friends list management
 
 ### Communities & moderation
+- [ ] Creating public/private communities
 - [ ] Join / leave enforcement
 - [ ] Channel search and channel pins
 - [ ] Moderation actions (mute, kick, ban) and message menus
