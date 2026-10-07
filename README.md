@@ -68,6 +68,11 @@ persists locally.
 - [ ] High-contrast theme
 - [ ] Keyboard-shortcuts dialog
 
+### Customizability
+- [ ] Custom profile avatars and banners
+- [ ] Custom community icons and banners
+- [ ] Custom colors for communities and profiles
+
 ### Voice & video
 - [ ] Device selection, noise suppression, and echo cancellation wiring
 - [ ] Voice and video calls
