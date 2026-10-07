@@ -22,6 +22,56 @@ This monorepo includes the client app, the server API, and related tooling/confi
 - [Server API](./server)
 - [Root workspace configuration](./package.json)
 
+## To-do list for everything still waiting on a backend
+
+The client is a working mock: anything below either does nothing yet or only
+persists locally.
+
+### Account & auth
+- [ ] Signup / login endpoints and session handling
+- [ ] Password change/reset
+- [ ] Two-factor enforcement
+- [ ] Active-sessions device list
+- [ ] Account disable and delete
+
+### Posting & feed
+- [ ] Post creation, editing, and deletion API
+- [ ] Working likes, comments and sharing
+
+### Messaging
+- [ ] Real-time E2EE messaging delivery
+- [ ] Pinned messages
+- [ ] Group DMs
+- [ ] Message search
+- [ ] Message-request audience enforcement
+- [ ] Read receipts, typing indicators, and read-activity enforcement
+
+### Social graph
+- [ ] Friend requests (send, accept and decline with inbox buttons included)
+- [ ] Follow graph (follower-only messaging, mute filters, and request rules assume it)
+- [ ] Block and mute list management plus enforcement
+- [ ] Close-friends list management
+
+### Communities & moderation
+- [ ] Join / leave enforcement
+- [ ] Channel search and channel pins
+- [ ] Moderation actions (mute, kick, ban) and message menus
+
+### Profiles & navigation
+- [ ] Click-through on community tags, thread/comment authors, and DM avatars
+
+### Settings enforcement
+- [ ] Server-side enforcement of visibility, messaging, notification, and voice prefs
+
+### Accessibility & UX finishing
+- [ ] Density scaling behind the compact-density toggle
+- [ ] High-contrast theme
+- [ ] Keyboard-shortcuts dialog
+
+### Voice & video
+- [ ] Device selection, noise suppression, and echo cancellation wiring
+- [ ] Voice and video calls
+
 # Getting Started (development)
 
 ### Prerequisites
