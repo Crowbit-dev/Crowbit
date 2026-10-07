@@ -4,6 +4,7 @@ import type { Community, Post, SettingsPrefs } from '../../types';
 import type { ProfileUser } from '../../lib/profileUser';
 import styles from '../WorkspaceContent.module.css';
 import PostCard from './PostCard';
+import TriangulatedMosaic from './TriangulatedMosaic';
 
 type ProfileViewProps = {
 	profileUser: ProfileUser | null;
@@ -46,6 +47,9 @@ export default function ProfileView({
 		<main className={styles.workspaceContent}>
 			<section className={`${styles.panelStack} ${styles.feedStack}`}>
 				<div className={styles.profileHeader}>
+					<div className={styles.profileBanner} aria-hidden="true">
+						<TriangulatedMosaic seed={profileUser.name} />
+					</div>
 					<div className={styles.profileTopRow}>
 						<span className={styles.profileAvatar} aria-hidden="true">
 							{profileUser.name.charAt(0).toUpperCase() || '?'}
