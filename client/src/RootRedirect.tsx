@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { apiFetch } from './lib/api';
 
 export default function RootRedirect() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		fetch('/api/session', { credentials: 'include' })
+		apiFetch('/api/session')
 			.then(async (res) => {
 				if (!res.ok) {
 					throw new Error('Not authenticated');

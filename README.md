@@ -29,6 +29,7 @@ persists locally.
 
 ### Account & auth
 - [ ] Signup / login endpoints and session handling
+- [ ] Breached password checks
 - [ ] Password change/reset
 - [ ] Two-factor enforcement
 - [ ] Active-sessions device list
@@ -103,12 +104,13 @@ The server exits on boot without a `.env` file. Create a `.env` file in [server/
 
 ```bash
 SESSION_SECRET=replace-me-with-a-long-random-string
+CLIENT_URL=http://localhost:5173
 # Optional:
 # PORT=3001
 # NODE_ENV=development
 ```
 
-See [server/src/env.ts](./server/src/env.ts) for more details.
+See [server/src/env.ts](./server/src/env.ts) for more details (or copy [server/.env.example](./server/.env.example)).
 
 4. Run dev servers (two terminals)
 
