@@ -18,7 +18,7 @@ import {
 	Users,
 	X,
 } from 'lucide-react';
-import { useState, type CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type {
 	Community,
 	DirectMessage,
@@ -97,31 +97,6 @@ function SidebarSearch({
 	);
 }
 
-function SidebarHeading({ id, kicker, title, copy }: { id: string; kicker: string; title: string; copy: string }) {
-	const [dismissed, setDismissed] = useState(() => localStorage.getItem(`sidebar-heading-dismissed:${id}`) === '1');
-	if (dismissed) return null;
-	const dismiss = () => {
-		localStorage.setItem(`sidebar-heading-dismissed:${id}`, '1');
-		setDismissed(true);
-	};
-	return (
-		<div className={styles.sidebarHeadingBlock}>
-			<button
-				type="button"
-				className={styles.sidebarHeadingDismiss}
-				onClick={dismiss}
-				aria-label="Dismiss introduction"
-				title="Dismiss"
-			>
-				<X size={14} aria-hidden="true" />
-			</button>
-			<p className={styles.sidebarKicker}>{kicker}</p>
-			<h2>{title}</h2>
-			<p className={styles.sidebarCopy}>{copy}</p>
-		</div>
-	);
-}
-
 function WorkspaceSidebar({
 	mode,
 	communities,
@@ -154,15 +129,7 @@ function WorkspaceSidebar({
 
 		return (
 			<aside className={styles.workspaceSidebar}>
-				<SidebarHeading
-					key="feed"
-					id="feed"
-					kicker="Feed"
-					title="Your spaces"
-					copy="Choose a space to catch up on its latest posts."
-				/>
-
-				<SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search the network" />
+				<SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search spaces" />
 
 				<div className={styles.sidebarSection}>
 					<div className={styles.sidebarSectionHead}>
@@ -231,14 +198,6 @@ function WorkspaceSidebar({
 
 		return (
 			<aside className={styles.workspaceSidebar}>
-				<SidebarHeading
-					key="dms"
-					id="dms"
-					kicker="Direct messages"
-					title="Conversations"
-					copy="Pick up where you left off with friends."
-				/>
-
 				<SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search friends" />
 
 				<div className={styles.sidebarSection}>
@@ -287,14 +246,6 @@ function WorkspaceSidebar({
 
 		return (
 			<aside className={styles.workspaceSidebar}>
-				<SidebarHeading
-					key="notifications"
-					id="notifications"
-					kicker="Notifications"
-					title="Inbox"
-					copy="Unread Activity."
-				/>
-
 				<SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search activity" />
 
 				<div className={styles.sidebarSection}>
@@ -331,14 +282,6 @@ function WorkspaceSidebar({
 
 		return (
 			<aside className={styles.workspaceSidebar}>
-				<SidebarHeading
-					key="search"
-					id="search"
-					kicker="Search"
-					title="Find anything"
-					copy="Search posts, users, and communities from one place."
-				/>
-
 				<SidebarSearch
 					value={searchQuery}
 					onChange={onSearchQuery}
@@ -437,14 +380,6 @@ function WorkspaceSidebar({
 			className={`${styles.workspaceSidebar} ${styles.communityEdge}`}
 			style={{ '--community-color': gradientCommunityColor(activeCommunity.color) } as CSSProperties}
 		>
-			<SidebarHeading
-				key="communities"
-				id="communities"
-				kicker="Communities"
-				title="All spaces"
-				copy="Select a community to view its channels and members."
-			/>
-
 			<SidebarSearch value={searchQuery} onChange={onSearchQuery} placeholder="Search communities" />
 
 			<div className={styles.sidebarSection}>
