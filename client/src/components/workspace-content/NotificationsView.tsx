@@ -55,7 +55,7 @@ export default function NotificationsView({
 					</>
 				)}
 				<div className={styles.notifBarActions}>
-					{/* TEMPORARY: decorative until read-state lands. */}
+					{/* TEMPORARY: decorative until read-state lands */}
 					<button type="button" className={styles.dmBarAction} aria-label="Mark all read" title="Mark all read">
 						<CheckCheck size={17} aria-hidden="true" />
 					</button>
@@ -94,7 +94,7 @@ export default function NotificationsView({
 											{community?.name ?? item.community} · {item.time}
 										</span>
 										<span className={styles.notifFollowActions}>
-											{/* TEMPORARY: decorative until friend requests land. */}
+											{/* TEMPORARY: decorative until friend requests land */}
 											<button type="button" className={styles.contentChip}>
 												Accept
 											</button>

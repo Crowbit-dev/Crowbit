@@ -1,6 +1,6 @@
 export type DelaunayPoint = { x: number; y: number };
 
-// Bowyer-Watson Delaunay triangulation. Returns index triples into `points`. used for generating a triangulated mosaic.
+// Bowyer-Watson Delaunay triangulation. Returns index triples into `points`. used for generating a triangulated mosaic
 export function delaunay(points: DelaunayPoint[]): Array<[number, number, number]> {
 	const minX = Math.min(...points.map((point) => point.x));
 	const minY = Math.min(...points.map((point) => point.y));

@@ -13,6 +13,7 @@ type ProfileViewProps = {
 	settingsPrefs: SettingsPrefs;
 	onOpenThread: (post: Post) => void;
 	onOpenProfile: (username: string) => void;
+	onOpenCommunity: (communityId: string) => void;
 	onMessageUser: (name: string) => void;
 };
 
@@ -23,6 +24,7 @@ export default function ProfileView({
 	settingsPrefs,
 	onOpenThread,
 	onOpenProfile,
+	onOpenCommunity,
 	onMessageUser,
 }: ProfileViewProps) {
 	if (!profileUser) {
@@ -62,7 +64,7 @@ export default function ProfileView({
 						</div>
 						{!profileUser.isSelf && (
 							<div className={styles.profileActions}>
-								{/* TEMPORARY: decorative until friend requests land. */}
+								{/* TEMPORARY: decorative until friend requests land */}
 								<button type="button" className={styles.contentChip}>
 									<UserPlus size={16} aria-hidden="true" />
 									Add friend
@@ -99,7 +101,7 @@ export default function ProfileView({
 								post={post}
 								community={
 									community
-										? { name: community.name, color: community.color }
+										? { id: community.id, name: community.name, color: community.color }
 										: post.community
 											? { name: post.community }
 											: null
@@ -109,6 +111,7 @@ export default function ProfileView({
 								clickable
 								onOpenThread={onOpenThread}
 								onOpenProfile={onOpenProfile}
+								onOpenCommunity={onOpenCommunity}
 							/>
 						);
 					})

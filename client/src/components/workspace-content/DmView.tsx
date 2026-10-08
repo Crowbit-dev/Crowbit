@@ -86,15 +86,15 @@ export default function DmView({ dm, communities, openMenu, onOpenProfile }: DmV
 					<button type="button" className={styles.dmBarAction} aria-label="Start video call">
 						<Video size={17} aria-hidden="true" />
 					</button>
-					{/* TEMPORARY: decorative until pins land. */}
+					{/* TEMPORARY: decorative until pins land */}
 					<button type="button" className={styles.dmBarAction} aria-label="Pinned messages">
 						<Pin size={17} aria-hidden="true" />
 					</button>
-					{/* TEMPORARY: decorative until group DMs land. */}
+					{/* TEMPORARY: decorative until group DMs land */}
 					<button type="button" className={styles.dmBarAction} aria-label="Create group">
 						<UserPlus size={17} aria-hidden="true" />
 					</button>
-					{/* TEMPORARY: decorative until message search lands. */}
+					{/* TEMPORARY: decorative until message search lands */}
 					<label className={styles.dmBarSearch}>
 						<Search size={15} aria-hidden="true" />
 						<input type="search" placeholder="Search" aria-label="Search conversation" />
@@ -116,6 +116,7 @@ export default function DmView({ dm, communities, openMenu, onOpenProfile }: DmV
 					}}
 					metaOpen={metaOpen}
 					edgeScrollbar
+					onOpenProfile={onOpenProfile}
 					openMenu={openMenu}
 				/>
 			</section>

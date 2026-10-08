@@ -28,8 +28,7 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
 	const keyboardRef = useRef(false);
 	const [position, setPosition] = useState({ x: menu.x, y: menu.y, origin: 'top left' });
 
-	// Clamp into the viewport (flip up/left near edges) in a layout effect,
-	// so the final position paints on the first frame with no visible snap.
+	// Clamp into the viewport (flip up/left near edges) in a layout effect, so the final position paints on the first frame with no visible snap
 	useLayoutEffect(() => {
 		const el = panelRef.current;
 		if (!el) return;
@@ -42,16 +41,18 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
 		if (menu.keyboard) itemRefs.current[0]?.focus();
 	}, [menu]);
 
-	// Return focus to the invoker after keyboard dismissal.
-	useEffect(
-		() => () => {
-			if (keyboardRef.current) menu.invoker?.focus?.();
-		},
-		[menu],
-	);
+	// Return focus to the invoker after keyboard dismissal
+	const invokerRef = useRef<HTMLElement | null>(menu.invoker);
+	useEffect(() => {
+		invokerRef.current = menu.invoker;
+	});
+	useEffect(() => {
+		return () => {
+			if (keyboardRef.current) invokerRef.current?.focus?.();
+		};
+	}, []);
 
-	// Dismiss on outside pointerdown, scroll, resize, or Escape.
-	// A left-click on a toggle invoker itself is left alone so it can toggle the menu.
+	// Dismiss on outside pointerdown, scroll, resize, or Escape. A left-click on a toggle invoker itself is left alone so it can toggle the menu
 	useEffect(() => {
 		const onPointerDown = (e: PointerEvent) => {
 			const target = e.target as Node;
@@ -126,7 +127,6 @@ function ContextMenu({ menu, onClose }: { menu: ContextMenuState; onClose: () =>
 						disabled={item.disabled}
 						className={`${styles.item} ${item.danger ? styles.danger : ''}`}
 						onClick={(e) => {
-							// Keyboard-activated clicks (Enter/Space) report detail 0.
 							if (e.detail === 0) keyboardRef.current = true;
 							item.onSelect();
 							onClose();

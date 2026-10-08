@@ -171,6 +171,12 @@
 	border-top: 0;
 }
 
+.comment:focus-visible {
+	outline: none;
+	background: rgba(255, 255, 255, 0.03);
+	border-radius: 8px;
+}
+
 .commentAvatar {
 	display: grid;
 	place-items: center;

@@ -7,12 +7,13 @@ import styles from '../WorkspaceContent.module.css';
 
 type PostCardProps = {
 	post: Post;
-	community?: { name: string; color?: string } | null;
+	community?: { id?: string; name: string; color?: string } | null;
 	showCloseFriendsBadge: boolean;
 	showImage?: boolean;
 	clickable?: boolean;
 	onOpenThread: (post: Post) => void;
 	onOpenProfile: (username: string) => void;
+	onOpenCommunity?: (communityId: string) => void;
 	onContextMenu?: (e: ReactMouseEvent<HTMLElement>, post: Post) => void;
 };
 
@@ -24,6 +25,7 @@ export default function PostCard({
 	clickable = false,
 	onOpenThread,
 	onOpenProfile,
+	onOpenCommunity,
 	onContextMenu,
 }: PostCardProps) {
 	const openResult = () => onOpenThread(post);
@@ -31,6 +33,20 @@ export default function PostCard({
 		if (clickable) e.stopPropagation();
 		onOpenProfile(post.handle.replace(/^@+/, ''));
 	};
+	const communityId = community?.id;
+	const openCommunityTag =
+		communityId && onOpenCommunity
+			? (e: ReactMouseEvent<HTMLElement>) => {
+					if (clickable) e.stopPropagation();
+					onOpenCommunity(communityId);
+				}
+			: undefined;
+	const communityTagCopy = community ? (
+		<>
+			<span className={shared.sidebarDot} style={{ background: community.color }} aria-hidden="true" />
+			<span>{community.name}</span>
+		</>
+	) : null;
 	return (
 		<article
 			className={`${styles.postCard} ${clickable ? styles.resultPostCard : ''}`}
@@ -47,7 +63,7 @@ export default function PostCard({
 			}
 			onContextMenu={onContextMenu ? (e) => onContextMenu(e, post) : undefined}
 			role={clickable ? 'button' : undefined}
-			tabIndex={clickable ? 0 : undefined}
+			tabIndex={clickable ? 0 : -1} // -1 keeps the card out of tab order while letting Esc focus it back after the menu closes
 			aria-label={clickable ? `${post.title} by ${post.author} — open thread` : undefined}
 		>
 			<div className={styles.postHeader}>
@@ -81,13 +97,19 @@ export default function PostCard({
 						<span className={styles.postDivider}>•</span>
 						<span className={styles.postTime}>{post.time}</span>
 					</div>
-					{community && (
-						<div className={styles.communityTag}>
-							{/* TEMPORARY: community tag shows link affordance until click-through lands. */}
-							<span className={shared.sidebarDot} style={{ background: community.color }} aria-hidden="true" />
-							<span>{community.name}</span>
-						</div>
-					)}
+					{community &&
+						(openCommunityTag ? (
+							<button
+								type="button"
+								className={styles.communityTag}
+								onClick={openCommunityTag}
+								aria-label={`Open ${community.name} community`}
+							>
+								{communityTagCopy}
+							</button>
+						) : (
+							<div className={styles.communityTag}>{communityTagCopy}</div>
+						))}
 					{post.audience === 'closeFriends' && showCloseFriendsBadge && (
 						<span className={styles.closeFriendsTag} title="Close friends">
 							<Star size={12} fill="currentColor" aria-hidden="true" />

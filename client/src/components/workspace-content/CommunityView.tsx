@@ -28,6 +28,7 @@ type CommunityViewProps = {
 	activeChannelId: string;
 	onOpenChannel: (communityId: string, channelId: string) => void;
 	onOpenDmWithName: (name: string) => void;
+	onOpenProfile: (username: string) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 };
 
@@ -36,6 +37,7 @@ export default function CommunityView({
 	activeChannelId,
 	onOpenChannel,
 	onOpenDmWithName,
+	onOpenProfile,
 	openMenu,
 }: CommunityViewProps) {
 	const [paneTab, setPaneTab] = useState<'channels' | 'members'>('channels');
@@ -48,16 +50,14 @@ export default function CommunityView({
 		invoker: HTMLElement | null,
 		toggle = false,
 	) => {
-		// LOCAL-ONLY: handle is derived from the mock name; a real backend would provide it.
-		const handle = `@${member.name.toLowerCase()}`;
+		const handle = `@${member.name.toLowerCase()}`; // LOCAL-ONLY: handle is derived from the mock name until backend exists
 		const items: ContextMenuItem[] = [
 			{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Username', onSelect: () => void copyText(handle) },
 			{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy User ID', onSelect: () => void copyText(member.id) },
-			// LOCAL-ONLY: fake link; no backend route exists for it yet.
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Profile Link',
-				onSelect: () => void copyText(profileLink(member.id)),
+				onSelect: () => void copyText(profileLink(member.name.toLowerCase())),
 			},
 			{ type: 'separator' },
 			{
@@ -65,9 +65,13 @@ export default function CommunityView({
 				label: 'Message',
 				onSelect: () => onOpenDmWithName(member.name),
 			},
-			{ icon: <User size={16} aria-hidden="true" />, label: 'View Profile', onSelect: () => {} },
+			{
+				icon: <User size={16} aria-hidden="true" />,
+				label: 'View Profile',
+				onSelect: () => onOpenProfile(member.name),
+			},
 			{ type: 'separator' },
-			// TEMPORARY: decorative until moderation lands.
+			// TEMPORARY: decorative until moderation lands
 			{ icon: <VolumeX size={16} aria-hidden="true" />, label: 'Mute', onSelect: () => {} },
 			{ icon: <UserX size={16} aria-hidden="true" />, label: 'Kick', danger: true, onSelect: () => {} },
 			{ icon: <Ban size={16} aria-hidden="true" />, label: 'Ban', danger: true, onSelect: () => {} },
@@ -104,11 +108,11 @@ export default function CommunityView({
 					<span className={styles.postDivider}>·</span>
 					<span className={styles.communityBarTopic}>{activeChannel.topic}</span>
 					<div className={styles.communityBarActions}>
-						{/* TEMPORARY: decorative until channel pins land. */}
+						{/* TEMPORARY: decorative until channel pins land */}
 						<button type="button" className={styles.dmBarAction} aria-label="Pinned messages">
 							<Pin size={17} aria-hidden="true" />
 						</button>
-						{/* TEMPORARY: decorative until channel search lands. */}
+						{/* TEMPORARY: decorative until channel search lands */}
 						<label className={styles.dmBarSearch}>
 							<Search size={15} aria-hidden="true" />
 							<input type="search" placeholder="Search" aria-label="Search channel" />
@@ -148,6 +152,7 @@ export default function CommunityView({
 									key={member.name}
 									className={styles.memberCard}
 									title={member.role}
+									tabIndex={-1}
 									onContextMenu={(e) => openMemberMenuAtEvent(e, member)}
 								>
 									<span className={styles.memberPresence}>
@@ -187,6 +192,7 @@ export default function CommunityView({
 						edgeScrollbar
 						moderationCommunity={community}
 						onMessageUser={onOpenDmWithName}
+						onOpenProfile={onOpenProfile}
 						openMenu={openMenu}
 					/>
 				</div>

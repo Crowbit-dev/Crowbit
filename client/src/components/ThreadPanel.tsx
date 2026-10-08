@@ -84,12 +84,12 @@ function ThreadPanel({
 			...prev,
 			{
 				id,
-				author: 'You',
+				author: 'You', // change author to current user when backend is ready
 				time: 'Now',
 				body,
 				...(target ? { replyTo: { id: target.id } } : {}),
 			},
-		]); // change author to current user when backend is ready
+		]);
 		setDraft('');
 		setReplyTarget(null);
 		stuckToBottomRef.current = true;
@@ -218,7 +218,7 @@ function ThreadPanel({
 				<div className={styles.heading}>
 					<strong className={styles.title}>{post.title}</strong>
 					{post.body && <p className={styles.body}>{post.body}</p>}
-					{/* TEMPORARY: meta items show link affordance until click-through lands. */}
+					{/* TEMPORARY: meta items show link affordance until click-through lands */}
 					<span className={styles.meta}>
 						<span className={styles.metaItem}>{post.handle}</span>
 						{' · '}
@@ -248,10 +248,11 @@ function ThreadPanel({
 							<article
 								key={comment.id}
 								id={`comment-${comment.id}`}
+								tabIndex={-1}
 								className={`${styles.comment} ${flashId === comment.id ? shared.flash : ''}`}
 								onContextMenu={(e) => openCommentMenu(e, comment, index)}
 							>
-								{/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
+								{/* TEMPORARY: avatar and author show link affordance until click-through lands */}
 								<div className={styles.commentAvatar}>{comment.author[0]}</div>
 								<div className={styles.commentCopy}>
 									<div className={styles.commentTopline}>

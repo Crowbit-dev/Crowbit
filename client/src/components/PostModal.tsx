@@ -31,7 +31,6 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 	const selectedCommunity = communities.find((entry) => entry.id === community) ?? communities[0];
 	const postingToProfile = community === '';
 
-	// Close the picker on Escape, the modal on a second press.
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
 			if (e.key !== 'Escape') return;
@@ -100,7 +99,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 				?.slice(0, 80) ||
 			'Untitled';
 		onPost({
-			// LOCAL-ONLY: fabricated id until the backend assigns one.
+			// TEMPORARY: some made up id until we have a backend
 			id: `local-${Date.now()}`,
 			author: 'You',
 			handle: '@you',

@@ -40,6 +40,7 @@ type WorkspaceContentProps = {
 	onUpdateSettings: <K extends keyof SettingsPrefs>(section: K, patch: Partial<SettingsPrefs[K]>) => void;
 	onOpenThread: (post: Post) => void;
 	onOpenProfile: (username: string) => void;
+	onOpenCommunity: (communityId: string) => void;
 	profileUser: ProfileUser | null;
 	onDeletePost: (post: Post) => void;
 	threadShift: number;
@@ -69,6 +70,7 @@ function WorkspaceContent({
 	onUpdateSettings,
 	onOpenThread,
 	onOpenProfile,
+	onOpenCommunity,
 	profileUser,
 	onDeletePost,
 	threadShift,
@@ -114,10 +116,11 @@ function WorkspaceContent({
 				settingsPrefs={settingsPrefs}
 				onOpenThread={onOpenThread}
 				onOpenChannel={onOpenChannel}
+				onOpenProfile={onOpenProfile}
+				onOpenCommunity={onOpenCommunity}
 				onOpenDm={onOpenDm}
 				onToggleJoin={onToggleJoin}
 				onResetSearch={onResetSearch}
-				onOpenProfile={onOpenProfile}
 			/>
 		);
 	}
@@ -139,6 +142,7 @@ function WorkspaceContent({
 				activeChannelId={activeChannelId}
 				onOpenChannel={onOpenChannel}
 				onOpenDmWithName={onOpenDmWithName}
+				onOpenProfile={onOpenProfile}
 				openMenu={openMenu}
 			/>
 		);
@@ -153,6 +157,7 @@ function WorkspaceContent({
 				settingsPrefs={settingsPrefs}
 				onOpenThread={onOpenThread}
 				onOpenProfile={onOpenProfile}
+				onOpenCommunity={onOpenCommunity}
 				onMessageUser={onOpenDmWithName}
 			/>
 		);
@@ -167,6 +172,7 @@ function WorkspaceContent({
 			settingsPrefs={settingsPrefs}
 			onOpenThread={onOpenThread}
 			onOpenProfile={onOpenProfile}
+			onOpenCommunity={onOpenCommunity}
 			onDeletePost={onDeletePost}
 			openMenu={openMenu}
 		/>

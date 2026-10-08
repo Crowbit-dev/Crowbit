@@ -174,6 +174,24 @@ function channelFor(communityId: string, channels: Record<string, string>): stri
 	return community.channels[0]?.id ?? 'general';
 }
 
+function loadStoredNumber(key: string, fallback: number, min: number, max: number): number {
+	try {
+		const saved = Number(localStorage.getItem(key));
+		if (Number.isFinite(saved) && saved >= min && saved <= max) return saved;
+	} catch {
+		console.log(`loadStoredNumber: failed to load ${key} from localStorage, using fallback ${fallback}`);
+	}
+	return fallback;
+}
+
+function saveStored(key: string, value: string): void {
+	try {
+		localStorage.setItem(key, value);
+	} catch {
+		console.log(`saveStored: failed to save ${key} to localStorage, value ${value} not persisted`);
+	}
+}
+
 function loadRecentSearches(): string[] {
 	try {
 		const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
@@ -272,15 +290,7 @@ function App() {
 	const [menu, setMenu] = useState<ContextMenuState | null>(null);
 	const modalityRef = useRef<'mouse' | 'keyboard'>('mouse');
 	const [windowWidth, setWindowWidth] = useState(() => window.innerWidth);
-	const [threadWidth, setThreadWidth] = useState<number>(() => {
-		try {
-			const saved = Number(localStorage.getItem('thread-width'));
-			if (Number.isFinite(saved) && saved >= 280 && saved <= 720) return saved;
-		} catch {
-			// Storage unavailable — fall through to the default.
-		}
-		return 400;
-	});
+	const [threadWidth, setThreadWidth] = useState<number>(() => loadStoredNumber('thread-width', 400, 280, 720));
 
 	const closeMenu = () => setMenu(null);
 
@@ -453,7 +463,7 @@ function App() {
 		go(feedPath());
 	};
 
-	// LOCAL-ONLY: removes from in-memory state; nothing persists without a backend.
+	// LOCAL-ONLY: removes from in-memory state (no server call yet)
 	const handleDeletePost = (post: Post) => {
 		setLocalPosts((prev) => prev.filter((entry) => entry.id !== post.id));
 		setActiveThread((prev) => (prev && prev.id === post.id ? null : prev));
@@ -479,27 +489,15 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		try {
-			localStorage.setItem(LAST_VISITED_KEY, JSON.stringify(lastVisited));
-		} catch {
-			// Storage unavailable — tracking still applies for this session.
-		}
+		saveStored(LAST_VISITED_KEY, JSON.stringify(lastVisited));
 	}, [lastVisited]);
 
 	useEffect(() => {
-		try {
-			localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recentSearches));
-		} catch {
-			// Storage unavailable — recents still apply for this session.
-		}
+		saveStored(RECENT_SEARCHES_KEY, JSON.stringify(recentSearches));
 	}, [recentSearches]);
 
 	useEffect(() => {
-		try {
-			localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsPrefs));
-		} catch {
-			// Storage unavailable — prefs still apply for this session.
-		}
+		saveStored(SETTINGS_KEY, JSON.stringify(settingsPrefs));
 	}, [settingsPrefs]);
 
 	useEffect(() => {
@@ -595,11 +593,7 @@ function App() {
 	const handleThreadWidth = (width: number) => {
 		const clamped = Math.round(Math.min(threadMaxWidth, Math.max(280, width)));
 		setThreadWidth(clamped);
-		try {
-			localStorage.setItem('thread-width', String(clamped));
-		} catch {
-			// Storage unavailable — width still applies for this session.
-		}
+		saveStored('thread-width', String(clamped));
 	};
 
 	useEffect(() => {
@@ -608,8 +602,8 @@ function App() {
 		return () => window.removeEventListener('resize', onResize);
 	}, []);
 
-	// Rail (84) + sidebar (320) + content padding (48) + full post width (760).
-	// The panel stops growing before posts would have to shrink.
+	// Rail (84) + sidebar (320) + content padding (48) + full post width (760)
+	// The panel stops growing before posts would have to shrink
 	const threadMaxWidth = Math.max(280, windowWidth - 1212);
 	const clampedThreadWidth = Math.min(threadWidth, threadMaxWidth);
 
@@ -697,6 +691,7 @@ function App() {
 					notifFilter={notifFilter}
 					onOpenThread={toggleThread}
 					onOpenProfile={openProfile}
+					onOpenCommunity={selectCommunity}
 					onDeletePost={handleDeletePost}
 					profileUser={profileUser}
 					threadShift={threadVisible ? clampedThreadWidth : 0}

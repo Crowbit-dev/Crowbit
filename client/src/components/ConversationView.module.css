@@ -104,6 +104,12 @@
 	padding-top: 30px;
 }
 
+.chatMessage:focus-visible {
+	outline: none;
+	background: rgba(255, 255, 255, 0.03);
+	border-radius: 8px;
+}
+
 .chatMessage:first-child {
 	border-top: 0;
 }

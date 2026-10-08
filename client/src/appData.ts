@@ -1,4 +1,4 @@
-// LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in types.ts (delete this file when real data arrives)
+// LOCAL-ONLY: filler data for the app to use while we don't have a backend yet. (will be deleted once we have a backend)
 import crowPhotograph from './assets/crowphotograph.png';
 import crowSideProfile from './assets/crowsideprofile.png';
 import type {
@@ -233,8 +233,8 @@ export const directMessages: DirectMessage[] = [
 		name: 'Maya',
 		username: '@maya',
 		status: 'online',
-		customStatus: 'shipping the launch deck',
-		preview: 'The deck is ready for review',
+		customStatus: 'shipping for stardance',
+		preview: 'The corvid is ready for review',
 		time: 'now',
 	},
 	{

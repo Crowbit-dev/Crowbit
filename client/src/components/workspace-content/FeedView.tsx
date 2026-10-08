@@ -18,6 +18,7 @@ type FeedViewProps = {
 	settingsPrefs: SettingsPrefs;
 	onOpenThread: (post: Post) => void;
 	onOpenProfile: (username: string) => void;
+	onOpenCommunity: (communityId: string) => void;
 	onDeletePost: (post: Post) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 };
@@ -30,6 +31,7 @@ export default function FeedView({
 	settingsPrefs,
 	onOpenThread,
 	onOpenProfile,
+	onOpenCommunity,
 	onDeletePost,
 	openMenu,
 }: FeedViewProps) {
@@ -41,7 +43,6 @@ export default function FeedView({
 	const openPostMenu = (e: ReactMouseEvent<HTMLElement>, post: Post) => {
 		e.preventDefault();
 		const slug = postSlug(post.author, post.title);
-		// Capture the highlight now — opening the menu collapses the selection.
 		const selection = window.getSelection()?.toString().trim() ?? '';
 		const items: ContextMenuItem[] = [
 			...(selection
@@ -72,7 +73,7 @@ export default function FeedView({
 		];
 		if (post.author === 'You') {
 			items.push({ type: 'separator' });
-			// LOCAL-ONLY: deletes from in-memory App state; nothing persists without a backend.
+			// LOCAL-ONLY: deletes from in-memory App state until backend exists
 			items.push({
 				icon: <Trash2 size={16} aria-hidden="true" />,
 				label: 'Delete Post',
@@ -120,7 +121,7 @@ export default function FeedView({
 								</p>
 								<p>{scopedCommunity.bio}</p>
 							</div>
-							{/* TEMPORARY: decorative until membership actions land. */}
+							{/* TEMPORARY: decorative until membership actions land */}
 							<button
 								type="button"
 								className={styles.contentChip}
@@ -152,7 +153,7 @@ export default function FeedView({
 								post={post}
 								community={
 									community
-										? { name: community.name, color: community.color }
+										? { id: community.id, name: community.name, color: community.color }
 										: showTag && post.community
 											? { name: post.community }
 											: null
@@ -161,6 +162,7 @@ export default function FeedView({
 								showImage
 								onOpenThread={onOpenThread}
 								onOpenProfile={onOpenProfile}
+								onOpenCommunity={onOpenCommunity}
 								onContextMenu={(e, target) => openPostMenu(e, target)}
 							/>
 						);

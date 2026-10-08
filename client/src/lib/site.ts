@@ -1,4 +1,3 @@
-// Canonical site origin, resolved at runtime so copied links always match the environment: explicit env override first, then the page origin.
 export function siteUrl(): string {
 	const override = import.meta.env.VITE_SITE_URL;
 	if (typeof override === 'string' && override.trim()) return override.trim().replace(/\/+$/, '');
@@ -6,7 +5,7 @@ export function siteUrl(): string {
 	return 'https://crowbit.dev';
 }
 
-export const profileLink = (id: string): string => `${siteUrl()}/u/${id}`;
+export const profileLink = (username: string): string => `${siteUrl()}/profile/${username.replace(/^@+/, '')}`;
 
 export const postLink = (slug: string): string => `${siteUrl()}/p/${slug}`;
 

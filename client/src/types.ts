@@ -1,4 +1,4 @@
-// Permanent domain shapes. These describe what the backend will return, so they live apart from the LOCAL-ONLY mock values in appData.ts.
+// The types here are used throughout the app, and they will remain even after the mock data is deleted
 export type WorkspaceMode = 'feed' | 'dms' | 'communities' | 'notifications' | 'search' | 'settings' | 'profile';
 
 export type CommunityChannel = {

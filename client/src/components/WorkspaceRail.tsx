@@ -39,7 +39,7 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 	const [muted, setMuted] = useState(false);
 	const [deafened, setDeafened] = useState(false);
 	const navigate = useNavigate();
-	// Deafening implies mute, undeafening restores the prior mic state.
+	// Deafening = mute, undeafening restores the prior mic state
 	const micMuted = muted || deafened;
 
 	const [status, setStatus] = useState<'online' | 'away' | 'offline'>('online');
@@ -79,7 +79,7 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 		copyTimer.current = window.setTimeout(() => setCopied(false), 1500);
 	};
 
-	// TEMPORARY: client-side only until logout is wired to the backend.
+	// TEMPORARY: just navigates to login for now, until we have a proper logout flow
 	const logout = () => navigate('/login');
 
 	const railItems: RailItem[] = [
