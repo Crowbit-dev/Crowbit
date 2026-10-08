@@ -38,6 +38,7 @@ function ThreadPanel({
 	const inputRef = useRef<HTMLTextAreaElement>(null);
 	const listRef = useRef<HTMLDivElement>(null);
 	const stuckToBottomRef = useRef(true);
+	const commentCountRef = useRef(comments.length);
 
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
@@ -70,7 +71,9 @@ function ThreadPanel({
 
 	useEffect(() => {
 		const el = listRef.current;
-		if (el && stuckToBottomRef.current) {
+		const grew = comments.length > commentCountRef.current;
+		commentCountRef.current = comments.length;
+		if (el && grew && stuckToBottomRef.current) {
 			el.scrollTo({ top: el.scrollHeight, behavior: 'auto' });
 		}
 	}, [comments]);
