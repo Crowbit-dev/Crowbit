@@ -429,6 +429,19 @@ export const comments: Record<string, ThreadComment[]> = {
 			time: '1m ago',
 			body: "OP, I don't own a crow but when I saw your post I immediately cried. I am a very sensitive person and I cry easily. Please do not use a crow for design or production work or even illegal weapons trafficking. It is a very bad idea to use a crow for any of those things.",
 		},
+		{
+			id: 'c9',
+			author: 'House',
+			time: '1m ago',
+			body: "It's never lupus."
+		},
+		{
+			id: 'c10',
+			author: 'Wilson',
+			time: '1m ago',
+			body: "I too am in this episode.",
+			replyTo: { id: 'c9' },
+		},
 	],
 	'130000000000000002': [
 		{
