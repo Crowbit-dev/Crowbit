@@ -711,7 +711,6 @@ function App() {
 				{activeThread && (
 					<div className={`thread-wrap${threadVisible ? ' open' : ''}`} style={{ width: clampedThreadWidth }}>
 						<ThreadPanel
-							key={activeThread.id}
 							post={activeThread}
 							communityName={communities.find((entry) => entry.id === activeThread.community)?.name ?? ''}
 							onClose={closeThread}

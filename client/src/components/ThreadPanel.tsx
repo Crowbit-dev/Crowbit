@@ -1,5 +1,5 @@
 import { Copy, Link2, Pencil, Reply, SendHorizontal, Trash2, X } from 'lucide-react';
-import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { comments as seedComments } from '../appData';
 import { copyText } from '../lib/clipboard';
 import { commentLink } from '../lib/site';
@@ -39,6 +39,30 @@ function ThreadPanel({
 	const listRef = useRef<HTMLDivElement>(null);
 	const stuckToBottomRef = useRef(true);
 	const commentCountRef = useRef(comments.length);
+	const [activePostId, setActivePostId] = useState(post.id);
+
+	if (activePostId !== post.id) {
+		const seed = seedComments[post.id] ?? [];
+		setActivePostId(post.id);
+		setComments(seed);
+		setDraft('');
+		setReplyTarget(null);
+		setEditingIndex(null);
+		setEditDraft('');
+		setFlashId(null);
+	}
+
+	useLayoutEffect(() => {
+		stuckToBottomRef.current = true;
+		commentCountRef.current = (seedComments[post.id] ?? []).length;
+		listRef.current?.scrollTo({ top: 0 });
+		return () => {
+			if (flashTimer.current !== null) {
+				window.clearTimeout(flashTimer.current);
+				flashTimer.current = null;
+			}
+		};
+	}, [post.id]);
 
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
