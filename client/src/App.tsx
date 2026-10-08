@@ -27,7 +27,6 @@ import {
 	searchPath,
 	settingsPath,
 } from './lib/workspacePaths';
-import { postSlug } from './lib/postSlug';
 import { findProfileUser, type ProfileUser } from './lib/profileUser';
 import type {
 	DirectMessage,
@@ -343,10 +342,8 @@ function App() {
 						selfUsername,
 					})
 			: null;
-	const threadSlug = searchParams.get('thread');
-	const threadPost = threadSlug
-		? (localPosts.find((entry) => postSlug(entry.author, entry.title) === threadSlug) ?? null)
-		: null;
+	const threadId = searchParams.get('thread');
+	const threadPost = threadId ? (localPosts.find((entry) => entry.id === threadId) ?? null) : null;
 	const invalidRoute =
 		route === null ||
 		(route.mode === 'communities' &&
@@ -360,7 +357,7 @@ function App() {
 		(route.mode === 'profile' && route.username !== undefined && profileUser === null) ||
 		(notifFilterRaw !== null && !(NOTIF_FILTERS as readonly string[]).includes(notifFilterRaw)) ||
 		(searchFilterRaw !== null && !(SEARCH_FILTERS as readonly string[]).includes(searchFilterRaw)) ||
-		(threadSlug !== null && threadPost === null);
+		(threadId !== null && threadPost === null);
 
 	const selectFeedScope = (scope: string) => {
 		setFeedScope(scope);
@@ -458,9 +455,9 @@ function App() {
 
 	// LOCAL-ONLY: removes from in-memory state; nothing persists without a backend.
 	const handleDeletePost = (post: Post) => {
-		setLocalPosts((prev) => prev.filter((entry) => !(entry.author === post.author && entry.title === post.title)));
-		setActiveThread((prev) => (prev && prev.author === post.author && prev.title === post.title ? null : prev));
-		if (activeThread && activeThread.author === post.author && activeThread.title === post.title) {
+		setLocalPosts((prev) => prev.filter((entry) => entry.id !== post.id));
+		setActiveThread((prev) => (prev && prev.id === post.id ? null : prev));
+		if (activeThread && activeThread.id === post.id) {
 			setThreadVisible(false);
 			go(location.pathname, { thread: null }, { replace: true });
 		}
@@ -506,8 +503,8 @@ function App() {
 	}, [settingsPrefs]);
 
 	useEffect(() => {
-		if (threadSlug) {
-			if (threadPost && (!activeThread || postSlug(activeThread.author, activeThread.title) !== threadSlug)) {
+		if (threadId) {
+			if (threadPost && (!activeThread || activeThread.id !== threadId)) {
 				setActiveThread(threadPost);
 				requestAnimationFrame(() => {
 					requestAnimationFrame(() => setThreadVisible(true));
@@ -517,7 +514,7 @@ function App() {
 			setThreadVisible(false);
 			setActiveThread(null);
 		}
-	}, [threadSlug, threadPost, activeThread]);
+	}, [threadId, threadPost, activeThread]);
 
 	useEffect(() => {
 		const needsQuery = mode === 'search';
@@ -570,7 +567,7 @@ function App() {
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => setThreadVisible(true));
 		});
-		go(location.pathname, { thread: postSlug(post.author, post.title) });
+		go(location.pathname, { thread: post.id });
 	};
 
 	const closeThread = () => {
@@ -588,7 +585,7 @@ function App() {
 	};
 
 	const toggleThread = (post: Post) => {
-		if (activeThread && activeThread.author === post.author && activeThread.title === post.title) {
+		if (activeThread && activeThread.id === post.id) {
 			closeThread();
 		} else {
 			openThread(post);
@@ -719,7 +716,7 @@ function App() {
 				{activeThread && (
 					<div className={`thread-wrap${threadVisible ? ' open' : ''}`} style={{ width: clampedThreadWidth }}>
 						<ThreadPanel
-							key={`${activeThread.author}-${activeThread.title}`}
+							key={activeThread.id}
 							post={activeThread}
 							communityName={communities.find((entry) => entry.id === activeThread.community)?.name ?? ''}
 							onClose={closeThread}

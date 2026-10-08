@@ -12,4 +12,4 @@ export const postLink = (slug: string): string => `${siteUrl()}/p/${slug}`;
 
 export const messageLink = (id: string): string => `${siteUrl()}/m/${id}`;
 
-export const commentLink = (postTitle: string, index: number): string => `${siteUrl()}/c/${postTitle}/${index}`;
+export const commentLink = (postId: string, index: number): string => `${siteUrl()}/c/${postId}/${index}`;

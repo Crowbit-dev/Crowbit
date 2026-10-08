@@ -95,7 +95,7 @@ export default function ProfileView({
 						const community = post.community ? communities.find((entry) => entry.id === post.community) : undefined;
 						return (
 							<PostCard
-								key={`${post.author}-${post.title}`}
+								key={post.id}
 								post={post}
 								community={
 									community

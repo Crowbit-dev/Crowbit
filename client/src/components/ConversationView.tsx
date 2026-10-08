@@ -169,7 +169,7 @@ function ConversationView({
 				time: 'Now',
 				body: body || 'Shared an image',
 				image: attachments[0]?.url,
-				replyTo: replyTarget ? { id: replyTarget.id, author: replyTarget.author, body: replyTarget.body } : undefined,
+				replyTo: replyTarget ? { id: replyTarget.id } : undefined,
 			},
 		]);
 		attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url));
@@ -339,69 +339,73 @@ function ConversationView({
 			)}
 
 			<div ref={feedRef} className={styles.conversationFeed}>
-				{messages.map((message) => (
-					<article
-						id={`msg-${message.id}`}
-						key={message.id}
-						className={`${styles.chatMessage} ${flashId === message.id ? shared.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
-						onContextMenu={(e) => openMessageMenu(e, message)}
-					>
-						<div className={styles.messageAvatar}>{message.author[0]}</div>
-						<div className={styles.chatMessageCopy}>
-							{message.replyTo && (
-								<button
-									type="button"
-									className={styles.messageReference}
-									onClick={() => message.replyTo && jumpToMessage(message.replyTo.id)}
-									aria-label={`Jump to ${message.replyTo.author}'s message`}
-								>
-									<Reply size={12} aria-hidden="true" />
-									<strong>{message.replyTo.author}</strong>
-									<span>{snippet(message.replyTo.body)}</span>
-								</button>
-							)}
-							<div className={styles.chatMessageTopline}>
-								<strong>{message.author}</strong>
-								<span>{message.time}</span>
-								{pinnedIds.has(message.id) && (
-									<span className={styles.pinnedMark} title="Pinned">
-										<Pin size={12} aria-hidden="true" />
-									</span>
+				{messages.map((message) => {
+					const replyToId = message.replyTo?.id;
+					const replySource = replyToId ? messages.find((entry) => entry.id === replyToId) : undefined;
+					return (
+						<article
+							id={`msg-${message.id}`}
+							key={message.id}
+							className={`${styles.chatMessage} ${flashId === message.id ? shared.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
+							onContextMenu={(e) => openMessageMenu(e, message)}
+						>
+							<div className={styles.messageAvatar}>{message.author[0]}</div>
+							<div className={styles.chatMessageCopy}>
+								{replySource && (
+									<button
+										type="button"
+										className={styles.messageReference}
+										onClick={() => jumpToMessage(replySource.id)}
+										aria-label={`Jump to ${replySource.author}'s message`}
+									>
+										<Reply size={12} aria-hidden="true" />
+										<strong>{replySource.author}</strong>
+										<span>{snippet(replySource.body)}</span>
+									</button>
 								)}
-							</div>
-							{editingId === message.id ? (
-								<div className={shared.editor}>
-									<textarea
-										ref={(el) => {
-											el?.focus();
-											el?.setSelectionRange(el.value.length, el.value.length);
-										}}
-										rows={2}
-										value={editDraft}
-										onChange={(e) => setEditDraft(e.target.value)}
-										onKeyDown={(e) => {
-											if (e.key === 'Enter' && !e.shiftKey) {
-												e.preventDefault();
-												saveEdit();
-											} else if (e.key === 'Escape') {
-												e.stopPropagation();
-												cancelEdit();
-											}
-										}}
-										aria-label="Edit message"
-									/>
-									<span>Enter to save · Esc to cancel</span>
+								<div className={styles.chatMessageTopline}>
+									<strong>{message.author}</strong>
+									<span>{message.time}</span>
+									{pinnedIds.has(message.id) && (
+										<span className={styles.pinnedMark} title="Pinned">
+											<Pin size={12} aria-hidden="true" />
+										</span>
+									)}
 								</div>
-							) : (
-								<p>
-									{message.body}
-									{message.edited && <span className={shared.editedMark}> (edited)</span>}
-								</p>
-							)}
-							{message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
-						</div>
-					</article>
-				))}
+								{editingId === message.id ? (
+									<div className={shared.editor}>
+										<textarea
+											ref={(el) => {
+												el?.focus();
+												el?.setSelectionRange(el.value.length, el.value.length);
+											}}
+											rows={2}
+											value={editDraft}
+											onChange={(e) => setEditDraft(e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter' && !e.shiftKey) {
+													e.preventDefault();
+													saveEdit();
+												} else if (e.key === 'Escape') {
+													e.stopPropagation();
+													cancelEdit();
+												}
+											}}
+											aria-label="Edit message"
+										/>
+										<span>Enter to save · Esc to cancel</span>
+									</div>
+								) : (
+									<p>
+										{message.body}
+										{message.edited && <span className={shared.editedMark}> (edited)</span>}
+									</p>
+								)}
+								{message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
+							</div>
+						</article>
+					);
+				})}
 			</div>
 
 			<form className={styles.messageComposer} onSubmit={handleSubmit}>

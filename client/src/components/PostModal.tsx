@@ -100,6 +100,8 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 				?.slice(0, 80) ||
 			'Untitled';
 		onPost({
+			// LOCAL-ONLY: fabricated id until the backend assigns one.
+			id: `local-${Date.now()}`,
 			author: 'You',
 			handle: '@you',
 			time: 'Now',

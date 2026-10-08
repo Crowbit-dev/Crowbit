@@ -39,6 +39,7 @@ export type DirectMessage = {
 export type PostAudience = 'everyone' | 'closeFriends';
 
 export type Post = {
+	id: string;
 	author: string;
 	handle: string;
 	time: string;
@@ -64,7 +65,7 @@ export type NotificationItem = {
 	channel: string;
 	snippet: string;
 	time: string;
-	postTitle?: string;
+	postId?: string;
 };
 
 export type MessageEntry = {
@@ -74,7 +75,7 @@ export type MessageEntry = {
 	body: string;
 	image?: string;
 	edited?: boolean;
-	replyTo?: { id: string; author: string; body: string };
+	replyTo?: { id: string };
 };
 
 export type ThreadComment = {
@@ -83,7 +84,7 @@ export type ThreadComment = {
 	time: string;
 	body: string;
 	edited?: boolean;
-	replyTo?: { id: string; author: string; body: string };
+	replyTo?: { id: string };
 };
 
 export type ConversationMutuals = {

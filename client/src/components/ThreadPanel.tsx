@@ -26,7 +26,7 @@ function ThreadPanel({
 	onResizeWidth: (width: number) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 }) {
-	const [comments, setComments] = useState<ThreadComment[]>(() => seedComments[post.title] ?? []);
+	const [comments, setComments] = useState<ThreadComment[]>(() => seedComments[post.id] ?? []);
 	const [draft, setDraft] = useState('');
 	const [flashId, setFlashId] = useState<string | null>(null);
 	const flashTimer = useRef<number | null>(null);
@@ -87,7 +87,7 @@ function ThreadPanel({
 				author: 'You',
 				time: 'Now',
 				body,
-				...(target ? { replyTo: { id: target.id, author: target.author, body: target.body } } : {}),
+				...(target ? { replyTo: { id: target.id } } : {}),
 			},
 		]); // change author to current user when backend is ready
 		setDraft('');
@@ -151,7 +151,7 @@ function ThreadPanel({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Comment Link',
-				onSelect: () => void copyText(commentLink(post.title, index)),
+				onSelect: () => void copyText(commentLink(post.id, index)),
 			},
 			{ type: 'separator' },
 			{ icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyToComment(index) },
@@ -241,65 +241,69 @@ function ThreadPanel({
 						<p>Start the conversation below.</p>
 					</div>
 				) : (
-					comments.map((comment, index) => (
-						<article
-							key={comment.id}
-							id={`comment-${comment.id}`}
-							className={`${styles.comment} ${flashId === comment.id ? shared.flash : ''}`}
-							onContextMenu={(e) => openCommentMenu(e, comment, index)}
-						>
-							{/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
-							<div className={styles.commentAvatar}>{comment.author[0]}</div>
-							<div className={styles.commentCopy}>
-								<div className={styles.commentTopline}>
-									<strong>{comment.author}</strong>
-									<span>{comment.time}</span>
-								</div>
-								{editingIndex === index ? (
-									<div className={shared.editor}>
-										<textarea
-											ref={(el) => {
-												el?.focus();
-												el?.setSelectionRange(el.value.length, el.value.length);
-											}}
-											rows={2}
-											value={editDraft}
-											onChange={(e) => setEditDraft(e.target.value)}
-											onKeyDown={(e) => {
-												if (e.key === 'Enter' && !e.shiftKey) {
-													e.preventDefault();
-													saveEdit();
-												} else if (e.key === 'Escape') {
-													e.stopPropagation();
-													cancelEdit();
-												}
-											}}
-											aria-label="Edit comment"
-										/>
-										<span>Enter to save · Esc to cancel</span>
+					comments.map((comment, index) => {
+						const replyToId = comment.replyTo?.id;
+						const replySource = replyToId ? comments.find((entry) => entry.id === replyToId) : undefined;
+						return (
+							<article
+								key={comment.id}
+								id={`comment-${comment.id}`}
+								className={`${styles.comment} ${flashId === comment.id ? shared.flash : ''}`}
+								onContextMenu={(e) => openCommentMenu(e, comment, index)}
+							>
+								{/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
+								<div className={styles.commentAvatar}>{comment.author[0]}</div>
+								<div className={styles.commentCopy}>
+									<div className={styles.commentTopline}>
+										<strong>{comment.author}</strong>
+										<span>{comment.time}</span>
 									</div>
-								) : (
-									<>
-										{comment.replyTo && (
-											<button
-												type="button"
-												className={styles.commentReference}
-												onClick={() => jumpToComment(comment.replyTo!.id)}
-												aria-label={`Jump to ${comment.replyTo.author}'s comment`}
-											>
-												<strong>{comment.replyTo.author}</strong>
-												<span>{snippet(comment.replyTo.body)}</span>
-											</button>
-										)}
-										<p>
-											{comment.body}
-											{comment.edited && <span className={shared.editedMark}> (edited)</span>}
-										</p>
-									</>
-								)}
-							</div>
-						</article>
-					))
+									{editingIndex === index ? (
+										<div className={shared.editor}>
+											<textarea
+												ref={(el) => {
+													el?.focus();
+													el?.setSelectionRange(el.value.length, el.value.length);
+												}}
+												rows={2}
+												value={editDraft}
+												onChange={(e) => setEditDraft(e.target.value)}
+												onKeyDown={(e) => {
+													if (e.key === 'Enter' && !e.shiftKey) {
+														e.preventDefault();
+														saveEdit();
+													} else if (e.key === 'Escape') {
+														e.stopPropagation();
+														cancelEdit();
+													}
+												}}
+												aria-label="Edit comment"
+											/>
+											<span>Enter to save · Esc to cancel</span>
+										</div>
+									) : (
+										<>
+											{replySource && (
+												<button
+													type="button"
+													className={styles.commentReference}
+													onClick={() => jumpToComment(replySource.id)}
+													aria-label={`Jump to ${replySource.author}'s comment`}
+												>
+													<strong>{replySource.author}</strong>
+													<span>{snippet(replySource.body)}</span>
+												</button>
+											)}
+											<p>
+												{comment.body}
+												{comment.edited && <span className={shared.editedMark}> (edited)</span>}
+											</p>
+										</>
+									)}
+								</div>
+							</article>
+						);
+					})
 				)}
 			</div>
 

@@ -148,7 +148,7 @@ export default function FeedView({
 						const community = showTag ? communities.find((entry) => entry.id === post.community) : undefined;
 						return (
 							<PostCard
-								key={`${post.author}-${post.title}`}
+								key={post.id}
 								post={post}
 								community={
 									community

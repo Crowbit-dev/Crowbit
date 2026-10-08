@@ -1,4 +1,4 @@
-// LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in types.ts — delete this file when real data arrives.
+// LOCAL-ONLY: fabricated values until a backend exists. Domain shapes live in types.ts (delete this file when real data arrives)
 import crowPhotograph from './assets/crowphotograph.png';
 import crowSideProfile from './assets/crowsideprofile.png';
 import type {
@@ -180,44 +180,48 @@ export const communities: Community[] = [
 
 export const posts: Post[] = [
 	{
+		id: '130000000000000001',
 		author: 'Nyra',
 		handle: '@nyra',
 		time: '2h ago',
 		community: '110000000000000001',
-		title: 'How are you building your personal brand in 2026?',
-		body: 'I am trying to keep my portfolio, content, and design process aligned without burning out. Curious what other creators are doing.',
+		title: 'This is my beautiful crow design.',
+		body: 'I lied about it being beautiful. It is a crow. I am not a designer. Sorry.',
 		image: crowPhotograph,
 		audience: 'everyone',
 		stats: { comments: 182, upvotes: 2400, shares: 42 },
 	},
 	{
+		id: '130000000000000002',
 		author: 'Milo',
 		handle: '@milo',
 		time: '5h ago',
 		community: '110000000000000002',
-		title: 'What is everyone using for fast internal tooling right now?',
-		body: 'I am comparing auth, dashboards, and deployment speed. I want something practical, not just shiny demos.',
+		title: 'How do I get my crow to stop force pushing?',
+		body: 'My crow keeps force pushing to the main branch. I have tried everything. Please help.',
 		image: crowSideProfile,
 		audience: 'everyone',
 		stats: { comments: 96, upvotes: 1800, shares: 21 },
 	},
 	{
+		id: '130000000000000003',
 		author: 'Ava',
 		handle: '@ava',
 		time: '1d ago',
 		community: '110000000000000003',
-		title: 'Founders: what do your best community rituals look like?',
-		body: 'The most sustainable communities usually feel less like a launch and more like a habit. I am collecting examples.',
-		audience: 'closeFriends',
+		title: 'I caught corvid19, should I go into work?',
+		body: '',
+		audience: 'everyone',
 		stats: { comments: 243, upvotes: 3100, shares: 58 },
 	},
 	{
+		id: '130000000000000004',
 		author: 'Noor',
 		handle: '@noor',
 		time: '3h ago',
 		community: '110000000000000004',
-		title: 'What is on your security audit checklist this quarter?',
-		body: 'I am putting together a lightweight checklist for small teams: access reviews, dependency updates, and backup drills. What am I missing?',
+		title: 'I made a security checklist for crows, please review.',
+		body: '1. Make sure the crow has a strong password.\n2. Make sure the crow has two-factor authentication enabled.\n3. Make sure the crow is not using the same password for multiple accounts.\n4. Make sure the crow is not clicking on suspicious links.',
 		audience: 'everyone',
 		stats: { comments: 64, upvotes: 1200, shares: 15 },
 	},
@@ -229,7 +233,7 @@ export const directMessages: DirectMessage[] = [
 		name: 'Maya',
 		username: '@maya',
 		status: 'online',
-		customStatus: '🚀 shipping the launch deck',
+		customStatus: 'shipping the launch deck',
 		preview: 'The deck is ready for review',
 		time: 'now',
 	},
@@ -238,7 +242,7 @@ export const directMessages: DirectMessage[] = [
 		name: 'Jules',
 		username: '@jules',
 		status: 'away',
-		customStatus: '🎨 deep in mockups, brb',
+		customStatus: 'deep in mockups, brb',
 		preview: 'I sent over the mockups',
 		time: '12m',
 	},
@@ -256,7 +260,7 @@ export const directMessages: DirectMessage[] = [
 		name: 'Theo',
 		username: '@theo',
 		status: 'offline',
-		customStatus: '✍️ drafting the next post',
+		customStatus: 'drafting the next post',
 		preview: 'Thanks for the feedback on the post',
 		time: '3h',
 	},
@@ -278,9 +282,9 @@ export const notifications: NotificationItem[] = [
 		actor: 'Jun',
 		community: '110000000000000001',
 		channel: 'showcase',
-		snippet: 'How are you building your personal brand in 2026?',
+		snippet: 'This is my beautiful crow design.',
 		time: '26m',
-		postTitle: 'How are you building your personal brand in 2026?',
+		postId: '130000000000000001',
 	},
 	{
 		id: 'n3',
@@ -317,7 +321,7 @@ export const notifications: NotificationItem[] = [
 		channel: 'backend',
 		snippet: 'This matches what we saw on the dashboard work.',
 		time: '2h',
-		postTitle: 'What is everyone using for fast internal tooling right now?',
+		postId: '130000000000000004',
 	},
 	{
 		id: 'n7',
@@ -334,9 +338,9 @@ export const notifications: NotificationItem[] = [
 		actor: 'Ava',
 		community: '110000000000000003',
 		channel: 'launch',
-		snippet: 'Founders: what do your best community rituals look like?',
+		snippet: 'How do I get my crow to stop force pushing?',
 		time: '3h',
-		postTitle: 'Founders: what do your best community rituals look like?',
+		postId: '130000000000000002',
 	},
 	{
 		id: 'n9',
@@ -391,67 +395,70 @@ export const mutualFriendsByDm: Record<string, string[]> = {
 };
 
 export const comments: Record<string, ThreadComment[]> = {
-	'How are you building your personal brand in 2026?': [
+	'130000000000000001': [
 		{
 			id: 'c1',
 			author: 'Jun',
 			time: '1h ago',
-			body: 'Batching content one weekend a month saved me. The rest runs on a queue.',
+			body: 'I hope you are not using the crow for production work. It is a very bad idea to use a crow for production work.',
 		},
 		{
 			id: 'c2',
 			author: 'Nyra',
 			time: '44m ago',
-			body: 'That is exactly the system I keep avoiding. What do you use for scheduling?',
+			body: 'I am not using the crow for production work. I am using it for design work. It is a very good idea to use a crow for design work.',
+			replyTo: { id: 'c1' },
 		},
 		{
 			id: 'c3',
 			author: 'Mira',
 			time: '12m ago',
-			body: 'Portfolio first, content second. Everything else is just distribution.',
+			body: 'Are you crazy? You are using a crow for design work? It is a very bad idea to use a crow for design work. Use a crow for production work, not design work.',
+			replyTo: { id: 'c2' },
+		},
+		{
+			id: 'c7',
+			author: 'Kai',
+			time: '6m ago',
+			body: 'what kind of idiot uses a crow for design or production work? I use a crow for illegal weapons trafficking. It is a very good idea to use a crow for illegal weapons trafficking.',
+			replyTo: { id: 'c3' },
+		},
+		{
+			id: 'c8',
+			author: 'Sage',
+			time: '1m ago',
+			body: "OP, I don't own a crow but when I saw your post I immediately cried. I am a very sensitive person and I cry easily. Please do not use a crow for design or production work or even illegal weapons trafficking. It is a very bad idea to use a crow for any of those things.",
 		},
 	],
-	'What is everyone using for fast internal tooling right now?': [
+	'130000000000000002': [
 		{
 			id: 'c4',
 			author: 'Tess',
 			time: '4h ago',
-			body: 'We moved dashboards onto the same auth as production. One login to rule them all.',
+			body: "Take away high-level access and give them a read-only keypair. That is the only way to stop force pushes. Also don't use RSA, they don't look like they understand the concept of keypairs, but they've cracked the RSA algorithm.",
 		},
-		{ id: 'c5', author: 'Rowan', time: '2h ago', body: 'Seconded. The fastest tool is the one you stop maintaining.' },
+		{ id: 'c5', author: 'Rowan', time: '2h ago', body: "They CRACKED RSA ?? They're going to take our jobs..." },
 	],
-	'Founders: what do your best community rituals look like?': [
+	'130000000000000003': [
 		{
 			id: 'c6',
 			author: 'Theo',
 			time: '20h ago',
-			body: 'Weekly demo thread. Same time, same channel, no exceptions for a year.',
-		},
-		{
-			id: 'c7',
-			author: 'Nia',
-			time: '18h ago',
-			body: 'Monthly AMA with a member instead of a guest. Way better attendance.',
-		},
-		{
-			id: 'c8',
-			author: 'Ava',
-			time: '9h ago',
-			body: 'Both of these are going straight into the notes. Keep them coming.',
+			body: 'you are a caw-worker from hell',
 		},
 	],
-	'What is on your security audit checklist this quarter?': [
+	'130000000000000004': [
 		{
 			id: 'c9',
 			author: 'Ivy',
 			time: '2h ago',
-			body: 'Add secret rotation to that list. Everyone forgets it until the incident.',
+			body: "They don't even understand the concept of RSA keypairs, silly birds. Everyone forgets that until the incident happens...",
 		},
 		{
 			id: 'c10',
 			author: 'Zed',
 			time: '1h ago',
-			body: 'Dependency pinning plus a weekly audit job. Boring and effective.',
+			body: 'Ban them from doing accounting too... learnt this the hard way.',
 		},
 	],
 };
@@ -483,11 +490,7 @@ export function buildChannelThread(channel: CommunityChannel, communityId: strin
 			author: first,
 			time: 'Today',
 			body: 'Pinned thread at the top works for now. I will summarize every Friday.',
-			replyTo: {
-				id: `${base}-3`,
-				author: 'You',
-				body: 'Same here — where should we keep the running decisions so they do not get buried?',
-			},
+			replyTo: { id: `${base}-3` },
 		},
 		{
 			id: `${base}-5`,

@@ -34,8 +34,8 @@ export default function NotificationsView({
 			(!q || `${item.actor} ${item.community} ${item.channel} ${item.snippet}`.toLowerCase().includes(q)),
 	);
 	const openItem = (item: NotificationItem) => {
-		if ((item.kind === 'like' || item.kind === 'comment') && item.postTitle) {
-			const post = posts.find((entry) => entry.title === item.postTitle);
+		if ((item.kind === 'like' || item.kind === 'comment') && item.postId) {
+			const post = posts.find((entry) => entry.id === item.postId);
 			if (post) {
 				onOpenThread(post);
 				return;

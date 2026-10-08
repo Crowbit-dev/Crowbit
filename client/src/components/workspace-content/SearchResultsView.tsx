@@ -83,7 +83,7 @@ export default function SearchResultsView({
 							const community = post.community ? communities.find((entry) => entry.id === post.community) : undefined;
 							return (
 								<PostCard
-									key={post.title}
+									key={post.id}
 									post={post}
 									community={
 										community
