@@ -461,6 +461,7 @@ function App() {
 		setLocalPosts((prev) => prev.filter((entry) => !(entry.author === post.author && entry.title === post.title)));
 		setActiveThread((prev) => (prev && prev.author === post.author && prev.title === post.title ? null : prev));
 		if (activeThread && activeThread.author === post.author && activeThread.title === post.title) {
+			setThreadVisible(false);
 			go(location.pathname, { thread: null }, { replace: true });
 		}
 	};
@@ -701,7 +702,7 @@ function App() {
 					onOpenProfile={openProfile}
 					onDeletePost={handleDeletePost}
 					profileUser={profileUser}
-					threadShift={activeThread ? clampedThreadWidth : 0}
+					threadShift={threadVisible ? clampedThreadWidth : 0}
 					openMenu={openMenu}
 					searchQuery={searchQueries[mode]}
 					onResetSearch={resetSearch}
