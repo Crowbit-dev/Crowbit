@@ -433,13 +433,13 @@ export const comments: Record<string, ThreadComment[]> = {
 			id: 'c9',
 			author: 'House',
 			time: '1m ago',
-			body: "It's never lupus."
+			body: "It's never lupus.",
 		},
 		{
 			id: 'c10',
 			author: 'Wilson',
 			time: '1m ago',
-			body: "I too am in this episode.",
+			body: 'I too am in this episode.',
 			replyTo: { id: 'c9' },
 		},
 	],
