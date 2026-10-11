@@ -229,7 +229,7 @@ function ThreadPanel({
 						{formatCount(post.stats.shares)} shares
 					</span>
 				</div>
-				<button type="button" className={styles.close} onClick={onClose} aria-label="Close thread" title="Close thread">
+				<button type="button" className={styles.close} onClick={onClose} aria-label="Close thread">
 					<X size={18} aria-hidden="true" />
 				</button>
 			</div>
@@ -346,7 +346,7 @@ function ThreadPanel({
 					}
 					maxLength={2000}
 				/>
-				<button type="submit" className={styles.send} disabled={!draft.trim()} aria-label="Send comment" title="Send">
+				<button type="submit" className={styles.send} disabled={!draft.trim()} aria-label="Send comment">
 					<SendHorizontal size={16} aria-hidden="true" />
 				</button>
 			</form>

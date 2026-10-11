@@ -83,13 +83,7 @@ function SidebarSearch({
 				maxLength={80}
 			/>
 			{value && (
-				<button
-					type="button"
-					className={styles.sidebarClear}
-					onClick={() => onChange('')}
-					aria-label="Clear search"
-					title="Clear search"
-				>
+				<button type="button" className={styles.sidebarClear} onClick={() => onChange('')} aria-label="Clear search">
 					<X size={14} aria-hidden="true" />
 				</button>
 			)}

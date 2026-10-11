@@ -56,7 +56,7 @@ export default function NotificationsView({
 				)}
 				<div className={styles.notifBarActions}>
 					{/* TEMPORARY: decorative until read-state lands */}
-					<button type="button" className={styles.dmBarAction} aria-label="Mark all read" title="Mark all read">
+					<button type="button" className={styles.dmBarAction} aria-label="Mark all read">
 						<CheckCheck size={17} aria-hidden="true" />
 					</button>
 				</div>

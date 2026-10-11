@@ -38,7 +38,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Account info</h3>
 						<SettingRow
 							label="Display name"
-							copy="Displayed on your profile and posts."
 							control={
 								<SettingEditableText
 									value={settingsPrefs.account.displayName}
@@ -50,7 +49,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Username"
-							copy="Your unique handle across the network."
 							control={
 								<SettingEditableText
 									value={settingsPrefs.account.username}
@@ -76,7 +74,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Password &amp; security</h3>
 						<SettingRow
 							label="Two-factor authentication"
-							copy="Require a code when signing in."
 							control={
 								<>
 									{/* TEMPORARY: persisted in memory only until backend enforcement lands */}
@@ -90,7 +87,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Active sessions"
-							copy="Review the devices signed in to your account."
 							control={
 								<>
 									{/* TEMPORARY: opens a device list once it exists */}
@@ -116,7 +112,7 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Danger zone</h3>
 						<SettingRow
 							label="Disable account"
-							copy="Take a break from the network and hide your profile."
+							copy="Hide your profile until you come back."
 							control={
 								<>
 									{/* TEMPORARY: decorative until account disabling lands */}
@@ -128,7 +124,7 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Delete account"
-							copy="Permanently remove your account and data."
+							copy="Permanent. Your account and data are gone for good."
 							control={
 								<>
 									{/* TEMPORARY: decorative until account deletion lands */}
@@ -145,7 +141,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Visibility</h3>
 						<SettingRow
 							label="Profile visibility"
-							copy="Who can view your profile."
 							control={
 								<>
 									{/* TEMPORARY: persisted in memory only until backend enforcement lands */}
@@ -163,7 +158,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Show read activity"
-							copy="Let others see what you have read."
 							control={
 								<>
 									{/* TEMPORARY: persisted in memory only until backend enforcement lands */}
@@ -177,7 +171,7 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Close friends"
-							copy="People who see your closest updates."
+							copy="The audience for your close-friends-only posts."
 							control={
 								<>
 									{/* TEMPORARY: decorative until close friends management lands */}
@@ -189,7 +183,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Show close friends badge"
-							copy="Display a badge on posts for close friends."
 							control={
 								<SettingToggle
 									checked={settingsPrefs.privacy.showCloseFriendsBadge}
@@ -201,7 +194,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Messaging</h3>
 						<SettingRow
 							label="Message requests"
-							copy="Who can send you message requests."
 							control={
 								<>
 									{/* TEMPORARY: persisted only until backend enforcement lands */}
@@ -222,7 +214,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Read receipts"
-							copy="Send read confirmations in conversations."
 							control={
 								<>
 									{/* TEMPORARY: persisted only until backend enforcement lands */}
@@ -236,7 +227,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Typing indicators"
-							copy="Show when you are typing a message."
 							control={
 								<>
 									{/* TEMPORARY: persisted only until backend enforcement lands */}
@@ -251,7 +241,7 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Blocked users</h3>
 						<SettingRow
 							label="Block list"
-							copy="People who cannot contact you or see your activity."
+							copy="Blocked people can't contact you or see your activity."
 							control={
 								<>
 									{/* TEMPORARY: decorative until block list management lands */}
@@ -327,7 +317,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<SettingRow
 							label="Text size in chat"
 							stacked
-							copy="Adjust the size of the chat font."
 							control={
 								<SettingSlider
 									value={CHAT_TEXT_SIZES.indexOf(settingsPrefs.accessibility.chatTextSize)}
@@ -346,9 +335,8 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<h3 className={settingStyles.subHead}>Visual density</h3>
 						<SettingRow
-							label="Space Between Message Groups"
+							label="Space between message groups"
 							stacked
-							copy="Adjust the spacing between message groups."
 							control={
 								<SettingSlider
 									value={MESSAGE_SPACINGS.indexOf(settingsPrefs.accessibility.messageSpacing)}
@@ -359,7 +347,7 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 											messageSpacing: MESSAGE_SPACINGS[next] ?? settingsPrefs.accessibility.messageSpacing,
 										})
 									}
-									label="Space Between Message Groups"
+									label="Space between message groups"
 									ticks={MESSAGE_SPACINGS.map((space) => `${space}px`)}
 									highlightTick="20px"
 								/>
@@ -367,7 +355,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Compact density"
-							copy="Tighter spacing in lists and cards."
 							control={
 								<>
 									{/* TEMPORARY: decorative until density scaling lands */}
@@ -383,7 +370,7 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<SettingRow
 							label="Saturation"
 							stacked
-							copy="Reduce the saturation of colors within the app, for those with color sensitivities. This does not affect images, videos, role colors or other user content."
+							copy="Fades the interface only. Images, videos, and role colors stay as they are."
 							control={
 								<SettingSlider
 									value={settingsPrefs.accessibility.saturation}
@@ -399,7 +386,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="High contrast mode"
-							copy="Boost contrast for text and interface elements."
 							control={
 								<>
 									{/* TEMPORARY: decorative until high contrast theme lands */}
@@ -410,7 +396,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						<h3 className={settingStyles.subHead}>Motion</h3>
 						<SettingRow
 							label="Reduce motion"
-							copy="Disable animations and transitions."
 							control={
 								<SettingToggle
 									checked={settingsPrefs.accessibility.reduceMotion}
@@ -425,7 +410,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 					<div>
 						<SettingRow
 							label="Noise suppression"
-							copy="Filter background noise from your microphone."
 							control={
 								<>
 									{/* TEMPORARY: persisted in memory only until voice wiring lands */}
@@ -439,7 +423,6 @@ export default function SettingsView({ settingsCategory, settingsPrefs, onUpdate
 						/>
 						<SettingRow
 							label="Echo cancellation"
-							copy="Prevent echo during voice calls."
 							control={
 								<>
 									{/* TEMPORARY: persisted in memory only until voice wiring lands */}

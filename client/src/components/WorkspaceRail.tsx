@@ -101,7 +101,6 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 						className={`${styles.railButton} ${mode === item.mode ? styles.active : ''}`}
 						onClick={() => onChangeMode(item.mode)}
 						aria-label={item.label}
-						title={item.label}
 					>
 						{item.icon}
 						{item.mode === 'notifications' && totalUnread > 0 && (
@@ -112,13 +111,7 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 					</button>
 				))}
 				<span className={styles.railDivider} aria-hidden="true" />
-				<button
-					type="button"
-					className={styles.railButton}
-					onClick={onCompose}
-					aria-label="Compose new post"
-					title="Compose new post"
-				>
+				<button type="button" className={styles.railButton} onClick={onCompose} aria-label="Compose new post">
 					<Plus aria-hidden="true" />
 				</button>
 			</div>
@@ -131,7 +124,6 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 					disabled={deafened}
 					aria-label={deafened ? 'Undeafen to unmute' : muted ? 'Unmute microphone' : 'Mute microphone'}
 					aria-pressed={micMuted}
-					title={deafened ? 'Undeafen to unmute' : muted ? 'Unmute microphone' : 'Mute microphone'}
 				>
 					{micMuted ? <MicOff aria-hidden="true" /> : <Mic aria-hidden="true" />}
 				</button>
@@ -141,7 +133,6 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 					onClick={() => setDeafened((prev) => !prev)}
 					aria-label={deafened ? 'Undeafen audio' : 'Deafen audio'}
 					aria-pressed={deafened}
-					title={deafened ? 'Undeafen audio' : 'Deafen audio'}
 				>
 					{deafened ? <HeadphoneOff aria-hidden="true" /> : <Headphones aria-hidden="true" />}
 				</button>
@@ -152,12 +143,7 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 						if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 					}}
 				>
-					<button
-						type="button"
-						className={styles.railProfile}
-						aria-label="Current user profile"
-						title="Current user profile"
-					>
+					<button type="button" className={styles.railProfile} aria-label="Current user profile">
 						<span className={styles.railAvatar}>{displayName.charAt(0).toUpperCase() || '?'}</span>
 					</button>
 					<div className={styles.profileCard}>
@@ -176,30 +162,18 @@ function WorkspaceRail({ mode, totalUnread, displayName, username, onChangeMode,
 						</button>
 						<span className={styles.profileDetails}>
 							<span className={styles.profileCopy}>
-								<button
-									type="button"
-									className={styles.profileNameButton}
-									onClick={() => onChangeMode('profile')}
-									title="Open your profile"
-								>
+								<button type="button" className={styles.profileNameButton} onClick={() => onChangeMode('profile')}>
 									{displayName}
 								</button>
 								<button
 									type="button"
 									className={`${styles.profileCopyName} ${copied ? styles.copied : ''}`}
 									onClick={copyUsername}
-									title="Copy username"
 								>
 									{copied ? 'Copied!' : `@${username}`}
 								</button>
 							</span>
-							<button
-								type="button"
-								className={styles.profileLogout}
-								onClick={logout}
-								aria-label="Log out"
-								title="Log out"
-							>
+							<button type="button" className={styles.profileLogout} onClick={logout} aria-label="Log out">
 								<LogOut size={16} aria-hidden="true" />
 							</button>
 						</span>

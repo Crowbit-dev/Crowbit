@@ -423,7 +423,6 @@ function ConversationView({
 							className={shared.replyPreviewClose}
 							onClick={() => setReplyTarget(null)}
 							aria-label="Cancel reply"
-							title="Cancel reply"
 						>
 							<X size={14} aria-hidden="true" />
 						</button>
@@ -438,7 +437,6 @@ function ConversationView({
 									type="button"
 									onClick={() => removeAttachment(attachment.url)}
 									aria-label={`Remove ${attachment.name}`}
-									title="Remove"
 								>
 									<X size={14} aria-hidden="true" />
 								</button>
@@ -452,7 +450,6 @@ function ConversationView({
 						className={styles.composerSend}
 						onClick={() => fileRef.current?.click()}
 						aria-label="Attach images"
-						title="Attach images"
 					>
 						<Paperclip size={16} aria-hidden="true" />
 					</button>
@@ -479,7 +476,6 @@ function ConversationView({
 						className={styles.composerSend}
 						disabled={!draft.trim() && attachments.length === 0}
 						aria-label={`Send message to ${peerName}`}
-						title="Send"
 					>
 						<SendHorizontal size={16} aria-hidden="true" />
 					</button>

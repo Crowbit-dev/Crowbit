@@ -51,7 +51,6 @@ export default function DmView({ dm, communities, openMenu, onOpenProfile }: DmV
 						style={profileAvatarButtonStyle}
 						onClick={() => onOpenProfile(dm.name)}
 						aria-label={`Open ${dm.name}'s profile`}
-						title={`Open ${dm.name}'s profile`}
 					>
 						{dm.name[0]}
 					</button>

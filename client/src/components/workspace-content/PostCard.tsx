@@ -72,7 +72,6 @@ export default function PostCard({
 					className={`${styles.avatar} ${styles.postAvatarButton}`}
 					onClick={openProfile}
 					aria-label={`Open ${post.author}'s profile`}
-					title={`Open ${post.author}'s profile`}
 				>
 					{post.author[0]}
 				</button>

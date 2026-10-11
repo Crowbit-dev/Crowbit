@@ -190,7 +190,7 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 							)}
 						</div>
 					</div>
-					<button type="button" className={styles.close} onClick={onClose} aria-label="Close composer" title="Close">
+					<button type="button" className={styles.close} onClick={onClose} aria-label="Close composer">
 						<X size={18} aria-hidden="true" />
 					</button>
 				</div>
@@ -293,7 +293,6 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 									type="button"
 									onClick={() => removeAttachment(attachment.url)}
 									aria-label={`Remove ${attachment.name}`}
-									title="Remove"
 								>
 									<X size={14} aria-hidden="true" />
 								</button>
@@ -309,18 +308,11 @@ function PostModal({ communities, defaultCommunity, onClose, onPost }: PostModal
 							className={styles.attach}
 							onClick={() => fileRef.current?.click()}
 							aria-label="Attach images"
-							title="Attach images"
 						>
 							<Paperclip size={16} aria-hidden="true" />
 						</button>
 						<input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={attach} tabIndex={-1} />
-						<button
-							type="button"
-							className={styles.bodyToggle}
-							onClick={toggleBody}
-							aria-expanded={bodyOpen}
-							title={bodyOpen ? 'Remove body' : 'Add a full body'}
-						>
+						<button type="button" className={styles.bodyToggle} onClick={toggleBody} aria-expanded={bodyOpen}>
 							<AlignLeft size={16} aria-hidden="true" />
 							{bodyOpen ? 'Remove body' : 'Add body'}
 						</button>

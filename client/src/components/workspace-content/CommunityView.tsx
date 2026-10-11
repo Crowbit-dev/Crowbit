@@ -171,7 +171,6 @@ export default function CommunityView({
 										className={styles.memberOptions}
 										onClick={(e) => openMemberMenuAtEvent(e, member, true)}
 										aria-label={`${member.name} options`}
-										title="Member options"
 									>
 										<Ellipsis size={16} aria-hidden="true" />
 									</button>
