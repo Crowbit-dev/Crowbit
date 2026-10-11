@@ -2,6 +2,7 @@ import { Copy, Link2, Pencil, Reply, SendHorizontal, Trash2, X } from 'lucide-re
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { comments as seedComments } from '../appData';
 import { copyText } from '../lib/clipboard';
+import { linkify } from '../lib/linkify';
 import { commentLink } from '../lib/site';
 import { formatCount } from '../lib/formatCount';
 import shared from '../styles/shared.module.css';
@@ -296,7 +297,7 @@ function ThreadPanel({
 												</button>
 											)}
 											<p>
-												{comment.body}
+												{linkify(comment.body, styles.commentLink)}
 												{comment.edited && <span className={shared.editedMark}> (edited)</span>}
 											</p>
 										</>

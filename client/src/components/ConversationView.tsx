@@ -23,6 +23,7 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { copyText } from '../lib/clipboard';
+import { linkify } from '../lib/linkify';
 import { messageLink } from '../lib/site';
 import type { Community, ConversationMutuals, MessageEntry } from '../types';
 import shared from '../styles/shared.module.css';
@@ -400,7 +401,7 @@ function ConversationView({
 									</div>
 								) : (
 									<p>
-										{message.body}
+										{linkify(message.body, styles.messageLink)}
 										{message.edited && <span className={shared.editedMark}> (edited)</span>}
 									</p>
 								)}

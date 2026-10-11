@@ -226,6 +226,15 @@
 	overflow-wrap: break-word;
 }
 
+.commentLink {
+	color: #6ea8fe;
+	overflow-wrap: break-word;
+}
+
+.commentLink:hover {
+	text-decoration: underline;
+}
+
 .commentReference {
 	display: flex;
 	align-items: baseline;

@@ -129,6 +129,15 @@
 	overflow-wrap: break-word;
 }
 
+.messageLink {
+	color: #6ea8fe;
+	overflow-wrap: break-word;
+}
+
+.messageLink:hover {
+	text-decoration: underline;
+}
+
 .messageReference {
 	position: absolute;
 	top: 8px;
