@@ -8,6 +8,7 @@ import { formatCount } from '../lib/formatCount';
 import shared from '../styles/shared.module.css';
 import type { Post, ThreadComment } from '../types';
 import type { ContextMenuItem } from './ContextMenu';
+import MessageEmbeds from './MessageEmbeds';
 import styles from './ThreadPanel.module.css';
 
 function ThreadPanel({
@@ -300,6 +301,7 @@ function ThreadPanel({
 												{linkify(comment.body, styles.commentLink)}
 												{comment.edited && <span className={shared.editedMark}> (edited)</span>}
 											</p>
+											<MessageEmbeds text={comment.body} />
 										</>
 									)}
 								</div>

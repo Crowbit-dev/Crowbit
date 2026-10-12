@@ -28,6 +28,7 @@ import { messageLink } from '../lib/site';
 import type { Community, ConversationMutuals, MessageEntry } from '../types';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
+import MessageEmbeds from './MessageEmbeds';
 import styles from './ConversationView.module.css';
 
 type ConversationViewProps = {
@@ -400,10 +401,13 @@ function ConversationView({
 										<span>Enter to save · Esc to cancel</span>
 									</div>
 								) : (
-									<p>
-										{linkify(message.body, styles.messageLink)}
-										{message.edited && <span className={shared.editedMark}> (edited)</span>}
-									</p>
+									<>
+										<p>
+											{linkify(message.body, styles.messageLink)}
+											{message.edited && <span className={shared.editedMark}> (edited)</span>}
+										</p>
+										<MessageEmbeds text={message.body} />
+									</>
 								)}
 								{message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
 							</div>
