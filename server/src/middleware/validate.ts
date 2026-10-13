@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-// Validates req.body against a zod schema; every route with a JSON body uses this so validation lives next to the handler.
+// Middleware to validate request body against a Zod schema. If validation fails, responds with 400 and error details. otherwise, proceeds to the next middleware/route handler.
 export function validateBody<T extends z.ZodType>(schema: T) {
 	return (req: Request, res: Response, next: NextFunction): void => {
 		const parsed = schema.safeParse(req.body);

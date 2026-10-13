@@ -14,7 +14,6 @@ declare module 'express-session' {
 	}
 }
 
-// App factory: all setup lives here so index.ts only boots and tests can import the app without listening.
 export const app = express();
 
 app.use(

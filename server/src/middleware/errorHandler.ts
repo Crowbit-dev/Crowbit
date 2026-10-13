@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-// Throw (or forward with next(err)) from any route; the central handler below turns it into JSON.
+// custom error class for throwing errors with status codes
 export class AppError extends Error {
 	status: number;
 
@@ -10,12 +10,11 @@ export class AppError extends Error {
 	}
 }
 
-// Final route: anything unmatched under /api or elsewhere becomes JSON instead of the Express HTML default.
+// 404 my beloved
 export function notFoundHandler(req: Request, res: Response): void {
 	res.status(404).json({ message: `Not found: ${req.method} ${req.path}` });
 }
 
-// Central error handler; must keep the four-argument signature so Express routes errors here.
 export function errorHandler(err: unknown, req: Request, res: Response, next: NextFunction): void {
 	if (err instanceof AppError) {
 		res.status(err.status).json({ message: err.message });
