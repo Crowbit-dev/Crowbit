@@ -1,0 +1,23 @@
+.embeds {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+.image,
+.video {
+	display: block;
+	max-width: min(100%, 320px);
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.video {
+	background: #000;
+}
+
+.audio {
+	width: min(100%, 300px);
+}

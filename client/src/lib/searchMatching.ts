@@ -1,6 +1,5 @@
 import type { Community, DirectMessage, Post, SearchUser } from '../types';
 
-// Shared matchers so the sidebar counts and the result lists never diverge.
 export function matchPosts(posts: Post[], query: string): Post[] {
 	if (!query) return posts.slice(0, 2);
 	return posts.filter((post) =>

@@ -93,7 +93,7 @@ export default function Login() {
 			</form>
 
 			<div className={styles.authSwitch}>
-				{/* TEMPORARY: decorative until password reset lands. */}
+				{/* TEMPORARY: decorative until password reset lands */}
 				<button type="button" className={styles.authLinkButton}>
 					Forgot password?
 				</button>

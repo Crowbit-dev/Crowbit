@@ -23,10 +23,12 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { copyText } from '../lib/clipboard';
+import { linkify } from '../lib/linkify';
 import { messageLink } from '../lib/site';
 import type { Community, ConversationMutuals, MessageEntry } from '../types';
 import shared from '../styles/shared.module.css';
 import type { ContextMenuItem } from './ContextMenu';
+import MessageEmbeds from './MessageEmbeds';
 import styles from './ConversationView.module.css';
 
 type ConversationViewProps = {
@@ -37,11 +39,11 @@ type ConversationViewProps = {
 	edgeScrollbar?: boolean;
 	moderationCommunity?: Community;
 	onMessageUser?: (name: string) => void;
+	onOpenProfile: (username: string) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 };
 
-// Shortens quoted text with an explicit ellipsis (the CSS container
-// truncation only kicks in when the full snippet overflows its box).
+// Shortens quoted text with an explicit ellipsis (the CSS container truncation only kicks in when the full snippet overflows its box)
 const snippet = (body: string, length = 80) => {
 	const line = body.split('\n')[0] ?? '';
 	return line.length > length ? `${line.slice(0, length).trimEnd()}…` : line;
@@ -89,6 +91,7 @@ function ConversationView({
 	edgeScrollbar = false,
 	moderationCommunity,
 	onMessageUser,
+	onOpenProfile,
 	openMenu,
 }: ConversationViewProps) {
 	const hasMutualCommunities = (mutuals?.communities.length ?? 0) > 0;
@@ -98,7 +101,7 @@ function ConversationView({
 	const [replyTarget, setReplyTarget] = useState<MessageEntry | null>(null);
 	const [flashId, setFlashId] = useState<string | null>(null);
 	const [attachments, setAttachments] = useState<{ url: string; name: string }[]>([]);
-	// LOCAL-ONLY: pinned ids live in memory; no backend persists them yet.
+	// LOCAL-ONLY: pinned ids are stored in-memory until a backend exists to persist them
 	const [pinnedIds, setPinnedIds] = useState<Set<string>>(new Set());
 	const [editingId, setEditingId] = useState<string | null>(null);
 	const [editDraft, setEditDraft] = useState('');
@@ -123,19 +126,19 @@ function ConversationView({
 		return () => window.removeEventListener('resize', syncHeight);
 	}, [draft]);
 
-	// Within 40px of the bottom counts as "at bottom" so rounding never breaks stickiness.
+	// Track whether the user is scrolled to the bottom of the feed, so we can autoscroll on new messages only if they are
 	useEffect(() => {
 		const scroller = feedRef.current;
 		if (!scroller) return;
 		const onScroll = () => {
-			stuckToBottomRef.current = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 40;
+			stuckToBottomRef.current = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 40; // small buffer for "close enough" to the bottom
 		};
 		onScroll();
 		scroller.addEventListener('scroll', onScroll, { passive: true });
 		return () => scroller.removeEventListener('scroll', onScroll);
 	}, []);
 
-	// Autoscroll on new messages, but only if already at the bottom.
+	// Autoscroll to bottom when new messages arrive, but only if the user was already at the bottom
 	useEffect(() => {
 		const scroller = feedRef.current;
 		if (!scroller || !stuckToBottomRef.current) {
@@ -144,7 +147,7 @@ function ConversationView({
 		scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'auto' });
 	}, [messages]);
 
-	// Typing anywhere outside a field jumps into the composer.
+	// Typing anywhere outside a field jumps into the composer
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
 			if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -169,7 +172,7 @@ function ConversationView({
 				time: 'Now',
 				body: body || 'Shared an image',
 				image: attachments[0]?.url,
-				replyTo: replyTarget ? { id: replyTarget.id, author: replyTarget.author, body: replyTarget.body } : undefined,
+				replyTo: replyTarget ? { id: replyTarget.id } : undefined,
 			},
 		]);
 		attachments.slice(1).forEach((attachment) => URL.revokeObjectURL(attachment.url));
@@ -208,7 +211,7 @@ function ConversationView({
 	const saveEdit = () => {
 		const body = editDraft.trim();
 		if (!editingId || !body) return;
-		// LOCAL-ONLY: edits apply to in-memory state; nothing persists without a backend.
+		// LOCAL-ONLY: edits apply to in-memory state until a backend exists to persist them
 		setMessages((prev) => prev.map((entry) => (entry.id === editingId ? { ...entry, body, edited: true } : entry)));
 		setEditingId(null);
 		setEditDraft('');
@@ -237,7 +240,6 @@ function ConversationView({
 
 	const openMessageMenu = (e: ReactMouseEvent<HTMLElement>, message: MessageEntry) => {
 		e.preventDefault();
-		// Capture the highlight now — opening the menu collapses the selection.
 		const selection = window.getSelection()?.toString().trim() ?? '';
 		const items: ContextMenuItem[] = [
 			...(selection
@@ -251,7 +253,6 @@ function ConversationView({
 					]
 				: []),
 			{ icon: <Copy size={16} aria-hidden="true" />, label: 'Copy Text', onSelect: () => void copyText(message.body) },
-			// LOCAL-ONLY: fake link; no backend route exists for it yet.
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Message Link',
@@ -270,7 +271,7 @@ function ConversationView({
 		];
 		if (message.author === 'You') {
 			items.push({ type: 'separator' });
-			// LOCAL-ONLY: deletes from in-memory state; nothing persists without a backend.
+			// LOCAL-ONLY: deletes from in-memory state until a backend exists to persist them
 			items.push({
 				icon: <Trash2 size={16} aria-hidden="true" />,
 				label: 'Delete Message',
@@ -299,10 +300,13 @@ function ConversationView({
 					onSelect: () => onMessageUser(member.name),
 				});
 			}
-			// TEMPORARY: decorative until profiles land.
-			items.push({ icon: <User size={16} aria-hidden="true" />, label: 'View Profile', onSelect: () => {} });
+			items.push({
+				icon: <User size={16} aria-hidden="true" />,
+				label: 'View Profile',
+				onSelect: () => onOpenProfile(member.name),
+			});
 			items.push({ type: 'separator' });
-			// TEMPORARY: decorative until moderation lands.
+			// TEMPORARY: decorative until moderation lands
 			items.push({ icon: <VolumeX size={16} aria-hidden="true" />, label: 'Mute', onSelect: () => {} });
 			items.push({ icon: <UserX size={16} aria-hidden="true" />, label: 'Kick', danger: true, onSelect: () => {} });
 			items.push({ icon: <Ban size={16} aria-hidden="true" />, label: 'Ban', danger: true, onSelect: () => {} });
@@ -339,69 +343,77 @@ function ConversationView({
 			)}
 
 			<div ref={feedRef} className={styles.conversationFeed}>
-				{messages.map((message) => (
-					<article
-						id={`msg-${message.id}`}
-						key={message.id}
-						className={`${styles.chatMessage} ${flashId === message.id ? shared.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
-						onContextMenu={(e) => openMessageMenu(e, message)}
-					>
-						<div className={styles.messageAvatar}>{message.author[0]}</div>
-						<div className={styles.chatMessageCopy}>
-							{message.replyTo && (
-								<button
-									type="button"
-									className={styles.messageReference}
-									onClick={() => message.replyTo && jumpToMessage(message.replyTo.id)}
-									aria-label={`Jump to ${message.replyTo.author}'s message`}
-								>
-									<Reply size={12} aria-hidden="true" />
-									<strong>{message.replyTo.author}</strong>
-									<span>{snippet(message.replyTo.body)}</span>
-								</button>
-							)}
-							<div className={styles.chatMessageTopline}>
-								<strong>{message.author}</strong>
-								<span>{message.time}</span>
-								{pinnedIds.has(message.id) && (
-									<span className={styles.pinnedMark} title="Pinned">
-										<Pin size={12} aria-hidden="true" />
-									</span>
+				{messages.map((message) => {
+					const replyToId = message.replyTo?.id;
+					const replySource = replyToId ? messages.find((entry) => entry.id === replyToId) : undefined;
+					return (
+						<article
+							id={`msg-${message.id}`}
+							key={message.id}
+							tabIndex={-1}
+							className={`${styles.chatMessage} ${flashId === message.id ? shared.flash : ''} ${message.replyTo ? styles.hasReply : ''}`}
+							onContextMenu={(e) => openMessageMenu(e, message)}
+						>
+							<div className={styles.messageAvatar}>{message.author[0]}</div>
+							<div className={styles.chatMessageCopy}>
+								{replySource && (
+									<button
+										type="button"
+										className={styles.messageReference}
+										onClick={() => jumpToMessage(replySource.id)}
+										aria-label={`Jump to ${replySource.author}'s message`}
+									>
+										<Reply size={12} aria-hidden="true" />
+										<strong>{replySource.author}</strong>
+										<span>{snippet(replySource.body)}</span>
+									</button>
 								)}
-							</div>
-							{editingId === message.id ? (
-								<div className={shared.editor}>
-									<textarea
-										ref={(el) => {
-											el?.focus();
-											el?.setSelectionRange(el.value.length, el.value.length);
-										}}
-										rows={2}
-										value={editDraft}
-										onChange={(e) => setEditDraft(e.target.value)}
-										onKeyDown={(e) => {
-											if (e.key === 'Enter' && !e.shiftKey) {
-												e.preventDefault();
-												saveEdit();
-											} else if (e.key === 'Escape') {
-												e.stopPropagation();
-												cancelEdit();
-											}
-										}}
-										aria-label="Edit message"
-									/>
-									<span>Enter to save · Esc to cancel</span>
+								<div className={styles.chatMessageTopline}>
+									<strong>{message.author}</strong>
+									<span>{message.time}</span>
+									{pinnedIds.has(message.id) && (
+										<span className={styles.pinnedMark} title="Pinned">
+											<Pin size={12} aria-hidden="true" />
+										</span>
+									)}
 								</div>
-							) : (
-								<p>
-									{message.body}
-									{message.edited && <span className={shared.editedMark}> (edited)</span>}
-								</p>
-							)}
-							{message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
-						</div>
-					</article>
-				))}
+								{editingId === message.id ? (
+									<div className={shared.editor}>
+										<textarea
+											ref={(el) => {
+												el?.focus();
+												el?.setSelectionRange(el.value.length, el.value.length);
+											}}
+											rows={2}
+											value={editDraft}
+											onChange={(e) => setEditDraft(e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter' && !e.shiftKey) {
+													e.preventDefault();
+													saveEdit();
+												} else if (e.key === 'Escape') {
+													e.stopPropagation();
+													cancelEdit();
+												}
+											}}
+											aria-label="Edit message"
+										/>
+										<span>Enter to save · Esc to cancel</span>
+									</div>
+								) : (
+									<>
+										<p>
+											{linkify(message.body, styles.messageLink)}
+											{message.edited && <span className={shared.editedMark}> (edited)</span>}
+										</p>
+										<MessageEmbeds text={message.body} />
+									</>
+								)}
+								{message.image && <img className={styles.chatMessageImage} src={message.image} alt="Attached image" />}
+							</div>
+						</article>
+					);
+				})}
 			</div>
 
 			<form className={styles.messageComposer} onSubmit={handleSubmit}>
@@ -416,7 +428,6 @@ function ConversationView({
 							className={shared.replyPreviewClose}
 							onClick={() => setReplyTarget(null)}
 							aria-label="Cancel reply"
-							title="Cancel reply"
 						>
 							<X size={14} aria-hidden="true" />
 						</button>
@@ -431,7 +442,6 @@ function ConversationView({
 									type="button"
 									onClick={() => removeAttachment(attachment.url)}
 									aria-label={`Remove ${attachment.name}`}
-									title="Remove"
 								>
 									<X size={14} aria-hidden="true" />
 								</button>
@@ -445,7 +455,6 @@ function ConversationView({
 						className={styles.composerSend}
 						onClick={() => fileRef.current?.click()}
 						aria-label="Attach images"
-						title="Attach images"
 					>
 						<Paperclip size={16} aria-hidden="true" />
 					</button>
@@ -472,7 +481,6 @@ function ConversationView({
 						className={styles.composerSend}
 						disabled={!draft.trim() && attachments.length === 0}
 						aria-label={`Send message to ${peerName}`}
-						title="Send"
 					>
 						<SendHorizontal size={16} aria-hidden="true" />
 					</button>

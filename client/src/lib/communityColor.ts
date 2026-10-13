@@ -1,4 +1,4 @@
-// Returns the community color for gradient washes, falling back to the brand accent when the color is near-gray (its wash would read as mud on gray).
+// Returns the community color for gradient washes, falling back to the brand accent when the color is near-gray (its wash would read as mud on gray)
 export function gradientCommunityColor(color: string): string {
 	const match = /^#([0-9a-f]{6})$/i.exec(color.trim());
 	if (!match) return 'var(--accent)';

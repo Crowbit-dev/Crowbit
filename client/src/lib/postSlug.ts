@@ -1,4 +1,4 @@
-// LOCAL-ONLY: slug is fabricated; no backend route exists for it yet.
+// LOCAL-ONLY: slug is fabricated; no backend route exists for it yet
 export function postSlug(author: string, title: string): string {
 	return `${author}-${title}`
 		.toLowerCase()

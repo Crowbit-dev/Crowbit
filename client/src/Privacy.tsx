@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './Auth.module.css';
 
-// This is a draft privacy policy for the Crowbit app. It is not legal advice, and it may change before launch.
 export default function Privacy() {
 	return (
 		<div className={styles.authPage}>

@@ -34,8 +34,8 @@ export default function NotificationsView({
 			(!q || `${item.actor} ${item.community} ${item.channel} ${item.snippet}`.toLowerCase().includes(q)),
 	);
 	const openItem = (item: NotificationItem) => {
-		if ((item.kind === 'like' || item.kind === 'comment') && item.postTitle) {
-			const post = posts.find((entry) => entry.title === item.postTitle);
+		if ((item.kind === 'like' || item.kind === 'comment') && item.postId) {
+			const post = posts.find((entry) => entry.id === item.postId);
 			if (post) {
 				onOpenThread(post);
 				return;
@@ -55,8 +55,8 @@ export default function NotificationsView({
 					</>
 				)}
 				<div className={styles.notifBarActions}>
-					{/* TEMPORARY: decorative until read-state lands. */}
-					<button type="button" className={styles.dmBarAction} aria-label="Mark all read" title="Mark all read">
+					{/* TEMPORARY: decorative until read-state lands */}
+					<button type="button" className={styles.dmBarAction} aria-label="Mark all read">
 						<CheckCheck size={17} aria-hidden="true" />
 					</button>
 				</div>
@@ -94,7 +94,7 @@ export default function NotificationsView({
 											{community?.name ?? item.community} · {item.time}
 										</span>
 										<span className={styles.notifFollowActions}>
-											{/* TEMPORARY: decorative until friend requests land. */}
+											{/* TEMPORARY: decorative until friend requests land */}
 											<button type="button" className={styles.contentChip}>
 												Accept
 											</button>

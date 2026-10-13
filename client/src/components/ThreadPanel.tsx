@@ -2,11 +2,13 @@ import { Copy, Link2, Pencil, Reply, SendHorizontal, Trash2, X } from 'lucide-re
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { comments as seedComments } from '../appData';
 import { copyText } from '../lib/clipboard';
+import { linkify } from '../lib/linkify';
 import { commentLink } from '../lib/site';
 import { formatCount } from '../lib/formatCount';
 import shared from '../styles/shared.module.css';
 import type { Post, ThreadComment } from '../types';
 import type { ContextMenuItem } from './ContextMenu';
+import MessageEmbeds from './MessageEmbeds';
 import styles from './ThreadPanel.module.css';
 
 function ThreadPanel({
@@ -26,7 +28,7 @@ function ThreadPanel({
 	onResizeWidth: (width: number) => void;
 	openMenu: (x: number, y: number, items: ContextMenuItem[], invoker: HTMLElement | null, toggle?: boolean) => void;
 }) {
-	const [comments, setComments] = useState<ThreadComment[]>(() => seedComments[post.title] ?? []);
+	const [comments, setComments] = useState<ThreadComment[]>(() => seedComments[post.id] ?? []);
 	const [draft, setDraft] = useState('');
 	const [flashId, setFlashId] = useState<string | null>(null);
 	const flashTimer = useRef<number | null>(null);
@@ -84,12 +86,12 @@ function ThreadPanel({
 			...prev,
 			{
 				id,
-				author: 'You',
+				author: 'You', // change author to current user when backend is ready
 				time: 'Now',
 				body,
-				...(target ? { replyTo: { id: target.id, author: target.author, body: target.body } } : {}),
+				...(target ? { replyTo: { id: target.id } } : {}),
 			},
-		]); // change author to current user when backend is ready
+		]);
 		setDraft('');
 		setReplyTarget(null);
 		stuckToBottomRef.current = true;
@@ -151,7 +153,7 @@ function ThreadPanel({
 			{
 				icon: <Link2 size={16} aria-hidden="true" />,
 				label: 'Copy Comment Link',
-				onSelect: () => void copyText(commentLink(post.title, index)),
+				onSelect: () => void copyText(commentLink(post.id, index)),
 			},
 			{ type: 'separator' },
 			{ icon: <Reply size={16} aria-hidden="true" />, label: 'Reply', onSelect: () => replyToComment(index) },
@@ -218,7 +220,7 @@ function ThreadPanel({
 				<div className={styles.heading}>
 					<strong className={styles.title}>{post.title}</strong>
 					{post.body && <p className={styles.body}>{post.body}</p>}
-					{/* TEMPORARY: meta items show link affordance until click-through lands. */}
+					{/* TEMPORARY: meta items show link affordance until click-through lands */}
 					<span className={styles.meta}>
 						<span className={styles.metaItem}>{post.handle}</span>
 						{' · '}
@@ -229,7 +231,7 @@ function ThreadPanel({
 						{formatCount(post.stats.shares)} shares
 					</span>
 				</div>
-				<button type="button" className={styles.close} onClick={onClose} aria-label="Close thread" title="Close thread">
+				<button type="button" className={styles.close} onClick={onClose} aria-label="Close thread">
 					<X size={18} aria-hidden="true" />
 				</button>
 			</div>
@@ -241,65 +243,71 @@ function ThreadPanel({
 						<p>Start the conversation below.</p>
 					</div>
 				) : (
-					comments.map((comment, index) => (
-						<article
-							key={comment.id}
-							id={`comment-${comment.id}`}
-							className={`${styles.comment} ${flashId === comment.id ? shared.flash : ''}`}
-							onContextMenu={(e) => openCommentMenu(e, comment, index)}
-						>
-							{/* TEMPORARY: avatar and author show link affordance until click-through lands. */}
-							<div className={styles.commentAvatar}>{comment.author[0]}</div>
-							<div className={styles.commentCopy}>
-								<div className={styles.commentTopline}>
-									<strong>{comment.author}</strong>
-									<span>{comment.time}</span>
-								</div>
-								{editingIndex === index ? (
-									<div className={shared.editor}>
-										<textarea
-											ref={(el) => {
-												el?.focus();
-												el?.setSelectionRange(el.value.length, el.value.length);
-											}}
-											rows={2}
-											value={editDraft}
-											onChange={(e) => setEditDraft(e.target.value)}
-											onKeyDown={(e) => {
-												if (e.key === 'Enter' && !e.shiftKey) {
-													e.preventDefault();
-													saveEdit();
-												} else if (e.key === 'Escape') {
-													e.stopPropagation();
-													cancelEdit();
-												}
-											}}
-											aria-label="Edit comment"
-										/>
-										<span>Enter to save · Esc to cancel</span>
+					comments.map((comment, index) => {
+						const replyToId = comment.replyTo?.id;
+						const replySource = replyToId ? comments.find((entry) => entry.id === replyToId) : undefined;
+						return (
+							<article
+								key={comment.id}
+								id={`comment-${comment.id}`}
+								tabIndex={-1}
+								className={`${styles.comment} ${flashId === comment.id ? shared.flash : ''}`}
+								onContextMenu={(e) => openCommentMenu(e, comment, index)}
+							>
+								{/* TEMPORARY: avatar and author show link affordance until click-through lands */}
+								<div className={styles.commentAvatar}>{comment.author[0]}</div>
+								<div className={styles.commentCopy}>
+									<div className={styles.commentTopline}>
+										<strong>{comment.author}</strong>
+										<span>{comment.time}</span>
 									</div>
-								) : (
-									<>
-										{comment.replyTo && (
-											<button
-												type="button"
-												className={styles.commentReference}
-												onClick={() => jumpToComment(comment.replyTo!.id)}
-												aria-label={`Jump to ${comment.replyTo.author}'s comment`}
-											>
-												<strong>{comment.replyTo.author}</strong>
-												<span>{snippet(comment.replyTo.body)}</span>
-											</button>
-										)}
-										<p>
-											{comment.body}
-											{comment.edited && <span className={shared.editedMark}> (edited)</span>}
-										</p>
-									</>
-								)}
-							</div>
-						</article>
-					))
+									{editingIndex === index ? (
+										<div className={shared.editor}>
+											<textarea
+												ref={(el) => {
+													el?.focus();
+													el?.setSelectionRange(el.value.length, el.value.length);
+												}}
+												rows={2}
+												value={editDraft}
+												onChange={(e) => setEditDraft(e.target.value)}
+												onKeyDown={(e) => {
+													if (e.key === 'Enter' && !e.shiftKey) {
+														e.preventDefault();
+														saveEdit();
+													} else if (e.key === 'Escape') {
+														e.stopPropagation();
+														cancelEdit();
+													}
+												}}
+												aria-label="Edit comment"
+											/>
+											<span>Enter to save · Esc to cancel</span>
+										</div>
+									) : (
+										<>
+											{replySource && (
+												<button
+													type="button"
+													className={styles.commentReference}
+													onClick={() => jumpToComment(replySource.id)}
+													aria-label={`Jump to ${replySource.author}'s comment`}
+												>
+													<strong>{replySource.author}</strong>
+													<span>{snippet(replySource.body)}</span>
+												</button>
+											)}
+											<p>
+												{linkify(comment.body, styles.commentLink)}
+												{comment.edited && <span className={shared.editedMark}> (edited)</span>}
+											</p>
+											<MessageEmbeds text={comment.body} />
+										</>
+									)}
+								</div>
+							</article>
+						);
+					})
 				)}
 			</div>
 
@@ -341,7 +349,7 @@ function ThreadPanel({
 					}
 					maxLength={2000}
 				/>
-				<button type="submit" className={styles.send} disabled={!draft.trim()} aria-label="Send comment" title="Send">
+				<button type="submit" className={styles.send} disabled={!draft.trim()} aria-label="Send comment">
 					<SendHorizontal size={16} aria-hidden="true" />
 				</button>
 			</form>

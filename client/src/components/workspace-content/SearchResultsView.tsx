@@ -15,6 +15,7 @@ type SearchResultsViewProps = {
 	settingsPrefs: SettingsPrefs;
 	onOpenThread: (post: Post) => void;
 	onOpenProfile: (username: string) => void;
+	onOpenCommunity: (communityId: string) => void;
 	onOpenChannel: (communityId: string, channelId: string) => void;
 	onOpenDm: (dmId: string) => void;
 	onToggleJoin: (communityId: string) => void;
@@ -30,6 +31,7 @@ export default function SearchResultsView({
 	settingsPrefs,
 	onOpenThread,
 	onOpenProfile,
+	onOpenCommunity,
 	onOpenChannel,
 	onOpenDm,
 	onToggleJoin,
@@ -83,11 +85,11 @@ export default function SearchResultsView({
 							const community = post.community ? communities.find((entry) => entry.id === post.community) : undefined;
 							return (
 								<PostCard
-									key={post.title}
+									key={post.id}
 									post={post}
 									community={
 										community
-											? { name: community.name, color: community.color }
+											? { id: community.id, name: community.name, color: community.color }
 											: post.community
 												? { name: post.community }
 												: null
@@ -96,6 +98,7 @@ export default function SearchResultsView({
 									clickable
 									onOpenThread={onOpenThread}
 									onOpenProfile={onOpenProfile}
+									onOpenCommunity={onOpenCommunity}
 								/>
 							);
 						})}
