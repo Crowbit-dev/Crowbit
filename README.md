@@ -1,7 +1,5 @@
 **Project & README are WIP**
 
-**FOR STARDANCE REVIEWERS: *THERE IS NO BACKEND YET !!!! THIS IS JUST A UI DESIGN SHIP***
-
 # Crowbit
 
 Open-source privacy-based social media alternative that gives the user full control over their personal data and content visibility.
